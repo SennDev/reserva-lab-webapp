@@ -1,0 +1,174 @@
+<div class="split-screen-container d-flex flex-column flex-lg-row min-vh-100">
+
+  <aside class="info-panel d-flex flex-column justify-content-center col-12 col-lg-5 p-4 p-xl-5 position-relative overflow-hidden">
+    <div class="glass-orb orb-1"></div>
+    <div class="glass-orb orb-2"></div>
+
+    <div class="visual-content z-2 text-center text-lg-start animate-fade-in-left">
+      <div class="logo-box mx-auto mx-lg-0 mb-4 d-flex align-items-center justify-content-center">
+        <i class="bi bi-flask-fill text-white fs-2"></i>
+      </div>
+      <h1 class="visual-title mb-3 fw-bold gradient-text-light">Únete a <br>ReservaLab</h1>
+      <p class="visual-subtitle text-white-50 mx-auto mx-lg-0 mb-0">
+        Digitaliza la gestión, reserva y trazabilidad de los laboratorios y equipos institucionales en la Facultad de Ciencias de la Computación.
+      </p>
+
+      <div class="glass-card-mini floating-anim mt-5 d-none d-lg-flex align-items-center">
+        <div class="icon-box-glow bg-success-soft text-success me-3">
+          <i class="bi bi-shield-lock-fill"></i>
+        </div>
+        <div>
+          <h6 class="fw-bold text-white mb-0">Datos Protegidos</h6>
+          <span class="small text-white-50">Cifrado de extremo a extremo</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="form-panel d-flex justify-content-center align-items-lg-center col-12 col-lg-7 p-0 bg-neo-light position-relative">
+
+    @if (isLoading()) {
+      <div class="wave-transition-overlay d-flex flex-column align-items-center justify-content-center">
+        <div class="wave-ripple ripple-registro"></div>
+        <div class="logo-box-auth animate-pulse mb-3">
+          <i class="bi bi-person-check-fill text-success fs-2"></i>
+        </div>
+        <p class="text-success fw-bold">Generando tu perfil académico...</p>
+      </div>
+    }
+
+    <div class="form-scroll-wrapper w-100 p-4 p-xl-5">
+      <div class="form-content mx-auto" style="max-width: 580px;">
+
+        <header class="mb-5 text-center text-lg-start stagger-1">
+          <h2 class="fw-bold text-dark mb-2">Crear Cuenta Nueva</h2>
+          <p class="text-muted small">Por favor, completa los siguientes datos para registrarte.</p>
+        </header>
+
+        <form (ngSubmit)="registrar()" #registroForm="ngForm">
+
+          <div class="mb-4 text-center text-lg-start stagger-2">
+            <label class="form-label fw-bold text-dark small mb-3">¿Cuál es tu rol institucional?</label>
+            <div class="neo-segmented-control d-flex">
+              <input type="radio" name="tipo_usuario" id="tipoEstudiante" value="estudiante" [(ngModel)]="user.tipo_usuario">
+              <label for="tipoEstudiante" class="segment-label"><i class="bi bi-backpack me-2"></i>Estudiante BUAP</label>
+
+              <input type="radio" name="tipo_usuario" id="tipoPersonal" value="personal" [(ngModel)]="user.tipo_usuario">
+              <label for="tipoPersonal" class="segment-label"><i class="bi bi-person-workspace me-2"></i>Personal / Docente</label>
+            </div>
+          </div>
+
+          <div class="row stagger-3">
+            <div class="col-md-12 mb-4">
+              <label class="form-label fw-semibold text-dark small mb-2">Nombre Completo</label>
+              <div class="position-relative">
+                <i class="bi bi-person position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                <input type="text" class="neo-input ps-5 py-3" placeholder="Ej. Ana García López"
+                       name="nombre_completo" [(ngModel)]="user.nombre_completo"
+                       (keypress)="soloLetras($event, user.nombre_completo)"
+                       [class.border-danger]="errors.nombre_completo" required>
+              </div>
+              @if (errors.nombre_completo) { <span class="text-danger small mt-1 d-block">{{ errors.nombre_completo }}</span> }
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <label class="form-label fw-semibold text-dark small mb-2">Matrícula / ID</label>
+              <div class="position-relative">
+                <i class="bi bi-card-heading position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                <input type="text" class="neo-input ps-5 py-3 text-uppercase" placeholder="202301234"
+                       name="matricula" [(ngModel)]="user.matricula"
+                       (keypress)="soloAlfanumericoSinEspacios($event)"
+                       [class.border-danger]="errors.matricula" maxlength="9" required>
+              </div>
+              @if (errors.matricula) { <span class="text-danger small mt-1 d-block">{{ errors.matricula }}</span> }
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <label class="form-label fw-semibold text-dark small mb-2">Correo Institucional</label>
+              <div class="position-relative">
+                <i class="bi bi-envelope position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                <input type="email" class="neo-input ps-5 py-3" placeholder="ana@alumno.buap.mx"
+                       name="email" [(ngModel)]="user.email"
+                       (blur)="validarCorreoRealTime()" (keyup)="validarCorreoRealTime()"
+                       [class.border-danger]="errors.email" required>
+              </div>
+              @if (errors.email) { <span class="text-danger small mt-1 d-block">{{ errors.email }}</span> }
+            </div>
+          </div>
+
+          <div class="mb-4 stagger-4">
+            <label class="form-label fw-semibold text-dark small mb-2">Carrera / Departamento</label>
+            <div class="position-relative">
+              <i class="bi bi-mortarboard position-absolute top-50 start-0 translate-middle-y ms-3 text-muted z-2"></i>
+              <select class="neo-input ps-5 py-3 form-select" name="carrera" [(ngModel)]="user.carrera" [class.border-danger]="errors.carrera" required>
+                <option value="" disabled selected>Selecciona tu área...</option>
+                @for (carrera of carreras; track carrera) {
+                  <option [value]="carrera">{{ carrera }}</option>
+                }
+              </select>
+            </div>
+            @if (errors.carrera) { <span class="text-danger small mt-1 d-block">{{ errors.carrera }}</span> }
+          </div>
+
+          <div class="row stagger-5">
+            <div class="col-md-6 mb-4">
+              <label class="form-label fw-semibold text-dark small mb-2">Contraseña</label>
+              <div class="position-relative">
+                <i class="bi bi-lock position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                <input [type]="inputType_1" class="neo-input px-5 py-3" placeholder="••••••••"
+                       name="password" [(ngModel)]="user.password"
+                       (keyup)="evaluarFuerzaPassword()" required>
+                <i class="bi position-absolute top-50 end-0 translate-middle-y me-3 text-muted fs-5 cursor-pointer transition-smooth"
+                   [class.bi-eye]="hide_1" [class.bi-eye-slash]="!hide_1" (click)="showPassword()"></i>
+              </div>
+
+              @if (user.password?.length > 0) {
+                <div class="pwd-meter-container mt-3 d-flex gap-2 {{claseFuerza}}">
+                  <div class="pwd-segment seg-1"></div>
+                  <div class="pwd-segment seg-2"></div>
+                  <div class="pwd-segment seg-3"></div>
+                </div>
+                <span class="small fw-bold text-uppercase d-block mt-1 pwd-text {{claseFuerza}}-text" style="font-size: 0.65rem;">{{ nivelFuerza }}</span>
+              }
+              @if (errors.password) { <span class="text-danger small mt-1 d-block">{{ errors.password }}</span> }
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <label class="form-label fw-semibold text-dark small mb-2">Confirmar Contraseña</label>
+              <div class="position-relative">
+                <i class="bi bi-lock position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                <input [type]="inputType_2" class="neo-input px-5 py-3" placeholder="••••••••"
+                       name="confirm_password" [(ngModel)]="user.confirm_password"
+                       (keyup)="compararPasswords()">
+                <i class="bi position-absolute top-50 end-0 translate-middle-y me-3 text-muted fs-5 cursor-pointer transition-smooth"
+                   [class.bi-eye]="hide_2" [class.bi-eye-slash]="!hide_2" (click)="showConfirmPassword()"></i>
+              </div>
+              @if (passwordsCoinciden === false && user.confirm_password?.length > 0) {
+                <span class="text-danger small mt-2 d-block fw-medium"><i class="bi bi-x-circle-fill me-1"></i>No coinciden</span>
+              } @else if (passwordsCoinciden === true) {
+                <span class="text-success small mt-2 d-block fw-medium"><i class="bi bi-check-circle-fill me-1"></i>Coinciden</span>
+              }
+            </div>
+          </div>
+
+          <button type="submit" class="btn-neo-primary w-100 py-3 mt-4 d-flex justify-content-center align-items-center fw-bold stagger-6 wave-btn" [disabled]="isLoading() || passwordsCoinciden === false">
+            @if (isLoading()) {
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Validando y Creando...
+            } @else {
+              Completar Registro <i class="bi bi-check2-circle ms-2 fs-5"></i>
+            }
+          </button>
+        </form>
+
+        <footer class="text-center mt-5 pt-4 border-top-neo stagger-6">
+          <span class="text-muted small">¿Ya tienes cuenta? </span>
+          <a routerLink="/auth/login" class="text-primary fw-bold text-decoration-none small transition-smooth hover-scale">Inicia sesión aquí</a>
+          <div class="mt-4">
+            <a routerLink="/" class="text-muted text-decoration-none small transition-smooth hover-scale"><i class="bi bi-arrow-left me-1"></i> Volver al inicio</a>
+          </div>
+        </footer>
+
+      </div>
+    </div>
+  </main>
+</div>

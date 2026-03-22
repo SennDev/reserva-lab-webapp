@@ -1,0 +1,128 @@
+/* ==========================================================================
+   LOGIN SCREEN - REFINAMIENTO ABSOLUTO (Consistencia con Registro)
+   ========================================================================== */
+
+/* 1. Layout Principal */
+.split-screen-container {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--neo-light-bg);
+}
+
+/* 2. Panel Izquierdo (Fijo en PC, Inmersivo - Tono Índigo/Violeta) */
+.info-panel {
+  background: linear-gradient(135deg, #312e81, #4f46e5); /* Índigo profundo a Primary */
+  position: relative;
+
+  @media (min-width: 992px) {
+    height: 100vh;
+    position: sticky;
+    top: 0;
+  }
+
+  /* Orbes internos para Glassmorphism */
+  .glass-orb {
+    position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.45;
+    animation: orbFloat 12s infinite alternate ease-in-out;
+  }
+  .orb-1 { width: 350px; height: 350px; background: #8b5cf6; top: -80px; left: -80px; }
+  .orb-2 { width: 300px; height: 300px; background: #3b82f6; bottom: -50px; right: -50px; animation-delay: -4s; }
+
+  .logo-box {
+    width: 75px; height: 75px; background: rgba(255,255,255,0.15);
+    border-radius: 20px; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  }
+
+  .visual-title { font-size: clamp(2.5rem, 5vw, 3.5rem); letter-spacing: -1.5px; line-height: 1.1; }
+
+  .gradient-text-light {
+    background: linear-gradient(135deg, #ffffff, #c7d2fe);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  /* Trust Badge Flotante */
+  .glass-card-mini {
+    background: rgba(255,255,255,0.1); backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 16px;
+    padding: 12px 20px; display: inline-flex;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+
+    .icon-box-glow {
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      border-radius: 12px; font-size: 1.2rem; background: rgba(199, 210, 254, 0.2);
+      box-shadow: 0 0 15px rgba(199, 210, 254, 0.4);
+    }
+    .text-primary-light { color: #c7d2fe; }
+  }
+}
+
+@keyframes orbFloat { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(30px, 40px) scale(1.1); } }
+
+/* 3. Panel Formulario (Scroll Independiente) */
+.form-panel {
+  background-color: var(--neo-light-bg) !important;
+
+  @media (min-width: 992px) {
+    height: 100vh;
+  }
+
+  .form-scroll-wrapper {
+    @media (min-width: 992px) {
+      overflow-y: auto;
+      height: 100%;
+      &::-webkit-scrollbar { width: 6px; }
+      &::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.1); border-radius: 10px; }
+    }
+  }
+}
+
+/* Ajustes Inputs */
+.neo-input {
+  &.ps-5 { padding-left: 3rem !important; }
+  &.pe-5 { padding-right: 3rem !important; }
+}
+
+.border-top-neo {
+  border-top: 2px solid rgba(255,255,255,0.8);
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.02);
+}
+
+/* === 4. ANIMACIONES (Cascada y Transiciones) === */
+/* Glassmorphism Overlay de Carga (Tono Índigo) */
+.wave-transition-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(241, 245, 249, 0.85); backdrop-filter: blur(12px);
+  z-index: 50; overflow: hidden;
+  border-radius: 0;
+}
+
+.ripple-login {
+  position: absolute; width: 300px; height: 300px; border-radius: 50%;
+  background: var(--primary-color); animation: waveRipple 1.8s ease-out infinite; z-index: -1;
+}
+
+@keyframes waveRipple { 0% { transform: scale(0); opacity: 0.1; } 50% { opacity: 0.2; } 100% { transform: scale(3); opacity: 0; } }
+
+/* Staggered Animations (Los campos entran en cascada suave) */
+@keyframes fadeInUpStagger {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stagger-1 { animation: fadeInUpStagger 0.6s ease-out 0.1s forwards; opacity: 0; }
+.stagger-2 { animation: fadeInUpStagger 0.6s ease-out 0.2s forwards; opacity: 0; }
+.stagger-3 { animation: fadeInUpStagger 0.6s ease-out 0.3s forwards; opacity: 0; }
+.stagger-4 { animation: fadeInUpStagger 0.6s ease-out 0.4s forwards; opacity: 0; }
+.stagger-5 { animation: fadeInUpStagger 0.6s ease-out 0.5s forwards; opacity: 0; }
+
+.floating-anim { animation: float 6s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+/* Efecto Ola Botón */
+.wave-btn:active:not([disabled]) { animation: buttonWave 0.6s ease-out; }
+@keyframes buttonWave { 0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.5); } 70% { box-shadow: 0 0 0 15px rgba(79, 70, 229, 0); } 100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); } }
+
+.cursor-pointer:hover { color: var(--primary-color) !important; }
+.transition-smooth { transition: var(--transition-smooth); }
+.hover-scale:hover { transform: scale(1.05); }

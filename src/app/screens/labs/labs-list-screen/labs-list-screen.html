@@ -1,0 +1,101 @@
+<div class="labs-wrapper d-flex flex-column h-100">
+
+  <header class="dashboard-header mb-5 stagger-1">
+    <div class="header-titles">
+      <h2 class="title-high-end text-dark mb-1">Catálogo de Laboratorios</h2>
+      <p class="text-muted small m-0 fw-medium">Consulta la disponibilidad y equipamiento de los espacios en la FCC.</p>
+    </div>
+
+    @if (isAdmin()) {
+      <button class="btn-neo-primary px-4 py-2 fw-bold d-flex align-items-center hover-glow-primary" routerLink="/dashboard/laboratorios/nuevo">
+        <i class="bi bi-plus-lg me-2 fs-5"></i> Añadir Laboratorio
+      </button>
+    }
+  </header>
+
+  <div class="search-section mb-5 stagger-2">
+    <div class="row">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="neo-search-bar position-relative">
+          <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-4 text-muted"></i>
+          <input type="text" class="neo-input-search w-100" placeholder="Buscar por nombre, edificio o equipo..."
+                 (input)="updateSearch($event)" [disabled]="isLoading()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="position-relative flex-grow-1">
+
+    @if (isLoading()) {
+      <div class="loading-overlay d-flex flex-column align-items-center justify-content-center h-100 w-100 pb-5">
+        <div class="spinner-border text-primary mb-3" style="width: 3.5rem; height: 3.5rem;" role="status"></div>
+        <h5 class="fw-bold text-dark">Sincronizando Catálogo...</h5>
+        <p class="text-muted small">Cargando disponibilidad de laboratorios en tiempo real</p>
+      </div>
+    } @else {
+      <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 stagger-3 pb-5 align-items-stretch animate-fade-in">
+
+        @if (filteredLabs().length === 0) {
+          <div class="col-12 d-flex flex-column align-items-center justify-content-center py-5 opacity-50 h-100 text-center container-empty">
+            <i class="bi bi-building-fill-x text-muted mb-3 display-3"></i>
+            <h4 class="fw-bold text-dark m-0">No se encontraron laboratorios</h4>
+            <p class="text-muted mt-2 mb-0">Intenta ajustar tu búsqueda o añade uno nuevo.</p>
+          </div>
+        } @else {
+
+          @for (lab of filteredLabs(); track lab.id) {
+            <div class="col">
+              <div class="neo-card-lab p-4 d-flex flex-column h-100 interactive-card">
+
+                <div class="d-flex justify-content-between align-items-start mb-4 gap-3">
+                  <div class="icon-box-lab {{lab.color}}">
+                    <i class="bi {{lab.icon}}"></i>
+                  </div>
+                  <span class="neo-badge-status flex-shrink-0"
+                        [class.badge-success-neo]="lab.estado === 'Disponible'"
+                        [class.badge-warning-neo]="lab.estado === 'En Mantenimiento'"
+                        [class.badge-danger-neo]="lab.estado === 'Ocupado'">
+                    {{lab.estado}}
+                  </span>
+                </div>
+
+                <div class="mb-4 flex-grow-1 overflow-hidden">
+                  <h5 class="fw-bold text-dark mb-2 tracking-tight lh-sm text-truncate-2" title="{{lab.nombre}}">
+                    {{lab.nombre}}
+                  </h5>
+                  <div class="d-flex flex-column text-muted small fw-medium gap-2 mt-3 info-location">
+                    <span class="d-flex align-items-center text-truncate"><i class="bi bi-geo-alt-fill me-2 text-primary"></i> {{lab.edificio}}</span>
+                    <span class="d-flex align-items-center"><i class="bi bi-people-fill me-2 text-primary"></i> Capacidad: {{lab.capacidad}} alumnos</span>
+                  </div>
+                </div>
+
+                <div class="border-top-neo pt-4 mb-4 mt-auto">
+                  <p class="small fw-bold text-muted text-uppercase tracking-wide mb-3 tag-label">Equipamiento Fijo</p>
+                  <div class="d-flex flex-wrap gap-2 tags-container overflow-hidden">
+                    @for (eq of lab.equipamiento; track eq) {
+                      <span class="neo-tag text-truncate fs-7" title="{{eq}}">{{eq}}</span>
+                    }
+                  </div>
+                </div>
+
+                <button class="btn-action-card w-100 fw-bold py-3 mt-auto"
+                        [disabled]="lab.estado !== 'Disponible'"
+                        routerLink="/dashboard/reservas/nueva">
+                  Solicitar Reserva
+                </button>
+
+                @if (isAdmin()) {
+                  <div class="d-flex gap-2 mt-3 pt-3 border-top-neo admin-actions">
+                    <button class="btn-neo-mini-rect w-50 text-primary hover-glow-primary"><i class="bi bi-pencil-square me-2"></i> Editar</button>
+                    <button class="btn-neo-mini-rect w-50 text-danger"><i class="bi bi-trash3 me-2"></i> Eliminar</button>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,156 @@
+/* ==========================================================================
+   NAVBAR - ULTIMATE GLASSMORPHISM
+   ========================================================================== */
+
+.navbar-wrapper {
+  position: sticky;
+  top: 1rem;
+  z-index: 1050; /* Asegura estar por encima del hero y orbes */
+  padding: 0 1rem;
+
+  @media (min-width: 992px) {
+    top: 1.5rem; padding: 0 2rem;
+  }
+}
+
+/* Cristal Premium Flotante */
+.navbar-glass-neo {
+  display: flex; justify-content: space-between; align-items: center;
+  background-color: rgba(255, 255, 255, 0.6); /* Más claro para mejor contraste de cristal */
+  backdrop-filter: blur(24px) saturate(180%); /* Saturation aumenta la viveza de los orbes traseros */
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-radius: var(--radius-pill);
+  padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05), inset 0 0 0 1px rgba(255,255,255,0.7);
+  max-width: 1200px; margin: 0 auto;
+  transition: var(--transition-smooth);
+}
+
+.shadow-primary-glow {
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4) !important;
+}
+
+.nav-brand {
+  display: flex; align-items: center; text-decoration: none !important; gap: 0.75rem;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  &:hover { transform: scale(1.03); }
+
+  .logo-box {
+    display: flex; justify-content: center; align-items: center;
+    width: 40px; height: 40px;
+    background: var(--primary-color); color: white;
+    border-radius: 12px; font-size: 1.3rem;
+  }
+
+  .brand-text {
+    font-weight: 800; font-size: 1.3rem; letter-spacing: -0.5px; color: var(--text-main);
+  }
+}
+
+/* Enlaces Desktop - Pill Hover Effect */
+.nav-links {
+  display: flex; gap: 0.25rem;
+
+  .nav-item {
+    color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.95rem;
+    padding: 0.6rem 1.25rem; border-radius: var(--radius-pill);
+    transition: var(--transition-smooth);
+    border: 1px solid transparent;
+
+    &:hover {
+      color: var(--primary-color);
+      background-color: rgba(255,255,255,0.8);
+      box-shadow: var(--shadow-dark), var(--shadow-light);
+      border-color: rgba(255,255,255,1);
+    }
+
+    &:active {
+      box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+    }
+  }
+}
+
+.btn-slim { padding: 0.6rem 1.5rem !important; font-size: 0.95rem !important; }
+
+/* Botón Hamburguesa */
+.menu-toggle {
+  display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+  width: 46px; height: 46px;
+  background-color: rgba(255,255,255,0.8); border: none; border-radius: 50%; cursor: pointer;
+  box-shadow: var(--shadow-dark), var(--shadow-light);
+  transition: var(--transition-smooth); margin-right: 0.2rem;
+
+  &:active { box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light); }
+
+  .line {
+    width: 22px; height: 2px; background-color: var(--text-main); border-radius: 2px;
+    transition: var(--transition-smooth);
+  }
+
+  &.active {
+    box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+    .line-1 { transform: translateY(7px) rotate(45deg); background-color: var(--primary-color); }
+    .line-2 { opacity: 0; }
+    .line-3 { transform: translateY(-7px) rotate(-45deg); background-color: var(--primary-color); }
+  }
+}
+
+/* Menú Móvil - Estilo App Nativa iOS */
+.mobile-menu-glass {
+  position: absolute; top: 85px; left: 1rem; right: 1rem;
+  max-width: 400px; margin: 0 auto;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(30px) saturate(200%); -webkit-backdrop-filter: blur(30px) saturate(200%);
+  border-radius: 28px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.8);
+  padding: 1.5rem; display: flex; flex-direction: column;
+
+  opacity: 0; transform: translateY(-15px) scale(0.98); visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform-origin: top right;
+
+  &.open { opacity: 1; transform: translateY(0) scale(1); visibility: visible; }
+
+  .mobile-links {
+    display: flex; flex-direction: column; gap: 0.5rem;
+
+    .mobile-item {
+      display: flex; align-items: center; gap: 1rem;
+      text-decoration: none; color: var(--text-main);
+      padding: 0.75rem; border-radius: 20px;
+      transition: var(--transition-smooth);
+      border: 1px solid transparent;
+
+      .icon-wrapper {
+        width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+        border-radius: 14px; font-size: 1.3rem;
+        box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+        background-color: var(--neo-light-bg);
+      }
+
+      &:hover, &:active {
+        background: rgba(255,255,255,0.9);
+        box-shadow: var(--shadow-dark), var(--shadow-light);
+        border-color: white;
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  .mobile-divider {
+    height: 2px; width: 100%;
+    background-color: transparent;
+    box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+    border-radius: 2px;
+  }
+}
+
+/* Efecto Ola (Wave) para botones interactivos */
+@keyframes buttonWave {
+  0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.5); }
+  70% { box-shadow: 0 0 0 15px rgba(79, 70, 229, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+}
+
+.wave-btn:active { animation: buttonWave 0.6s ease-out; }

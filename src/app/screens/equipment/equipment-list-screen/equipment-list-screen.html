@@ -1,0 +1,94 @@
+<div class="equipment-wrapper d-flex flex-column h-100">
+
+  <header class="dashboard-header mb-5 stagger-1">
+    <div class="header-titles">
+      <h2 class="title-high-end text-dark mb-1">Inventario de Equipos</h2>
+      <p class="text-muted small m-0 fw-medium">Gestiona y rastrea el hardware y herramientas de la facultad.</p>
+    </div>
+
+    @if (isStaff()) {
+      <button class="btn-neo-primary px-4 py-2 fw-bold d-flex align-items-center hover-glow-primary" routerLink="/dashboard/equipos/nuevo">
+        <i class="bi bi-plus-lg me-2 fs-5"></i> Registrar Equipo
+      </button>
+    }
+  </header>
+
+  <div class="search-section mb-5 stagger-2">
+    <div class="row">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="neo-search-bar position-relative">
+          <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-4 text-muted"></i>
+          <input type="text" class="neo-input-search w-100" placeholder="Buscar por nombre, # serie o ubicación..."
+                 (input)="updateSearch($event)" [disabled]="isLoading()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="position-relative flex-grow-1 w-100">
+
+    @if (isLoading()) {
+      <div class="loading-overlay d-flex flex-column align-items-center justify-content-center h-100 w-100 pb-5">
+        <div class="spinner-border text-primary mb-3" style="width: 3.5rem; height: 3.5rem;" role="status"></div>
+        <h5 class="fw-bold text-dark">Sincronizando Inventario...</h5>
+        <p class="text-muted small">Cargando base de datos de hardware</p>
+      </div>
+    } @else {
+
+      <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 stagger-3 pb-5 align-items-stretch animate-fade-in w-100 m-0">
+
+        @if (filteredEquipos().length === 0) {
+          <div class="col-12 d-flex flex-column align-items-center justify-content-center py-5 opacity-50 h-100 text-center">
+            <i class="bi bi-box-seam text-muted mb-3 display-3"></i>
+            <h4 class="fw-bold text-dark m-0">No se encontró el equipo</h4>
+            <p class="text-muted mt-2 mb-0">Verifica el número de serie o intenta otra búsqueda.</p>
+          </div>
+        } @else {
+
+          @for (eq of filteredEquipos(); track eq.id) {
+            <div class="col">
+              <div class="neo-card-equipment p-4 d-flex flex-column h-100 interactive-card">
+
+                <div class="d-flex justify-content-between align-items-start mb-4 gap-3">
+                  <div class="icon-box-eq {{eq.color}}">
+                    <i class="bi {{eq.icon}}"></i>
+                  </div>
+                  <span class="neo-badge-status flex-shrink-0"
+                        [class.badge-success-neo]="eq.estado === 'Disponible'"
+                        [class.badge-warning-neo]="eq.estado === 'Mantenimiento'"
+                        [class.badge-primary-neo]="eq.estado === 'En Préstamo'"
+                        [class.badge-danger-neo]="eq.estado === 'Baja'">
+                    {{eq.estado}}
+                  </span>
+                </div>
+
+                <div class="mb-4 flex-grow-1 overflow-hidden">
+                  <h5 class="fw-bold text-dark mb-1 tracking-tight lh-sm text-truncate-2" title="{{eq.nombre}}">
+                    {{eq.nombre}}
+                  </h5>
+
+                  <div class="neo-serial-box my-3 p-2 text-center rounded-3">
+                    <span class="small text-muted fw-bold text-uppercase tracking-wide">S/N: </span>
+                    <span class="font-monospace fw-bolder text-dark">{{eq.numero_serie}}</span>
+                  </div>
+
+                  <div class="d-flex align-items-center text-muted small fw-medium mt-3">
+                    <i class="bi bi-geo-alt-fill me-2 text-primary"></i>
+                    <span class="text-truncate" title="{{eq.laboratorio}}">{{eq.laboratorio}}</span>
+                  </div>
+                </div>
+
+                @if (isStaff()) {
+                  <div class="d-flex gap-2 mt-auto pt-3 border-top-neo admin-actions">
+                    <button class="btn-neo-mini-rect w-50 text-primary hover-glow-primary"><i class="bi bi-pencil-square me-2"></i> Editar</button>
+                    <button class="btn-neo-mini-rect w-50 text-danger" [disabled]="eq.estado === 'En Préstamo'"><i class="bi bi-trash3 me-2"></i> Baja</button>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,225 @@
+/* ==========================================================================
+   DASHBOARD MASTER LAYOUT - "APP SHELL" ARCHITECTURE
+   ========================================================================== */
+
+/* --- 1. MIXINS --- */
+@mixin neo-out {
+  background-color: var(--neo-light-bg);
+  box-shadow: var(--shadow-dark), var(--shadow-light);
+}
+
+@mixin neo-in {
+  background-color: var(--neo-light-bg);
+  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+}
+
+@mixin glass-panel {
+  background: rgba(241, 245, 249, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* --- 2. LAYOUT BASE (EL FIX MAESTRO) --- */
+.dashboard-layout {
+  display: flex;
+  background-color: var(--neo-light-bg);
+  width: 100%;
+  height: 100vh; /* Altura forzada y clavada al monitor */
+  overflow: hidden; /* Matamos el scroll general del navegador */
+}
+
+.tracking-tight { letter-spacing: -0.5px; }
+.tracking-wide { letter-spacing: 0.5px; text-transform: uppercase; }
+.transition-smooth { transition: var(--transition-smooth); }
+
+/* --- 3. SIDEBAR NEOMÓRFICO --- */
+.neo-sidebar {
+  width: 280px;
+  background-color: var(--neo-light-bg);
+  box-shadow: 10px 0 30px rgba(148, 163, 184, 0.25), inset -2px 0 5px #ffffff;
+  z-index: 1040;
+  flex-shrink: 0;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  @media (max-width: 991.98px) {
+    position: fixed; top: 0; left: 0; height: 100vh;
+    transform: translateX(-100%);
+    &.open { transform: translateX(0); }
+  }
+  @media (min-width: 992px) {
+    position: relative; /* Adiós al Sticky roto */
+    height: 100vh;
+    transform: translateX(0);
+  }
+
+  .sidebar-header {
+    .logo-box {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white; border-radius: 14px; font-size: 1.4rem;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.35);
+    }
+    .btn-close-sidebar {
+      background: transparent; border: none; font-size: 1.5rem; color: var(--text-muted);
+    }
+  }
+
+  .sidebar-nav {
+    overflow-y: auto; padding-top: 1rem;
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.08); border-radius: 10px; }
+
+    .nav-item {
+      text-decoration: none; color: var(--text-muted);
+      border-radius: 16px; border: 1px solid transparent;
+      padding: 0.85rem 1rem;
+
+      .icon-wrapper {
+        width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;
+        border-radius: 12px; font-size: 1.25rem; background: transparent;
+        transition: var(--transition-smooth);
+      }
+
+      &:hover {
+        color: var(--primary-color); background-color: rgba(255,255,255,0.6);
+        .icon-wrapper { @include neo-out; background-color: var(--surface-color); }
+      }
+
+      &.active {
+        color: var(--primary-color);
+        border-color: rgba(255,255,255,0.7);
+        @include neo-in;
+
+        .icon-wrapper {
+          color: white;
+          background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+          box-shadow: 0 4px 15px rgba(79, 70, 229, 0.35);
+        }
+      }
+    }
+  }
+}
+
+/* --- BADGE DE ROL (NUEVO DISEÑO PREMIUM) --- */
+.user-role-badge {
+  background: rgba(79, 70, 229, 0.05);
+  border: 1px solid rgba(79, 70, 229, 0.15);
+  padding: 12px 16px;
+  border-radius: 16px;
+  color: var(--primary-color);
+  cursor: pointer;
+  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: all 0.5s ease; z-index: 0;
+  }
+
+  &:hover {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: #ffffff; border-color: transparent;
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35), inset 2px 2px 5px rgba(255,255,255,0.3);
+    transform: translateY(-3px);
+
+    &::before { left: 100%; }
+
+    .role-dot {
+      background-color: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+    }
+  }
+
+  &:active { transform: translateY(0); box-shadow: var(--shadow-inset-dark); }
+
+  .role-dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background-color: var(--primary-color); transition: all 0.3s ease;
+    box-shadow: 0 0 8px rgba(79, 70, 229, 0.5);
+  }
+}
+
+.border-top-neo {
+  border-top: 2px solid rgba(255,255,255,0.8);
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.02);
+}
+
+.sidebar-overlay {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 1030;
+}
+
+/* --- 4. ÁREA PRINCIPAL & TOPBAR (SCROLL INDEPENDIENTE) --- */
+.main-wrapper {
+  min-width: 0;
+  height: 100vh; /* Se clava a la pantalla */
+  overflow-y: auto; /* AHORA SOLAMENTE ESTE CONTENEDOR HACE SCROLL */
+  overflow-x: hidden;
+
+  /* Scrollbar exclusiva para la vista principal */
+  &::-webkit-scrollbar { width: 8px; }
+  &::-webkit-scrollbar-track { background: var(--neo-light-bg); }
+  &::-webkit-scrollbar-thumb { background-color: rgba(148, 163, 184, 0.4); border-radius: 20px; }
+  &::-webkit-scrollbar-thumb:hover { background-color: var(--primary-color); }
+}
+
+.neo-topbar {
+  @include glass-panel;
+  box-shadow: 0 10px 30px rgba(148, 163, 184, 0.08);
+}
+
+.border-start-neo {
+  border-left: 2px solid rgba(255,255,255,0.8);
+  box-shadow: -2px 0 5px rgba(0,0,0,0.02);
+}
+
+.btn-neo-circle {
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  border: none; border-radius: 50%; font-size: 1.3rem; color: var(--text-muted);
+  @include neo-out;
+
+  &:hover { color: var(--primary-color); transform: translateY(-3px); }
+  &:active { @include neo-in; transform: translateY(0); }
+}
+
+.avatar-neo {
+  width: 44px; height: 44px; border-radius: 50%; font-size: 1.3rem;
+  background: var(--surface-color); border: 2px solid rgba(255,255,255,0.8);
+  @include neo-in;
+}
+
+/* --- 5. SOLUCIONES ESPECÍFICAS (FIXES) --- */
+.badge-notification {
+  position: absolute; top: 0; right: 0; width: 12px; height: 12px;
+  transform: translate(10%, -10%); border: 2px solid var(--neo-light-bg) !important;
+}
+
+.btn-danger-hover {
+  color: var(--danger-color);
+  &:hover {
+    color: #ffffff !important; background-color: var(--danger-color);
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4), var(--shadow-hover-dark), var(--shadow-hover-light);
+    transform: translateY(-3px) scale(1.05);
+  }
+  &:active {
+    background-color: #dc2626; box-shadow: inset 3px 3px 6px rgba(0,0,0,0.2), inset -3px -3px 6px rgba(255,255,255,0.1);
+    transform: translateY(0) scale(0.95);
+  }
+}
+
+.content-area {
+  position: relative;
+  z-index: 1;
+
+  /* EL TOQUE MAESTRO DE UX */
+  max-width: 1600px; /* El límite perfecto para monitores grandes */
+  margin: 0 auto; /* Si el monitor es más grande que 1600px, centra el contenido */
+  width: 100%;
+}
+
+.animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }

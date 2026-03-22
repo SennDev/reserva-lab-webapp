@@ -1,0 +1,204 @@
+/* ==========================================================================
+   REGISTRO SCREEN - REFINAMIENTO ABSOLUTO
+   ========================================================================== */
+
+/* 1. Layout Principal (Responsividad Perfecta) */
+.split-screen-container {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--neo-light-bg);
+}
+
+/* 2. Panel Izquierdo (Fijo en PC, Inmersivo) */
+.info-panel {
+  background: linear-gradient(135deg, #0f766e, #3b82f6);
+  position: relative;
+
+  @media (min-width: 992px) {
+    height: 100vh;
+    position: sticky;
+    top: 0;
+  }
+
+  .glass-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.4;
+    animation: orbFloat 10s infinite alternate ease-in-out;
+  }
+  .orb-1 { width: 300px; height: 300px; background: #10b981; top: -50px; left: -50px; }
+  .orb-2 { width: 250px; height: 250px; background: #6366f1; bottom: -50px; right: -50px; animation-delay: -3s; }
+
+  .logo-box {
+    width: 75px; height: 75px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  }
+
+  .visual-title { font-size: clamp(2.5rem, 5vw, 3.5rem); line-height: 1.1; }
+  .gradient-text-light {
+    background: linear-gradient(135deg, #ffffff, #a7f3d0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glass-card-mini {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 16px;
+    padding: 12px 20px;
+    display: inline-flex;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+
+    .icon-box-glow {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      background: rgba(16, 185, 129, 0.2);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+    }
+  }
+}
+
+@keyframes orbFloat {
+  0% { transform: translate(0,0) scale(1); }
+  100% { transform: translate(30px, 30px) scale(1.1); }
+}
+
+/* 3. Panel Formulario (Scroll Global Único) */
+.form-panel {
+  background-color: var(--neo-light-bg) !important;
+
+  @media (min-width: 992px) {
+    height: 100vh;
+  }
+
+  .form-scroll-wrapper {
+    width: 100%;
+    height: auto;       /* crece naturalmente */
+    overflow: visible;  /* no genera barra propia */
+  }
+}
+
+/* === 4. COMPONENTES NEOMÓRFICOS DEL FORMULARIO === */
+.neo-segmented-control {
+  background: var(--neo-light-bg);
+  padding: 6px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+  border: 1px solid rgba(255,255,255,0.5);
+
+  input[type="radio"] { display: none; }
+
+  .segment-label {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+
+    &:hover { color: var(--primary-color); }
+  }
+
+  input[type="radio"]:checked + .segment-label {
+    background: var(--surface-color);
+    color: var(--primary-color);
+    box-shadow: var(--shadow-dark), var(--shadow-light);
+    border: 1px solid rgba(255,255,255,0.9);
+  }
+}
+
+.neo-input {
+  &.ps-5 { padding-left: 2.8rem !important; }
+  &.pe-5 { padding-right: 2.8rem !important; }
+}
+
+select.neo-input {
+  background-position: right 1.2rem center;
+}
+
+/* Medidor de Contraseña */
+.pwd-meter-container {
+  .pwd-segment {
+    flex: 1;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.06);
+    transition: all 0.4s ease;
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
+  }
+
+  &.fuerza-debil {
+    .seg-1 { background: var(--danger-color); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+  }
+  &.fuerza-media {
+    .seg-1, .seg-2 { background: var(--warning-color); box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
+  }
+  &.fuerza-fuerte {
+    .seg-1, .seg-2, .seg-3 { background: var(--success-color); box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+  }
+}
+
+.fuerza-debil-text { color: var(--danger-color); }
+.fuerza-media-text { color: var(--warning-color); }
+.fuerza-fuerte-text { color: var(--success-color); }
+
+.border-top-neo {
+  border-top: 2px solid rgba(255,255,255,0.8);
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.02);
+}
+
+/* === 5. ANIMACIONES === */
+.wave-transition-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(241, 245, 249, 0.85);
+  backdrop-filter: blur(12px);
+  z-index: 50;
+  overflow: hidden;
+}
+
+.ripple-registro {
+  position: absolute;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: #10b981;
+  animation: waveRipple 1.8s ease-out infinite;
+  z-index: -1;
+}
+
+@keyframes waveRipple {
+  0% { transform: scale(0); opacity: 0.1; }
+  50% { opacity: 0.2; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+@keyframes fadeInUpStagger {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stagger-1 { animation: fadeInUpStagger 0.6s ease-out 0.1s forwards; opacity: 0; }
+.stagger-2 { animation: fadeInUpStagger 0.6s ease-out 0.2s forwards; opacity: 0; }
+.stagger-3 { animation: fadeInUpStagger 0.6s ease-out 0.3s forwards; opacity: 0; }
+.stagger-4 { animation: fadeInUpStagger 0.6s ease-out 0.4s forwards; opacity: 0; }
+.stagger-5 { animation: fadeInUpStagger 0.6s ease-out 0.5s forwards; opacity: 0; }
+.stagger-6 { animation: fadeInUpStagger 0.6s ease-out 0.6s forwards; opacity: 0; }
+
+.floating-anim { animation: float 6s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+.wave-btn:active:not([disabled]) { animation: buttonWave 0.6s ease-out; }
+@keyframes buttonWave {
+  0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.5); }
+  70% { box-shadow: 0 0 0 15px rgba(79, 70, 229, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+}

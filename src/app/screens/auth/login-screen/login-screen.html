@@ -1,0 +1,99 @@
+<div class="split-screen-container d-flex flex-column flex-lg-row min-vh-100">
+
+  <aside class="info-panel d-flex flex-column justify-content-center col-12 col-lg-5 p-4 p-xl-5 position-relative overflow-hidden">
+    <div class="glass-orb orb-1"></div>
+    <div class="glass-orb orb-2"></div>
+
+    <div class="visual-content z-2 text-center text-lg-start animate-fade-in-left">
+      <div class="logo-box mx-auto mx-lg-0 mb-4 d-flex align-items-center justify-content-center">
+        <i class="bi bi-beaker-fill text-white fs-2"></i>
+      </div>
+      <h1 class="visual-title mb-3 fw-bold gradient-text-light">Bienvenido de <br>Nuevo</h1>
+      <p class="visual-subtitle text-white-50 mx-auto mx-lg-0 mb-0">
+        Accede a tu panel de control para gestionar tus reservas de laboratorios, validar horarios y solicitar préstamos de equipo.
+      </p>
+
+      <div class="glass-card-mini floating-anim mt-5 d-none d-lg-flex align-items-center">
+        <div class="icon-box-glow bg-primary-soft text-primary-light me-3">
+          <i class="bi bi-shield-check"></i>
+        </div>
+        <div>
+          <h6 class="fw-bold text-white mb-0">Conexión Segura</h6>
+          <span class="small text-white-50">Autenticación cifrada institucional</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="form-panel d-flex justify-content-center align-items-lg-center col-12 col-lg-7 p-0 bg-neo-light position-relative">
+
+    @if (isLoading()) {
+      <div class="wave-transition-overlay d-flex flex-column align-items-center justify-content-center">
+        <div class="wave-ripple ripple-login"></div>
+        <div class="logo-box-auth animate-pulse mb-3">
+          <i class="bi bi-fingerprint text-primary fs-1"></i>
+        </div>
+        <p class="text-primary fw-bold">Validando credenciales...</p>
+      </div>
+    }
+
+    <div class="form-scroll-wrapper w-100 p-4 p-xl-5">
+      <div class="form-content mx-auto" style="max-width: 480px;">
+
+        <header class="mb-5 text-center text-lg-start stagger-1">
+          <h2 class="fw-bold text-dark mb-2">Iniciar Sesión</h2>
+          <p class="text-muted small">Ingresa tus credenciales institucionales para acceder</p>
+        </header>
+
+        <form (ngSubmit)="login()" #loginForm="ngForm">
+
+          <div class="mb-4 stagger-2">
+            <label class="form-label fw-semibold text-dark small mb-2">Correo Institucional</label>
+            <div class="position-relative">
+              <i class="bi bi-envelope position-absolute top-50 start-0 translate-middle-y ms-3 text-muted fs-5"></i>
+              <input type="email" class="neo-input w-100 ps-5 py-3" placeholder="ejemplo@alumno.buap.mx"
+                     name="email" [(ngModel)]="user.email"
+                     [class.border-danger]="errors.email" required>
+            </div>
+            @if (errors.email) { <span class="text-danger small mt-1 d-block">{{ errors.email }}</span> }
+          </div>
+
+          <div class="mb-5 stagger-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label class="form-label fw-semibold text-dark small m-0">Contraseña</label>
+              <a href="javascript:void(0)" class="small text-primary fw-bold text-decoration-none transition-smooth hover-scale">¿Olvidaste tu contraseña?</a>
+            </div>
+            <div class="position-relative">
+              <i class="bi bi-lock position-absolute top-50 start-0 translate-middle-y ms-3 text-muted fs-5"></i>
+              <input [type]="inputType" class="neo-input w-100 px-5 py-3" placeholder="••••••••"
+                     name="password" [(ngModel)]="user.password"
+                     [class.border-danger]="errors.password" required>
+              <i class="bi position-absolute top-50 end-0 translate-middle-y me-3 text-muted fs-5 cursor-pointer transition-smooth"
+                 [class.bi-eye]="hidePassword" [class.bi-eye-slash]="!hidePassword"
+                 (click)="showPassword()"></i>
+            </div>
+            @if (errors.password) { <span class="text-danger small mt-1 d-block">{{ errors.password }}</span> }
+          </div>
+
+          <button type="submit" class="btn-neo-primary w-100 py-3 mt-2 d-flex justify-content-center align-items-center fw-bold stagger-4 wave-btn" [disabled]="isLoading()">
+            @if (isLoading()) {
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Conectando...
+            } @else {
+              Ingresar al Sistema <i class="bi bi-box-arrow-in-right ms-2 fs-5"></i>
+            }
+          </button>
+        </form>
+
+        <footer class="text-center mt-5 pt-4 border-top-neo stagger-5">
+          <span class="text-muted small">¿No tienes cuenta? </span>
+          <a routerLink="/auth/registro" class="text-primary fw-bold text-decoration-none small transition-smooth hover-scale">Regístrate aquí</a>
+          <div class="mt-4">
+            <a routerLink="/" class="text-muted text-decoration-none small transition-smooth hover-scale"><i class="bi bi-arrow-left me-1"></i> Volver al inicio público</a>
+          </div>
+        </footer>
+
+      </div>
+    </div>
+  </main>
+
+</div>

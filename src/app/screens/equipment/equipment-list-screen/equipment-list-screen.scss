@@ -1,0 +1,70 @@
+@mixin neo-outset { box-shadow: var(--shadow-dark), var(--shadow-light); border: 1px solid rgba(255, 255, 255, 0.7); }
+@mixin neo-inset { box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light); border: 1px solid rgba(255, 255, 255, 0.3); }
+@mixin text-truncate-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+.equipment-wrapper { width: 100%; padding-top: 0.5rem; }
+.title-high-end { font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 800; letter-spacing: -1px; }
+.text-truncate-2 { @include text-truncate-2; }
+.tracking-tight { letter-spacing: -0.5px; }
+.tracking-wide { letter-spacing: 0.8px; }
+
+.dashboard-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem;
+  @media (max-width: 767.98px) { flex-direction: column; align-items: flex-start; gap: 1rem; .btn-neo-primary { width: 100%; text-align: center; justify-content: center; } }
+}
+
+.neo-search-bar .neo-input-search {
+  background-color: var(--neo-light-bg); border-radius: var(--radius-pill); padding: 1.1rem 1.5rem 1.1rem 3.5rem;
+  font-size: 0.95rem; font-weight: 600; color: var(--text-main); @include neo-inset; transition: all 0.3s ease;
+  &::placeholder { color: var(--text-muted); opacity: 0.5; font-weight: 500; }
+  &:focus { outline: none; box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light), 0 0 0 4px rgba(79, 70, 229, 0.15); border-color: var(--primary-color); }
+}
+
+.neo-card-equipment {
+  background-color: var(--neo-light-bg); border-radius: 24px; @include neo-outset; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  @media (max-width: 575.98px) { padding: 1.25rem !important; border-radius: 20px; }
+}
+
+.interactive-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 15px 15px 35px rgba(148, 163, 184, 0.35), -15px -15px 35px #ffffff; border-color: #ffffff; }
+
+.icon-box-eq {
+  width: clamp(48px, 8vw, 56px); height: clamp(48px, 8vw, 56px); display: flex; align-items: center; justify-content: center;
+  font-size: clamp(1.3rem, 2vw, 1.6rem); background-color: var(--neo-light-bg); border-radius: 14px; @include neo-inset; flex-shrink: 0;
+}
+
+/* Caja de S/N Neomórfica */
+.neo-serial-box {
+  @include neo-inset; background-color: rgba(241, 245, 249, 0.5); border: 1px dashed rgba(100, 116, 139, 0.2);
+}
+
+.neo-badge-status {
+  padding: 6px 14px; border-radius: var(--radius-pill); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; @include neo-inset;
+  &.badge-success-neo { color: var(--success-color); }
+  &.badge-warning-neo { color: var(--warning-color); }
+  &.badge-primary-neo { color: var(--primary-color); }
+  &.badge-danger-neo { color: var(--danger-color); }
+}
+
+.border-top-neo { border-top: 2px solid rgba(255,255,255,0.7); box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+
+.btn-neo-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border: none; border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25), inset 2px 2px 5px rgba(255,255,255,0.3); transition: all 0.3s ease;
+  &:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(79, 70, 229, 0.35); }
+  &:active { box-shadow: inset 3px 3px 8px rgba(0,0,0,0.2); transform: translateY(0); }
+}
+
+.btn-neo-mini-rect {
+  background: var(--neo-light-bg); border: none; font-size: 0.8rem; font-weight: 700; padding: 8px; border-radius: 8px; @include neo-outset; transition: all 0.2s ease;
+  &:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--shadow-hover-dark), var(--shadow-hover-light); }
+  &:active:not(:disabled) { @include neo-inset; transform: translateY(0); }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+.loading-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 28px; background-color: rgba(241, 245, 249, 0.7); backdrop-filter: blur(8px); z-index: 10; }
+.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+@keyframes fadeInUpStagger { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.stagger-1 { animation: fadeInUpStagger 0.5s ease-out 0.1s forwards; opacity: 0; }
+.stagger-2 { animation: fadeInUpStagger 0.5s ease-out 0.15s forwards; opacity: 0; }
+.stagger-3 { animation: fadeInUpStagger 0.5s ease-out 0.2s forwards; opacity: 0; }

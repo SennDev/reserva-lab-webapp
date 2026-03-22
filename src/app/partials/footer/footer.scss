@@ -1,0 +1,113 @@
+/* ==========================================================================
+   FOOTER - DARK NEUMORPHISM (Ancla Visual)
+   ========================================================================== */
+
+/* Variables locales para el modo oscuro del footer */
+.neo-footer-dark {
+  --bg-dark: #0f172a; /* Slate 900 profundo */
+  --text-white: #f8fafc;
+  --text-muted-dark: #94a3b8;
+  --primary-light: #818cf8; /* Índigo claro para contrastar en oscuro */
+
+  /* Sombras Neomórficas Oscuras */
+  --shadow-dark-bg: 8px 8px 16px rgba(0, 0, 0, 0.6);
+  --shadow-light-bg: -8px -8px 16px rgba(255, 255, 255, 0.04);
+  --shadow-inset-dark-bg: inset 4px 4px 8px rgba(0, 0, 0, 0.6);
+  --shadow-inset-light-bg: inset -4px -4px 8px rgba(255, 255, 255, 0.04);
+
+  background-color: var(--bg-dark);
+  position: relative;
+  overflow: hidden;
+  border-radius: 40px 40px 0 0; /* Curva superior para fluir con la página */
+  margin-top: auto;
+  z-index: 10;
+}
+
+/* Línea de luz superior (Efecto Sci-Fi / Neón) */
+.footer-glow-line {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+  opacity: 0.5;
+  box-shadow: 0 2px 15px var(--primary-light);
+}
+
+.text-muted-dark { color: var(--text-muted-dark); line-height: 1.6; }
+.text-primary-light { color: var(--primary-light); }
+.letter-spacing-tight { letter-spacing: -0.5px; }
+
+/* Logo Box Oscuro */
+.brand-logo .logo-box-dark {
+  width: 44px; height: 44px;
+  background-color: var(--bg-dark);
+  color: var(--primary-light);
+  border-radius: 14px;
+  font-size: 1.4rem;
+  box-shadow: var(--shadow-dark-bg), var(--shadow-light-bg);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Enlaces con Hover Neomórfico Inset */
+.footer-links a {
+  color: var(--text-muted-dark);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-left: -12px;
+
+  &:hover {
+    color: var(--text-white);
+    background-color: var(--bg-dark);
+    box-shadow: var(--shadow-inset-dark-bg), var(--shadow-inset-light-bg);
+    transform: translateX(5px);
+  }
+}
+
+/* Iconos de contacto */
+.icon-box-dark {
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  background: var(--bg-dark); border-radius: 10px; color: var(--primary-light);
+  box-shadow: var(--shadow-inset-dark-bg), var(--shadow-inset-light-bg);
+}
+
+/* Botones Sociales (Cuter detail) */
+.social-btn-dark {
+  width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+  background: var(--bg-dark); color: var(--text-muted-dark);
+  border-radius: 50%; font-size: 1.2rem; text-decoration: none;
+  box-shadow: var(--shadow-dark-bg), var(--shadow-light-bg);
+  transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.02);
+
+  &:hover {
+    color: var(--primary-light); transform: translateY(-3px);
+  }
+  &:active {
+    box-shadow: var(--shadow-inset-dark-bg), var(--shadow-inset-light-bg);
+    transform: translateY(0);
+  }
+}
+
+/* Divisor hundido modo oscuro */
+.neo-divider-dark {
+  height: 2px; width: 100%;
+  background-color: transparent;
+  box-shadow: var(--shadow-inset-dark-bg), var(--shadow-inset-light-bg);
+  border-radius: 2px;
+}
+
+/* Botón flotante 'Volver arriba' */
+.btn-back-to-top {
+  width: 44px; height: 44px;
+  background-color: var(--primary-light); color: var(--bg-dark);
+  border: none; border-radius: 14px; font-size: 1.5rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 15px rgba(129, 140, 248, 0.4);
+  cursor: pointer; transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px); box-shadow: 0 8px 25px rgba(129, 140, 248, 0.6);
+  }
+  &:active { transform: translateY(0); }
+}

@@ -1,0 +1,131 @@
+<div class="dashboard-home-wrapper h-100 d-flex flex-column">
+
+  <header class="dashboard-header mb-4 stagger-1">
+    <div class="header-titles">
+      <h2 class="title-high-end text-dark mb-1">Visión General</h2>
+      <p class="text-muted small m-0 fw-medium">Monitorea tu actividad y el estado de la facultad en tiempo real.</p>
+    </div>
+    <button class="btn-neo-circle text-muted hover-glow-primary" title="Actualizar datos" [disabled]="isLoading()" (click)="ngOnInit()">
+      <i class="bi bi-arrow-clockwise" [class.spin-anim]="isLoading()"></i>
+    </button>
+  </header>
+
+  <div class="position-relative flex-grow-1">
+
+    @if (isLoading()) {
+      <div class="loading-overlay d-flex flex-column align-items-center justify-content-center h-100 w-100 pb-5">
+        <div class="spinner-border text-primary mb-3" style="width: 3.5rem; height: 3.5rem;" role="status"></div>
+        <h5 class="fw-bold text-dark">Recopilando Métricas...</h5>
+        <p class="text-muted small">Sincronizando tus reservas y ocupación global</p>
+      </div>
+    } @else {
+
+      <div class="animate-fade-in">
+        <div class="row g-4 mb-4 stagger-2">
+          @for (stat of stats(); track stat.title) {
+            <div class="col-12 col-lg-4">
+              <div class="neo-widget-card p-4 h-100 d-flex align-items-center">
+                <div class="stat-icon-neo {{stat.color}} me-4">
+                  <i class="bi {{stat.icon}}"></i>
+                </div>
+                <div class="stat-info overflow-hidden">
+                  <p class="text-muted m-0 fw-bold text-uppercase tracking-wide text-truncate">{{stat.title}}</p>
+                  <div class="d-flex align-items-baseline gap-2 mt-1">
+                    <h3 class="title-kpi-main text-dark m-0">{{stat.value}}</h3>
+                    <span class="small text-muted fw-semibold text-truncate">{{stat.subtext}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="row g-4 stagger-3 pb-4">
+
+          <div class="col-12 col-xl-8 d-flex flex-column">
+            <div class="neo-widget-content p-4 p-md-5 h-100 d-flex flex-column">
+              <div class="header-flex mb-4 pb-3 border-bottom-neo">
+                <h5 class="fw-bold text-dark m-0 tracking-tight">Mis Próximas Reservas</h5>
+                <button class="btn-neo-text small fw-bold" routerLink="/dashboard/reservas">
+                  Ver todas <i class="bi bi-chevron-right ms-1"></i>
+                </button>
+              </div>
+
+              <div class="reservations-list flex-grow-1">
+                @if (proximasReservas().length === 0) {
+                  <div class="empty-state d-flex flex-column align-items-center justify-content-center h-100 opacity-50 py-4">
+                    <i class="bi bi-inbox fs-1 text-muted mb-3"></i>
+                    <p class="fw-medium m-0">No tienes reservas activas.</p>
+                  </div>
+                } @else {
+                  <div class="d-flex flex-column gap-3">
+                    @for (res of proximasReservas(); track res.lab) {
+                      <div class="neo-list-item d-flex flex-column flex-sm-row justify-content-between align-items-sm-center p-3 px-4"
+                           [class]="res.estado === 'Confirmada' ? 'status-green' : 'status-yellow'">
+
+                        <div class="d-flex align-items-center gap-3 mb-3 mb-sm-0 overflow-hidden">
+                          <div class="item-icon text-primary"><i class="bi bi-journal-text"></i></div>
+                          <div class="item-text overflow-hidden">
+                            <h6 class="fw-bold text-dark m-0 tracking-tight text-truncate" title="{{res.lab}}">{{res.lab}}</h6>
+                            <span class="small text-muted fw-medium text-truncate d-block">{{res.materia}}</span>
+                          </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3 ms-auto ms-sm-0 flex-shrink-0">
+                          <div class="text-sm-end text-muted small fw-medium">
+                            <i class="bi bi-clock me-1 text-primary"></i> {{res.fecha}}
+                          </div>
+                          <span class="neo-badge-status {{res.badgeClass}}">{{res.estado}}</span>
+                          <button class="btn-neo-mini text-muted hover-glow-primary"><i class="bi bi-three-dots-vertical"></i></button>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-xl-4 d-flex flex-column gap-4">
+
+            <div class="neo-widget-card p-4">
+              <div class="header-flex mb-3">
+                <h6 class="fw-bold text-dark m-0 tracking-tight">Ocupación Global</h6>
+                <div class="live-indicator"><span class="pulse-dot"></span> Vivo</div>
+              </div>
+              <div class="d-flex align-items-end gap-2 mb-3">
+                <h2 class="display-4 fw-bold m-0 lh-1 text-dark">{{ocupacionGlobal()}}%</h2>
+                <span class="text-muted small fw-medium mb-1">En uso</span>
+              </div>
+              <div class="neo-progress-track">
+                <div class="neo-progress-fill bg-primary-gradient progress-glow" [style.width.%]="ocupacionGlobal()"></div>
+              </div>
+            </div>
+
+            <div class="neo-widget-action p-4 p-xl-5 flex-grow-1 position-relative overflow-hidden">
+              <div class="vector-shape shape-1"></div>
+              <div class="vector-shape shape-2"></div>
+
+              <div class="content-z-index d-flex flex-column h-100">
+                <h5 class="fw-bold mb-1 text-white tracking-tight">Acceso Rápido</h5>
+                <p class="small text-white-50 mb-4">¿Qué necesitas, {{ userName() }}?</p>
+
+                <div class="d-flex flex-column gap-3 mt-auto">
+                  <button class="btn-action-solid w-100 d-flex align-items-center" routerLink="/dashboard/reservas/nueva">
+                    <div class="icon-box bg-primary-soft text-primary me-3"><i class="bi bi-plus-lg"></i></div>
+                    Nueva Reserva
+                  </button>
+                  <button class="btn-action-outline w-100 d-flex align-items-center" disabled title="Próximamente">
+                    <div class="icon-box bg-white-20 text-white me-3"><i class="bi bi-tools"></i></div>
+                    Solicitar Equipo
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

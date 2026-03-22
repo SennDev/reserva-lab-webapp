@@ -1,0 +1,60 @@
+<div class="navbar-wrapper">
+  <nav class="navbar-glass-neo">
+
+    <a routerLink="/" class="nav-brand" (click)="closeMenu()">
+      <div class="logo-box shadow-primary-glow">
+        <i class="bi bi-beaker-fill"></i>
+      </div>
+      <span class="brand-text">ReservaLab</span>
+    </a>
+
+    <div class="nav-links d-none d-lg-flex">
+      <a href="#inicio" class="nav-item">Inicio</a>
+      <a href="#caracteristicas" class="nav-item">Beneficios</a>
+      <a href="#laboratorios" class="nav-item">Espacios</a>
+    </div>
+
+    <div class="nav-actions d-none d-lg-flex">
+      <button class="btn-neo-outline btn-slim" routerLink="/auth/login">Acceder</button>
+      <button class="btn-neo-primary btn-slim wave-btn" routerLink="/auth/registro">Crear Cuenta</button>
+    </div>
+
+    <button
+      class="menu-toggle d-lg-none"
+      [class.active]="isMobileMenuOpen()"
+      (click)="toggleMenu()"
+      aria-label="Menú de navegación">
+      <span class="line line-1"></span>
+      <span class="line line-2"></span>
+      <span class="line line-3"></span>
+    </button>
+
+  </nav>
+
+  <div class="mobile-menu-glass d-lg-none" [class.open]="isMobileMenuOpen()">
+    <div class="mobile-links">
+      <a href="#inicio" class="mobile-item" (click)="closeMenu()">
+        <div class="icon-wrapper bg-primary-soft text-primary"><i class="bi bi-house-door-fill"></i></div>
+        <span class="fw-bold">Inicio</span>
+        <i class="bi bi-chevron-right ms-auto text-muted small"></i>
+      </a>
+      <a href="#caracteristicas" class="mobile-item" (click)="closeMenu()">
+        <div class="icon-wrapper bg-warning-soft text-warning"><i class="bi bi-stars"></i></div>
+        <span class="fw-bold">Beneficios</span>
+        <i class="bi bi-chevron-right ms-auto text-muted small"></i>
+      </a>
+      <a href="#laboratorios" class="mobile-item" (click)="closeMenu()">
+        <div class="icon-wrapper bg-success-soft text-success"><i class="bi bi-buildings-fill"></i></div>
+        <span class="fw-bold">Espacios</span>
+        <i class="bi bi-chevron-right ms-auto text-muted small"></i>
+      </a>
+    </div>
+
+    <div class="mobile-divider my-4"></div>
+
+    <div class="mobile-actions d-flex flex-column gap-3">
+      <button class="btn-neo-outline w-100 py-3 fw-bold" routerLink="/auth/login" (click)="closeMenu()">Acceso Personal</button>
+      <button class="btn-neo-primary w-100 py-3 wave-btn fw-bold shadow-primary-glow" routerLink="/auth/registro" (click)="closeMenu()">Crear Cuenta Nueva</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,156 @@
+<app-navbar></app-navbar>
+
+<div class="global-glass-background">
+  <div class="glass-orb orb-primary"></div>
+  <div class="glass-orb orb-secondary"></div>
+  <div class="glass-orb orb-accent"></div>
+</div>
+
+<div class="home-wrapper position-relative z-2" id="inicio">
+
+  <main class="hero-section container d-flex align-items-center justify-content-center">
+    <div class="row align-items-center w-100 flex-column-reverse flex-lg-row gy-5">
+
+      <div class="col-12 col-lg-6 text-center text-lg-start animate-fade-in-right">
+        <div class="neo-badge-glass mb-4 d-inline-flex align-items-center mx-auto mx-lg-0">
+          <span class="pulse-dot me-2"></span> Sistema Académico 2026
+        </div>
+
+        <h1 class="hero-title fw-bold text-dark mb-4">
+          Control total sobre tus <br>
+          <span class="gradient-text-glass">Espacios de Ciencia</span>
+        </h1>
+
+        <p class="hero-subtitle text-muted mb-5 mx-auto mx-lg-0">
+          Digitaliza la gestión de laboratorios. Una arquitectura neomórfica diseñada para la eficiencia, eliminando conflictos de horarios y maximizando el uso de recursos.
+        </p>
+
+        <div class="hero-cta-group d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start mb-4">
+          <button class="btn-neo-primary btn-lg wave-btn mb-3 mb-sm-0 me-sm-3" routerLink="/auth/registro">
+            Comenzar <i class="bi bi-arrow-right ms-2 fs-5"></i>
+          </button>
+
+          <button class="btn-neo-outline btn-lg" routerLink="/auth/login">
+            Acceder
+          </button>
+        </div>
+
+        <div class="academic-proof d-flex align-items-center justify-content-center justify-content-lg-start gap-3 animate-fade-in-up delay-2">
+          <div class="proof-item"><i class="bi bi-shield-check text-primary me-2"></i><span>Seguridad JWT</span></div>
+          <div class="divider-vertical"></div>
+          <div class="proof-item"><i class="bi bi-lightning-charge-fill text-warning me-2"></i><span>Respuesta Real-time</span></div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6 animate-fade-in-left">
+        <div class="glass-card-hero mx-auto floating-anim">
+          <div class="glass-header d-flex justify-content-between align-items-center mb-3 px-2">
+            <div class="d-flex gap-2">
+              <span class="dot bg-danger"></span><span class="dot bg-warning"></span><span class="dot bg-success"></span>
+            </div>
+            <span class="small fw-bold text-muted"></span>
+          </div>
+          <div class="image-inner-wrapper border-glass-highlight">
+            <img src="assets/images/lab.jpg" alt="Interface" class="img-fluid object-fit-cover shadow-sm">
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section class="py-5 section-steps position-relative">
+    <div class="container py-4">
+      <div class="row g-4 justify-content-center">
+        @for (step of steps; track step.num) {
+          <div class="col-12 col-md-4 animate-fade-in-up delay-{{$index + 1}}">
+            <div class="step-card-mini d-flex align-items-center p-4">
+              <div class="step-number-box me-3">{{step.num}}</div>
+              <div>
+                <h6 class="fw-bold m-0 text-dark">{{step.title}}</h6>
+                <p class="small text-muted m-0">{{step.desc}}</p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="caracteristicas" class="py-5 section-neo-base">
+    <div class="container py-5">
+      <div class="row align-items-center gy-5">
+        <div class="col-12 col-xl-5 text-center text-xl-start animate-fade-in-up">
+          <h2 class="title-primary fw-bold text-dark mb-4">Potencia tu <br><span class="text-primary">Productividad</span></h2>
+          <p class="subtitle text-muted mb-4">
+            ReservaLab centraliza procesos complejos en una interfaz intuitiva y táctil. Optimiza tu tiempo y el de tus alumnos.
+          </p>
+          <div class="d-none d-xl-block">
+            <div class="neo-decorative-circle"></div>
+          </div>
+        </div>
+
+        <div class="col-12 col-xl-7 animate-fade-in-up delay-1">
+          <div class="neo-accordion-container mx-auto mx-xl-0">
+            @for (feat of features; track feat.title; let i = $index) {
+              <div class="neo-panel" [class.active]="activeFeatureIndex() === i" (click)="toggleFeature(i)">
+                <div class="setting-title d-flex align-items-center">
+                  <div class="icon-neo-small me-3" [class]="feat.colorClass">
+                    <i class="bi {{feat.icon}}"></i>
+                  </div>
+                  <h3 class="m-0 fw-bold fs-5">{{feat.title}}</h3>
+                  <div class="ms-auto icon-indicator transition-smooth" [class.active-indicator]="activeFeatureIndex() === i">
+                    <i class="bi bi-chevron-down text-muted"></i>
+                  </div>
+                </div>
+                <div class="setting-content">
+                  <p class="text-muted m-0">{{feat.desc}}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="laboratorios" class="py-5 mb-5 section-neo-base">
+    <div class="container">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-end mb-5 animate-fade-in-up">
+        <div class="text-center text-md-start">
+          <h2 class="title-primary fw-bold text-dark mb-2">Espacios Disponibles</h2>
+          <p class="subtitle text-muted m-0">Explora la infraestructura tecnológica a tu alcance.</p>
+        </div>
+        <button class="btn-neo-outline mt-4 mt-md-0 px-4" routerLink="/auth/registro">Catálogo Completo</button>
+      </div>
+
+      <div class="row g-4">
+        @for (lab of laboratorios; track lab.nombre; let i = $index) {
+          <div class="col-12 col-md-6 animate-fade-in-up delay-{{i + 1}}">
+            <div class="neo-card-lab p-4 p-lg-5 d-flex flex-column h-100">
+              <div class="d-flex align-items-center w-100 mb-4">
+                <div class="lab-icon-neo me-4 flex-shrink-0">
+                  <i class="bi {{lab.icon}} fs-2 {{lab.color}}"></i>
+                </div>
+                <div>
+                  <h4 class="fw-bold mb-1 text-dark fs-5">{{lab.nombre}}</h4>
+                  <span class="neo-badge-light small fw-bold"><i class="bi bi-people-fill me-1"></i> Capacidad: {{lab.capacidad}}</span>
+                </div>
+              </div>
+
+              <div class="mt-auto pt-4 border-top-neo">
+                <div class="d-flex flex-wrap gap-2">
+                  @for (item of lab.equipamiento; track item) {
+                    <span class="neo-tag">{{item}}</span>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<app-footer></app-footer>

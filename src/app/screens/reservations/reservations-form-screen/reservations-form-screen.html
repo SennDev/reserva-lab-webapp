@@ -1,0 +1,131 @@
+<div class="form-wrapper d-flex flex-column h-100 pb-4">
+
+  <header class="mb-5 stagger-1 d-flex align-items-center">
+    <button class="btn-neo-circle me-4" routerLink="/dashboard/reservas" title="Volver al Historial">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <div>
+      <h2 class="title-high-end text-dark mb-1">Solicitar Nueva Reserva</h2>
+      <p class="text-muted small m-0 fw-medium">Aparta un espacio físico validando su disponibilidad.</p>
+    </div>
+  </header>
+
+  <div class="row g-5 flex-grow-1 align-items-start stagger-2 m-0 w-100">
+
+    <div class="col-12 col-xl-7">
+      <div class="neo-widget-content p-4 p-md-5">
+        <form (ngSubmit)="submitReserva()" #reservaForm="ngForm" novalidate>
+
+          <h6 class="fw-bold text-primary mb-4 border-bottom-neo pb-2"><i class="bi bi-calendar-event me-2"></i> Detalles del Espacio y Tiempo</h6>
+
+          <div class="mb-4">
+            <label class="fw-bold small text-dark mb-2">Laboratorio Requerido <span class="text-danger">*</span></label>
+            <select class="neo-input w-100 form-select" [class.input-error]="errors.laboratorioId" name="laboratorioId" [(ngModel)]="reservaData.laboratorioId">
+              <option value="" disabled selected>Selecciona un laboratorio disponible...</option>
+              @for (lab of laboratoriosDisponibles; track lab.id) {
+                <option [value]="lab.id">{{lab.nombre}}</option>
+              }
+            </select>
+            @if (errors.laboratorioId) { <span class="text-danger small mt-2 d-block fw-medium"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.laboratorioId }}</span> }
+          </div>
+
+          <div class="row g-4 mb-4">
+            <div class="col-md-6">
+              <label class="fw-bold small text-dark mb-2">Fecha de Uso <span class="text-danger">*</span></label>
+              <input type="date" class="neo-input w-100" [class.input-error]="errors.fecha" name="fecha" [(ngModel)]="reservaData.fecha" [min]="minDate">
+              @if (errors.fecha) { <span class="text-danger small mt-2 d-block fw-medium"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.fecha }}</span> }
+            </div>
+
+            <div class="col-md-6">
+              <label class="fw-bold small text-dark mb-2">Franja Horaria <span class="text-danger">*</span></label>
+              <select class="neo-input w-100 form-select" [class.input-error]="errors.horario" name="horario" [(ngModel)]="reservaData.horario">
+                <option value="" disabled selected>Selecciona un bloque...</option>
+                @for (hora of bloquesHorarios; track hora) {
+                  <option [value]="hora">{{hora}}</option>
+                }
+              </select>
+              @if (errors.horario) { <span class="text-danger small mt-2 d-block fw-medium"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.horario }}</span> }
+            </div>
+          </div>
+
+          <h6 class="fw-bold text-primary mb-4 border-bottom-neo pb-2 mt-5"><i class="bi bi-journal-text me-2"></i> Justificación Académica</h6>
+
+          <div class="mb-4">
+            <label class="fw-bold small text-dark mb-2">Materia / Práctica a realizar <span class="text-danger">*</span></label>
+            <input type="text" class="neo-input w-100" [class.input-error]="errors.materia" name="materia" [(ngModel)]="reservaData.materia"
+                   placeholder="Ej. Robótica Industrial I">
+            @if (errors.materia) { <span class="text-danger small mt-2 d-block fw-medium"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.materia }}</span> }
+          </div>
+
+          <div class="mb-5">
+            <label class="fw-bold small text-dark mb-2">Motivo / Descripción de uso <span class="text-danger">*</span></label>
+            <textarea class="neo-input w-100" [class.input-error]="errors.motivo" rows="3" name="motivo" [(ngModel)]="reservaData.motivo"
+                      placeholder="Describe qué actividades se realizarán con el equipo..."></textarea>
+            @if (errors.motivo) { <span class="text-danger small mt-2 d-block fw-medium"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.motivo }}</span> }
+          </div>
+
+          <div class="d-flex gap-3 justify-content-end pt-4 border-top-neo mt-4">
+            <button type="button" class="btn-action-outline text-muted px-4 fw-bold" routerLink="/dashboard/reservas">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-neo-primary px-5 py-3 fw-bold d-flex align-items-center" [disabled]="isSaving()">
+              @if (isSaving()) {
+                <span class="spinner-border spinner-border-sm me-2"></span> Solicitando...
+              } @else {
+                <i class="bi bi-send-check-fill me-2 fs-5"></i> Enviar Solicitud
+              }
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <div class="col-12 col-xl-5 d-none d-xl-flex flex-column align-items-center position-sticky top-bar-offset mt-0 h-100">
+      <div class="preview-container w-100 d-flex flex-column align-items-center p-5 interactive-card">
+
+        <p class="small fw-bold text-primary text-uppercase tracking-wide mb-5 animate-pulse">
+          <i class="bi bi-eye-fill me-2"></i> Ticket de Solicitud
+        </p>
+
+        <div class="neo-list-item-preview d-flex flex-column p-4 w-100 shadow-xl status-yellow bg-white border-white-50">
+
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="item-icon text-primary"><i class="bi bi-journal-bookmark-fill"></i></div>
+            <span class="neo-badge-status badge-warning-neo">Pendiente</span>
+          </div>
+
+          <h5 class="fw-bolder text-dark mb-2 tracking-tight text-truncate" title="{{reservaData.materia}}">
+            {{ reservaData.materia || 'Nombre de la Práctica...' }}
+          </h5>
+
+          <div class="d-flex flex-column gap-2 small text-muted fw-medium mt-3">
+            <span class="d-flex align-items-center text-truncate">
+              <div class="icon-box-micro me-2"><i class="bi bi-geo-alt-fill"></i></div>
+              <span class="text-dark fw-bold me-1">Lab:</span> {{ labSeleccionadoNombre() }}
+            </span>
+            <span class="d-flex align-items-center text-truncate">
+              <div class="icon-box-micro me-2"><i class="bi bi-person-fill"></i></div>
+              <span class="text-dark fw-bold me-1">Solicita:</span> {{ authService.currentUserValue?.nombre_completo || 'Usuario' }}
+            </span>
+          </div>
+
+          <div class="border-top-neo pt-3 mt-3 d-flex flex-column gap-2 text-muted small fw-medium">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-calendar-event me-2 text-primary"></i> <span class="text-dark fw-bold">{{ reservaData.fecha || 'DD/MM/AAAA' }}</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-clock me-2 text-primary"></i> {{ reservaData.horario || '--:-- a --:--' }}
+            </div>
+          </div>
+
+        </div>
+
+        <p class="small text-muted mt-5 text-center px-4 lh-base">
+          Esta solicitud será enviada al Administrador o Técnico para su aprobación. Podrás ver su estado en tu historial.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
