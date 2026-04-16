@@ -64,7 +64,7 @@
           <i class="bi bi-list fs-4"></i>
         </button>
         <div class="d-none d-sm-block">
-          <h5 class="m-0 fw-bold text-dark tracking-tight">Bienvenido, {{ (user()?.nombre_completo || 'Usuario').split(' ')[0] }}</h5>
+          <h5 class="m-0 fw-bold text-dark tracking-tight">Bienvenido {{ (user()?.nombre_completo || 'Usuario').split(' ')[0] }}</h5>
           <span class="small text-muted fw-medium">Facultad de Ciencias de la Computación</span>
         </div>
       </div>
@@ -75,7 +75,7 @@
           <span class="badge-notification bg-danger border border-light rounded-circle"></span>
         </button>
 
-        <div class="user-profile-menu d-flex align-items-center gap-3 ps-3 border-start-neo">
+        <div class="user-profile-menu d-flex align-items-center gap-3 ps-3 ">
           <div class="d-none d-md-flex flex-column text-end">
             <span class="fw-bold text-dark small m-0 lh-1">{{ user()?.nombre_completo || 'Cargando...' }}</span>
             <span class="text-muted fw-medium" style="font-size: 0.75rem;">{{ user()?.matricula }}</span>
