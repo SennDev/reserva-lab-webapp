@@ -14,7 +14,6 @@
     </div>
 
     <nav class="sidebar-nav px-3 flex-grow-1">
-      <p class="nav-label small fw-bold text-muted text-uppercase tracking-wide px-3 mb-2">Principal</p>
 
       <a routerLink="/dashboard" class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth" (click)="closeSidebar()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
         <div class="icon-wrapper me-3"><i class="bi bi-grid-1x2-fill"></i></div>
@@ -31,14 +30,10 @@
         <span class="fw-semibold">Catálogo Labs</span>
       </a>
 
-      @if (user()?.rol === 'admin' || user()?.rol === 'tecnico') {
-        <p class="nav-label small fw-bold text-muted text-uppercase tracking-wide px-3 mt-4 mb-2">Administración</p>
-
-        <a routerLink="/dashboard/equipos" class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth" (click)="closeSidebar()" routerLinkActive="active">
-          <div class="icon-wrapper me-3"><i class="bi bi-tools"></i></div>
-          <span class="fw-semibold">Gestión de Equipos</span>
-        </a>
-      }
+      <a routerLink="/dashboard/equipos" class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth" (click)="closeSidebar()" routerLinkActive="active">
+        <div class="icon-wrapper me-3"><i class="bi bi-tools"></i></div>
+        <span class="fw-semibold">Catálogo Equipos</span>
+      </a>
     </nav>
 
     <div class="sidebar-footer p-4 border-top-neo mt-auto">
@@ -64,7 +59,7 @@
           <i class="bi bi-list fs-4"></i>
         </button>
         <div class="d-none d-sm-block">
-          <h5 class="m-0 fw-bold text-dark tracking-tight">Bienvenido, {{ (user()?.nombre_completo || 'Usuario').split(' ')[0] }}</h5>
+          <h5 class="m-0 fw-bold text-dark tracking-tight">Bienvenido {{ (user()?.nombre_completo || 'Usuario').split(' ')[0] }}</h5>
           <span class="small text-muted fw-medium">Facultad de Ciencias de la Computación</span>
         </div>
       </div>
@@ -75,7 +70,7 @@
           <span class="badge-notification bg-danger border border-light rounded-circle"></span>
         </button>
 
-        <div class="user-profile-menu d-flex align-items-center gap-3 ps-3 border-start-neo">
+        <div class="user-profile-menu d-flex align-items-center gap-3 ps-3 ">
           <div class="d-none d-md-flex flex-column text-end">
             <span class="fw-bold text-dark small m-0 lh-1">{{ user()?.nombre_completo || 'Cargando...' }}</span>
             <span class="text-muted fw-medium" style="font-size: 0.75rem;">{{ user()?.matricula }}</span>
