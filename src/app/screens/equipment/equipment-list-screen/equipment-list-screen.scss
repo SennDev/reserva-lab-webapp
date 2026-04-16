@@ -13,7 +13,7 @@
 }
 
 .neo-search-bar .neo-input-search {
-  background-color: var(--neo-light-bg); border-radius: var(--radius-pill); padding: 1.1rem 1.5rem 1.1rem 3.5rem;
+  background-color: var(--neo-light-bg); border-radius: var(--radius-pill); padding: 1.1rem 1.5rem 1.1rem 2rem;
   font-size: 0.95rem; font-weight: 600; color: var(--text-main); @include neo-inset; transition: all 0.3s ease;
   &::placeholder { color: var(--text-muted); opacity: 0.5; font-weight: 500; }
   &:focus { outline: none; box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light), 0 0 0 4px rgba(79, 70, 229, 0.15); border-color: var(--primary-color); }
