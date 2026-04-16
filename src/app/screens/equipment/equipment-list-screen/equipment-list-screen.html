@@ -78,6 +78,12 @@
                   </div>
                 </div>
 
+                <button class="btn-action-card w-100 fw-bold py-3 mt-auto"
+                        [disabled]="eq.estado !== 'Disponible'"
+                        routerLink="/dashboard/reservas/nueva">
+                  Solicitar Reserva
+                </button>
+
                 @if (isStaff()) {
                   <div class="d-flex gap-2 mt-auto pt-3 border-top-neo admin-actions">
                     <button class="btn-neo-mini-rect w-50 text-primary hover-glow-primary"><i class="bi bi-pencil-square me-2"></i> Editar</button>
