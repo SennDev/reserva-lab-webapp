@@ -43,6 +43,16 @@ export const routes: Routes = [
         loadComponent: () => import('./screens/reservations/reservations-form-screen/reservations-form-screen').then(m => m.ReservationsFormScreen)
       },
 
+      // 4. RUTA DE PRESTAMOS
+      {
+        path: 'prestamos',
+        loadComponent: () => import('./screens/loans/loans-list-screen/loans-list-screen').then(m => m.LoansListScreen)
+      },
+      {
+        path: 'prestamos/nueva',
+        loadComponent: () => import('./screens/loans/loans-form-screen/loans-form-screen').then(m => m.LoansFormScreen)
+      },
+
       // 4. RUTAS DE EQUIPOS
       {
         path: 'equipos',

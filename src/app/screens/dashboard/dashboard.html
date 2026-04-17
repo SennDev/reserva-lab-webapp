@@ -25,6 +25,11 @@
         <span class="fw-semibold">Mis Reservas</span>
       </a>
 
+      <a routerLink="/dashboard/prestamos" class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth" (click)="closeSidebar()" routerLinkActive="active">
+        <div class="icon-wrapper me-3"><i class="bi bi-box-seam-fill"></i></div>
+        <span class="fw-semibold">Mis Prestamos</span>
+      </a>
+
       <a routerLink="/dashboard/laboratorios" class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth" (click)="closeSidebar()" routerLinkActive="active">
         <div class="icon-wrapper me-3"><i class="bi bi-building-fill"></i></div>
         <span class="fw-semibold">Catálogo Labs</span>
@@ -34,6 +39,7 @@
         <div class="icon-wrapper me-3"><i class="bi bi-tools"></i></div>
         <span class="fw-semibold">Catálogo Equipos</span>
       </a>
+
     </nav>
 
     <div class="sidebar-footer p-4 border-top-neo mt-auto">
