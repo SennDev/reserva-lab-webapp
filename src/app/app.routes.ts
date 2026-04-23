@@ -61,6 +61,21 @@ export const routes: Routes = [
       {
         path: 'equipos/nuevo',
         loadComponent: () => import('./screens/equipment/equipment-form-screen/equipment-form-screen').then(m => m.EquipmentFormScreen)
+      },
+      
+      // 5. RUTAS DE REPORTES / ADMINISTRACIÓN
+      {
+        path: 'reportes',
+        loadComponent: () => import('./screens/reports/reports-list-screen/reports-list-screen').then(m => m.ReportsListScreen)
+      },
+      {
+        path: 'reportes/detalle', // En el futuro será 'reportes/:id'
+        loadComponent: () => import('./screens/reports/reports-detail-screen/reports-detail-screen').then(m => m.ReportsDetailScreen)
+      },
+      // 6. RUTA DE PERFIL DE USUARIO
+      {
+        path: 'perfil',
+        loadComponent: () => import('./screens/profile/profile-screen/profile-screen').then(m => m.ProfileScreen)
       }
     ]
   }

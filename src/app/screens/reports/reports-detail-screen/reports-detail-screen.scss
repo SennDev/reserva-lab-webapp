@@ -1,0 +1,94 @@
+/* ==========================================================================
+   REPORTS DETAIL SCREEN - MASTER-DETAIL ARCHITECTURE
+   ========================================================================== */
+
+@mixin neo-outset {
+  box-shadow: var(--shadow-dark), var(--shadow-light);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+@mixin neo-inset {
+  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.reports-detail-wrapper { width: 100%; padding-top: 0.5rem; }
+.title-high-end { font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 800; letter-spacing: -1px; }
+
+/* Botón Volver */
+.btn-neo-circle {
+  width: 46px; height: 46px; display: flex; align-items: center; justify-content: center;
+  background: var(--neo-light-bg); border: none; border-radius: 50%; font-size: 1.2rem;
+  box-shadow: var(--shadow-dark), var(--shadow-light); transition: all 0.3s ease;
+  &:hover { color: var(--primary-color); transform: translateX(-4px); box-shadow: var(--shadow-hover-dark), var(--shadow-hover-light); }
+  &:active { box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light); transform: translateY(0); }
+}
+
+/* --- BANDEJA IZQUIERDA (Pendientes) --- */
+.neo-list-item {
+  background-color: var(--neo-light-bg); border-radius: 20px;
+  @include neo-outset; border-left: 6px solid transparent; transition: all 0.3s ease;
+  &.status-yellow { border-left-color: var(--warning-color); }
+  &:hover { transform: translateY(-3px); box-shadow: 10px 10px 25px rgba(148, 163, 184, 0.3), -10px -10px 25px #ffffff; }
+}
+
+.avatar-neo-small {
+  width: 40px; height: 40px; border-radius: 50%; background-color: var(--neo-light-bg);
+  @include neo-inset;
+}
+
+.neo-badge-status {
+  padding: 6px 14px; border-radius: var(--radius-pill); font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+  @include neo-inset; &.badge-warning-neo { color: var(--warning-color); }
+}
+
+/* Botones de acción en la tarjeta */
+.btn-neo-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border: none; border-radius: 12px;
+  box-shadow: 0 8px 15px rgba(79, 70, 229, 0.25), inset 2px 2px 5px rgba(255,255,255,0.3); transition: all 0.2s;
+  &:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(79, 70, 229, 0.35); }
+  &:active { transform: translateY(0); box-shadow: inset 3px 3px 8px rgba(0,0,0,0.2); }
+}
+.btn-action-outline {
+  background-color: transparent; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; transition: all 0.2s;
+  &:hover { background-color: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.6); }
+}
+
+.border-bottom-neo { border-bottom: 2px solid rgba(255,255,255,0.7); box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+.border-top-neo { border-top: 2px solid rgba(255,255,255,0.7); box-shadow: 0 -2px 5px rgba(0,0,0,0.02); }
+.bg-neo-inset { background-color: var(--neo-light-bg); @include neo-inset; }
+
+/* --- PANEL DERECHO (Sticky y Agenda) --- */
+.sticky-panel {
+  @media (min-width: 1200px) {
+    position: sticky;
+    top: 90px; /* Ajusta este valor dependiendo de tu Topbar superior */
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    padding-bottom: 2rem;
+    
+    &::-webkit-scrollbar { width: 0px; background: transparent; } /* Oculta scrollbar */
+  }
+}
+
+.preview-container {
+  background-color: var(--neo-light-bg); border-radius: 24px;
+  box-shadow: var(--shadow-hover-dark), var(--shadow-hover-light); border: 1px solid #ffffff;
+  
+  .item-icon { border-radius: 16px; @include neo-inset; display: flex; align-items: center; justify-content: center; }
+}
+
+.agenda-container {
+  background-color: var(--neo-light-bg); @include neo-inset; border: 1px solid rgba(255, 255, 255, 0.5);
+  
+  .agenda-item {
+    background-color: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.02); transition: transform 0.2s;
+    &:hover { transform: scale(1.02); background-color: rgba(255, 255, 255, 0.7); }
+  }
+}
+
+/* Animaciones */
+@keyframes fadeInUpStagger { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.stagger-1 { animation: fadeInUpStagger 0.5s ease-out 0.1s forwards; opacity: 0; }
+.stagger-2 { animation: fadeInUpStagger 0.5s ease-out 0.2s forwards; opacity: 0; }

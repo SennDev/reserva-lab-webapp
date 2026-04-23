@@ -1,0 +1,124 @@
+<div class="reports-wrapper d-flex flex-column h-100">
+
+  <header class="dashboard-header mb-5 stagger-1">
+    <div class="header-titles">
+      <h2 class="title-high-end text-dark mb-1">Administración de Catálogo</h2>
+      <p class="text-muted small m-0 fw-medium">Selecciona un espacio o equipo para gestionar sus reservas y préstamos.</p>
+    </div>
+  </header>
+
+  <div class="search-section mb-4 stagger-2">
+    <div class="row g-3 align-items-center">
+      
+
+      <div class="search-section mb-4 stagger-2">
+        <div class="row">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="neo-search-bar position-relative">
+              <input type="text" class="neo-input-search w-100" placeholder="Buscar por nombre o edificio..."
+                    (input)="updateSearch($event)" [disabled]="isLoading()">
+              <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-4 text-muted"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-12 col-lg-6 col-xl-5 d-flex gap-2">
+        <button (click)="activeTab.set('laboratorios')" 
+                class="flex-grow-1 border-0 fw-bold py-3 px-3 transition-smooth rounded-4 d-flex align-items-center justify-content-center"
+                [class.btn-neo-primary]="activeTab() === 'laboratorios'"
+                [class.neo-badge-status]="activeTab() !== 'laboratorios'"
+                [class.text-muted]="activeTab() !== 'laboratorios'"
+                style="cursor: pointer; font-size: 0.95rem;">
+          <i class="bi bi-building-fill me-2"></i> Laboratorios
+        </button>
+        
+        <button (click)="activeTab.set('equipos')" 
+                class="flex-grow-1 border-0 fw-bold py-3 px-3 transition-smooth rounded-4 d-flex align-items-center justify-content-center"
+                [class.btn-neo-primary]="activeTab() === 'equipos'"
+                [class.neo-badge-status]="activeTab() !== 'equipos'"
+                [class.text-muted]="activeTab() !== 'equipos'"
+                style="cursor: pointer; font-size: 0.95rem;">
+          <i class="bi bi-tools me-2"></i> Equipos
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="neo-widget-content p-4 p-xl-5 flex-grow-1 d-flex flex-column stagger-3 mb-4 w-100 position-relative">
+
+    @if (isLoading()) {
+      <div class="loading-overlay d-flex flex-column align-items-center justify-content-center h-100 w-100">
+        <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+        <h5 class="fw-bold text-dark">Cargando Catálogo...</h5>
+        <p class="text-muted small">Sincronizando disponibilidad</p>
+      </div>
+    } @else {
+      <div class="d-none d-xl-flex justify-content-between align-items-center mb-4 pb-3 border-bottom-neo w-100 px-3 animate-fade-in">
+        <h6 class="fw-bold text-muted m-0 tracking-wide text-uppercase" style="font-size: 0.85rem;">Detalles del Recurso</h6>
+        <h6 class="fw-bold text-muted m-0 tracking-wide text-uppercase" style="font-size: 0.85rem; min-width: 250px; text-align: center;">Estado Físico y Gestión</h6>
+      </div>
+
+      <div class="reports-list flex-grow-1 w-100 animate-fade-in">
+        @if (filteredCatalogo().length === 0) {
+          <div class="empty-state d-flex flex-column align-items-center justify-content-center h-100 opacity-50 py-5 text-center">
+            <i class="bi bi-archive fs-1 text-muted mb-3 display-4"></i>
+            <h5 class="fw-bold text-dark m-0">No hay registros</h5>
+            <p class="small text-muted mt-2">Intenta con otros términos de búsqueda.</p>
+          </div>
+        } @else {
+          <div class="d-flex flex-column gap-4 w-100">
+            @for (item of filteredCatalogo(); track item.id) {
+
+              <div class="neo-list-item d-flex flex-column flex-xl-row justify-content-between align-items-xl-center p-4 w-100"
+                   [class.status-green]="item.estado === 'Disponible'"
+                   [class.status-yellow]="item.estado === 'En Mantenimiento' || item.estado === 'En Préstamo'"
+                   [class.status-red]="item.estado === 'Ocupado' || item.estado === 'Baja'">
+
+                <div class="d-flex align-items-center gap-4 mb-4 mb-xl-0 flex-grow-1 overflow-hidden me-xl-4">
+                  <div class="item-icon text-primary">
+                    <i class="bi {{item.icon}}"></i>
+                  </div>
+
+                  <div class="item-text overflow-hidden d-flex flex-column justify-content-center w-100">
+                    <h5 class="fw-bolder text-dark mb-2 tracking-tight text-truncate" title="{{item.nombre}}">{{item.nombre}}</h5>
+                    
+                    <div class="d-flex align-items-center small text-muted fw-medium">
+                      <div class="icon-box-micro me-2">
+                        <i class="bi" [class.bi-geo-alt-fill]="item.tipo === 'laboratorio'" [class.bi-upc-scan]="item.tipo === 'equipo'"></i>
+                      </div>
+                      <span class="text-truncate fw-bold">{{item.ubicacion_serie}}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-xl-end gap-4 flex-shrink-0">
+
+                  <div style="min-width: 140px; text-align: center;">
+                    <span class="neo-badge-status w-100 d-inline-block"
+                          [class.badge-success-neo]="item.estado === 'Disponible'"
+                          [class.badge-warning-neo]="item.estado === 'En Mantenimiento'"
+                          [class.badge-primary-neo]="item.estado === 'En Préstamo'"
+                          [class.badge-danger-neo]="item.estado === 'Ocupado' || item.estado === 'Baja'">
+                      {{item.estado}}
+                    </span>
+                  </div>
+
+                  <div class="d-flex align-items-center gap-2 ps-xl-4 ms-auto ms-xl-0 py-2 border-start-neo">
+                    <button class="btn-neo-primary px-4 py-2 small fw-bold d-flex align-items-center" 
+                            style="font-size: 0.85rem;"
+                            routerLink="/dashboard/reportes/detalle"> 
+                      Gestionar <i class="bi bi-arrow-right-short ms-2 fs-5"></i>
+                    </button>
+                  </div>
+                  
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

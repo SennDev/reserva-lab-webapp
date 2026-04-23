@@ -1,0 +1,123 @@
+/* ==========================================================================
+   REPORTS / ADMIN MANAGEMENT SCREEN - HIGH-END NEUMORPHISM
+   ========================================================================== */
+
+/* --- 1. MIXINS LOCALES --- */
+@mixin neo-outset {
+  box-shadow: var(--shadow-dark), var(--shadow-light);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+@mixin neo-inset {
+  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* --- 2. LAYOUT BASE --- */
+.reports-wrapper { width: 100%; padding-top: 0.5rem; }
+
+.title-high-end { font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 800; letter-spacing: -1px; }
+.tracking-tight { letter-spacing: -0.5px; }
+.tracking-wide { letter-spacing: 0.8px; }
+
+.dashboard-header {
+  display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem;
+}
+
+/* --- 3. CONTENEDOR PRINCIPAL --- */
+.neo-widget-content {
+  background-color: var(--neo-light-bg); border-radius: 28px;
+  @include neo-outset; width: 100% !important;
+}
+
+.border-bottom-neo { border-bottom: 2px solid rgba(255,255,255,0.7); box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+.border-start-neo {
+  @media (min-width: 1200px) { border-left: 2px solid rgba(255,255,255,0.7); box-shadow: -2px 0 5px rgba(0,0,0,0.02); }
+}
+
+/* --- 4. BUSCADOR NEOMÓRFICO (Texto integrado) --- */
+.neo-search-bar {
+  .neo-input-search {
+    background-color: var(--neo-light-bg); border-radius: var(--radius-pill);
+    padding: 1.1rem 1.5rem; font-size: 0.95rem; font-weight: 600; color: var(--text-main);
+    @include neo-inset; transition: all 0.3s ease;
+    &::placeholder { color: var(--text-muted); opacity: 0.5; font-weight: 500; }
+    &:focus { outline: none; box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light), 0 0 0 4px rgba(79, 70, 229, 0.15); border-color: var(--primary-color); }
+  }
+}
+
+/* --- 5. ELEMENTOS DE LA LISTA --- */
+.reports-list {
+  max-height: 65vh; overflow-y: auto; overflow-x: hidden; padding-right: 12px;
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.1); border-radius: 10px; }
+}
+
+.neo-list-item {
+  background-color: var(--neo-light-bg); border-radius: 24px;
+  box-shadow: 6px 6px 15px rgba(148, 163, 184, 0.25), -6px -6px 15px #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-left: 6px solid transparent; transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateX(4px) scale(1.005);
+    box-shadow: 10px 10px 25px rgba(148, 163, 184, 0.3), -10px -10px 25px #ffffff; border-color: #ffffff;
+  }
+
+  &.status-green { border-left-color: var(--success-color); }
+  &.status-yellow { border-left-color: var(--warning-color); }
+  &.status-red { border-left-color: var(--danger-color); }
+
+  .item-icon {
+    width: clamp(54px, 6vw, 64px); height: clamp(54px, 6vw, 64px);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 16px; font-size: clamp(1.4rem, 2vw, 1.8rem); flex-shrink: 0;
+    @include neo-inset; color: var(--primary-color);
+  }
+}
+
+.icon-box-micro {
+  width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;
+  background-color: var(--neo-light-bg); border-radius: 6px; font-size: 0.8rem;
+  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light); color: var(--primary-color);
+}
+
+.neo-badge-status {
+  padding: 8px 16px; border-radius: var(--radius-pill);
+  font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+  @include neo-inset; white-space: nowrap;
+  &.badge-success-neo { color: var(--success-color); }
+  &.badge-warning-neo { color: var(--warning-color); }
+  &.badge-danger-neo { color: var(--danger-color); }
+}
+
+/* --- 6. BOTONES GLOBALES --- */
+.btn-neo-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white !important; border: none;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25), inset 2px 2px 5px rgba(255,255,255,0.3);
+  transition: all 0.3s ease;
+  &:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(79, 70, 229, 0.35); }
+  &:active { transform: translateY(0); box-shadow: inset 3px 3px 8px rgba(0,0,0,0.2); }
+}
+
+.btn-neo-mini {
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+  background: var(--neo-light-bg); border: none; border-radius: 50%; font-size: 1.2rem;
+  @include neo-outset; transition: all 0.2s ease;
+  &:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover-dark), var(--shadow-hover-light); }
+  &:active { @include neo-inset; transform: translateY(0); }
+}
+
+/* --- 7. ANIMACIONES DE CARGA --- */
+@keyframes fadeInUpStagger { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.stagger-1 { animation: fadeInUpStagger 0.5s ease-out 0.1s forwards; opacity: 0; }
+.stagger-2 { animation: fadeInUpStagger 0.5s ease-out 0.15s forwards; opacity: 0; }
+.stagger-3 { animation: fadeInUpStagger 0.5s ease-out 0.2s forwards; opacity: 0; }
+
+.loading-overlay {
+  position: absolute; top: 0; left: 0; border-radius: 28px;
+  background-color: rgba(241, 245, 249, 0.7); backdrop-filter: blur(8px); z-index: 10;
+}
+.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
