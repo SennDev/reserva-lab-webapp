@@ -13,13 +13,13 @@
     }
   </header>
 
-  <div class="search-section mb-5 stagger-2">
+  <div class="search-section mb-4 stagger-2">
     <div class="row">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
         <div class="neo-search-bar position-relative">
-          <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-4 text-muted"></i>
           <input type="text" class="neo-input-search w-100" placeholder="Buscar por nombre, # serie o ubicación..."
                  (input)="updateSearch($event)" [disabled]="isLoading()">
+          <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-4 text-muted"></i>
         </div>
       </div>
     </div>

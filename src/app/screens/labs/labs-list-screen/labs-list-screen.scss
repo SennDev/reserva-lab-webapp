@@ -44,7 +44,7 @@
 .neo-search-bar {
   .neo-input-search {
     background-color: var(--neo-light-bg); border-radius: var(--radius-pill);
-    padding: 1.1rem 1.5rem 1.1rem 3.5rem; // Más padding para aire premium
+    padding: 1.1rem 1.5rem 1.1rem 2rem; // Más padding para aire premium
     font-size: 0.95rem; font-weight: 600; color: var(--text-main);
     @include neo-inset; transition: all 0.3s ease;
 

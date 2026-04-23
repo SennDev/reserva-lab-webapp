@@ -1,0 +1,125 @@
+<div class="reports-detail-wrapper d-flex flex-column h-100 pb-4">
+
+  <header class="mb-5 stagger-1 d-flex align-items-center">
+    <button class="btn-neo-circle me-4" (click)="goBack()" title="Volver al Catálogo">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <div>
+      <h2 class="title-high-end text-dark mb-1">Gestión de Recurso</h2>
+      <p class="text-muted small m-0 fw-medium">Audita las solicitudes entrantes y verifica la disponibilidad.</p>
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <div class="loading-overlay d-flex flex-column align-items-center justify-content-center flex-grow-1 w-100">
+      <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+      <h5 class="fw-bold text-dark">Cargando detalles...</h5>
+    </div>
+  } @else {
+    
+    <div class="row g-5 flex-grow-1 align-items-start m-0 w-100 stagger-2">
+
+      <div class="col-12 col-xl-8 p-0 pe-xl-4">
+        
+        <h5 class="fw-bold text-dark mb-4 border-bottom-neo pb-3">
+          <i class="bi bi-inbox-fill text-primary me-2"></i> Solicitudes Pendientes ({{ pendientes().length }})
+        </h5>
+
+        @if (pendientes().length === 0) {
+          <div class="empty-state d-flex flex-column align-items-center justify-content-center p-5 opacity-50 bg-neo-inset rounded-4">
+            <i class="bi bi-check2-circle fs-1 text-muted mb-3 display-4"></i>
+            <h5 class="fw-bold text-dark m-0">No hay solicitudes nuevas</h5>
+            <p class="small text-muted mt-2">La bandeja está limpia para este recurso.</p>
+          </div>
+        } @else {
+          <div class="d-flex flex-column gap-4">
+            @for (sol of pendientes(); track sol.id) {
+              
+              <div class="neo-list-item d-flex flex-column p-4 status-yellow">
+                
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="avatar-neo-small d-flex align-items-center justify-content-center text-primary fw-bold">
+                      {{ sol.usuario.charAt(0) }}
+                    </div>
+                    <div>
+                      <h6 class="fw-bold text-dark m-0">{{ sol.usuario }}</h6>
+                      <span class="small text-muted fw-medium">{{ sol.matricula }}</span>
+                    </div>
+                  </div>
+                  <span class="neo-badge-status badge-warning-neo">Pendiente</span>
+                </div>
+
+                <div class="border-top-neo pt-3 mb-4">
+                  <p class="fw-bold text-dark mb-2 text-truncate" title="{{sol.proyecto}}">
+                    <i class="bi bi-journal-text me-2 text-primary"></i> {{ sol.proyecto }}
+                  </p>
+                  <div class="d-flex gap-4 small text-muted fw-medium mt-2">
+                    <span><i class="bi bi-calendar-event me-2"></i> {{ sol.fecha }}</span>
+                    <span><i class="bi bi-clock me-2"></i> {{ sol.horario }}</span>
+                  </div>
+                </div>
+
+                <div class="d-flex gap-3 mt-auto">
+                  <button class="btn-neo-primary flex-grow-1 py-2 fw-bold" (click)="aprobarSolicitud(sol.id)">
+                    <i class="bi bi-check-lg me-2"></i> Aprobar
+                  </button>
+                  <button class="btn-action-outline flex-grow-1 py-2 fw-bold text-danger" (click)="rechazarSolicitud(sol.id)">
+                    <i class="bi bi-x-lg me-2"></i> Rechazar
+                  </button>
+                </div>
+
+              </div>
+
+            }
+          </div>
+        }
+      </div>
+
+
+      <div class="col-12 col-xl-4 sticky-panel p-0 ps-xl-3 mt-5 mt-xl-0">
+        
+        <div class="preview-container w-100 d-flex flex-column p-4 mb-4">
+          <div class="d-flex align-items-center gap-4 mb-4 border-bottom-neo pb-4">
+            <div class="item-icon text-primary flex-shrink-0" style="width: 60px; height: 60px; font-size: 1.8rem;">
+              <i class="bi {{ recursoInfo()?.icon }}"></i>
+            </div>
+            <div>
+              <h5 class="fw-bolder text-dark mb-1 tracking-tight">{{ recursoInfo()?.nombre }}</h5>
+              <span class="d-flex align-items-center small text-muted fw-medium">
+                <i class="bi bi-geo-alt-fill me-2 text-primary"></i> {{ recursoInfo()?.ubicacion_serie }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center small fw-bold text-muted">
+            <span>Estado Físico Actual:</span>
+            <span class="text-success"><i class="bi bi-circle-fill me-1 small"></i> {{ recursoInfo()?.estado_actual }}</span>
+          </div>
+        </div>
+
+        <div class="agenda-container p-4 rounded-4">
+          <h6 class="fw-bold text-dark mb-4"><i class="bi bi-calendar-check text-primary me-2"></i> Próximamente Ocupado</h6>
+          
+          @if (agendaAprobada().length === 0) {
+            <p class="small text-muted text-center py-4 m-0">No hay reservas aprobadas aún.</p>
+          } @else {
+            <div class="d-flex flex-column gap-3">
+              @for (agenda of agendaAprobada(); track agenda.id) {
+                <div class="agenda-item p-3 rounded-3 d-flex flex-column gap-1">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="small fw-bold text-dark"><i class="bi bi-calendar-event me-1"></i> {{ agenda.fecha }}</span>
+                    <span class="badge bg-success-subtle text-success small rounded-pill px-2 py-1" style="font-size: 0.7rem;">{{ agenda.horario }}</span>
+                  </div>
+                  <span class="small text-muted fw-medium"><i class="bi bi-person-fill me-1"></i> {{ agenda.usuario }}</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+      </div>
+
+    </div>
+  }
+</div>

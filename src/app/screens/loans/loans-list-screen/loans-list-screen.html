@@ -1,13 +1,13 @@
-<div class="reservations-wrapper d-flex flex-column h-100">
+<div class="loans-wrapper d-flex flex-column h-100">
 
   <header class="dashboard-header mb-5 stagger-1">
     <div class="header-titles">
-      <h2 class="title-high-end text-dark mb-1">Mis Reservas</h2>
-      <p class="text-muted small m-0 fw-medium">Administra y consulta el estado de tus solicitudes personales de espacios.</p>
+      <h2 class="title-high-end text-dark mb-1">Mis Préstamos</h2>
+      <p class="text-muted small m-0 fw-medium">Administra y consulta el estado de tus herramientas solicitadas.</p>
     </div>
 
-    <button class="btn-neo-primary px-4 py-2 fw-bold d-flex align-items-center hover-glow-primary" routerLink="/dashboard/reservas/nueva">
-      <i class="bi bi-calendar-plus me-2 fs-5"></i> Nueva Reserva
+    <button class="btn-neo-primary px-4 py-2 fw-bold d-flex align-items-center hover-glow-primary" routerLink="/dashboard/prestamos/nueva">
+      <i class="bi bi-box-arrow-up-right me-2 fs-5"></i> Nuevo Préstamo
     </button>
   </header>
 
@@ -15,7 +15,7 @@
     <div class="row">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
         <div class="neo-search-bar position-relative">
-          <input type="text" class="neo-input-search w-100" placeholder="Buscar por materia, laboratorio o estado... "
+          <input type="text" class="neo-input-search w-100" placeholder="Buscar por equipo, serie o estado... "
                  (input)="updateSearch($event)" [disabled]="isLoading()">
           <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-4 text-muted"></i>
         </div>
@@ -32,56 +32,57 @@
       </div>
     } @else {
       <div class="d-none d-xl-flex justify-content-between align-items-center mb-4 pb-3 border-bottom-neo w-100 px-3 animate-fade-in">
-        <h6 class="fw-bold text-muted m-0 tracking-wide text-uppercase" style="font-size: 0.85rem;">Detalles de la Práctica / Materia</h6>
+        <h6 class="fw-bold text-muted m-0 tracking-wide text-uppercase" style="font-size: 0.85rem;">Detalles del Equipo</h6>
         <h6 class="fw-bold text-muted m-0 tracking-wide text-uppercase" style="font-size: 0.85rem; min-width: 320px; text-align: center;">Estado y Fechas</h6>
       </div>
 
-      <div class="reservations-list flex-grow-1 w-100 animate-fade-in">
-        @if (filteredReservas().length === 0) {
+      <div class="loans-list flex-grow-1 w-100 animate-fade-in">
+        @if (filteredPrestamos().length === 0) {
           <div class="empty-state d-flex flex-column align-items-center justify-content-center h-100 opacity-50 py-5 text-center">
-            <i class="bi bi-calendar-x fs-1 text-muted mb-3 display-4"></i>
-            <h5 class="fw-bold text-dark m-0">No tienes reservas registradas</h5>
-            <p class="small text-muted mt-2">Intenta cambiar los términos de búsqueda o realiza una nueva solicitud.</p>
+            <i class="bi bi-box-seam fs-1 text-muted mb-3 display-4"></i>
+            <h5 class="fw-bold text-dark m-0">No tienes préstamos registrados</h5>
+            <p class="small text-muted mt-2">Intenta con otros términos de búsqueda o pide un nuevo equipo.</p>
           </div>
         } @else {
-          <div class="d-flex flex-column gap-4 w-100">
-            @for (res of filteredReservas(); track res.id) {
+            <div class="d-flex flex-column gap-4 w-100">
+            @for (prestamo of filteredPrestamos(); track prestamo.id) {
 
               <div class="neo-list-item d-flex flex-column flex-xl-row justify-content-between align-items-xl-center p-4 w-100"
-                   [class.status-green]="res.estado === 'Aprobada' || res.estado === 'Completada'"
-                   [class.status-yellow]="res.estado === 'Pendiente'"
-                   [class.status-red]="res.estado === 'Rechazada'">
+                   [class.status-green]="prestamo.estado === 'Aprobado' || prestamo.estado === 'Devuelto'"
+                   [class.status-yellow]="prestamo.estado === 'Pendiente'"
+                   [class.status-red]="prestamo.estado === 'Rechazado'">
 
                 <div class="d-flex align-items-center gap-4 mb-4 mb-xl-0 flex-grow-1 overflow-hidden me-xl-4">
                   <div class="item-icon text-primary"><i class="bi bi-journal-bookmark-fill"></i></div>
 
                   <div class="item-text overflow-hidden d-flex flex-column justify-content-center">
-                    <h5 class="fw-bolder text-dark mb-2 tracking-tight text-truncate" title="{{res.materia}}">{{res.materia}}</h5>
+                    <h5 class="fw-bolder text-dark mb-2 tracking-tight text-truncate" title="{{prestamo.equipo}}">{{prestamo.equipo}}</h5>
                     <div class="d-flex flex-wrap align-items-center gap-3 small text-muted fw-medium">
                       <span class="d-flex align-items-center text-truncate">
-                        <div class="icon-box-micro me-2"><i class="bi bi-geo-alt-fill"></i></div>
-                        <span class="text-dark fw-bold me-1">Lab:</span> {{res.lab}}
+                        <div class="icon-box-micro me-2"><i class="bi bi-upc-scan"></i></div>
+                        <span class="text-dark fw-bold me-1">S/N:</span> <span class="font-monospace">{{prestamo.numero_serie}}</span>
                       </span>
-                    </div>
+                      </div>
                   </div>
                 </div>
 
                 <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-xl-end gap-4 flex-shrink-0">
+                  
                   <div class="text-start text-xl-end text-muted small fw-medium me-xl-3">
                     <div class="d-flex align-items-center justify-content-xl-end mb-1">
-                      <i class="bi bi-calendar-event me-2 text-primary"></i> <span class="text-dark fw-bold">{{res.fecha}}</span>
+                      <i class="bi bi-calendar-event me-2 text-primary"></i> <span class="text-dark fw-bold">{{prestamo.fecha}}</span>
                     </div>
                     <div class="d-flex align-items-center justify-content-xl-end">
-                      <i class="bi bi-clock me-2 text-primary"></i> {{res.horario}}
+                      <i class="bi bi-clock me-2 text-primary"></i> {{prestamo.horario}}
                     </div>
                   </div>
 
                   <div style="min-width: 130px; text-align: center;">
                     <span class="neo-badge-status w-100 d-inline-block"
-                          [class.badge-success-neo]="res.estado === 'Aprobada' || res.estado === 'Completada'"
-                          [class.badge-warning-neo]="res.estado === 'Pendiente'"
-                          [class.badge-danger-neo]="res.estado === 'Rechazada'">
-                      {{res.estado}}
+                          [class.badge-success-neo]="prestamo.estado === 'Aprobado' || prestamo.estado === 'Devuelto'"
+                          [class.badge-warning-neo]="prestamo.estado === 'Pendiente'"
+                          [class.badge-danger-neo]="prestamo.estado === 'Rechazado'">
+                      {{prestamo.estado}}
                     </span>
                   </div>
 

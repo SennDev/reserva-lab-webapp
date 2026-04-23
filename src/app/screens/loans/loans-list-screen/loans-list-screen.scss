@@ -1,5 +1,5 @@
 /* ==========================================================================
-   RESERVATIONS LIST SCREEN - HIGH-END NEUMORPHISM (INBOX STYLE)
+   LOANS LIST SCREEN - HIGH-END NEUMORPHISM (INBOX STYLE)
    ========================================================================== */
 
 /* --- 1. MIXINS LOCALES --- */
@@ -14,7 +14,7 @@
 }
 
 /* --- 2. LAYOUT BASE --- */
-.reservations-wrapper { width: 100%; padding-top: 0.5rem; }
+.loans-wrapper { width: 100%; padding-top: 0.5rem; }
 
 .title-high-end { font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 800; letter-spacing: -1px; }
 .tracking-tight { letter-spacing: -0.5px; }
@@ -32,7 +32,6 @@
 .neo-widget-content {
   background-color: var(--neo-light-bg); border-radius: 28px;
   @include neo-outset;
-  /* Obligamos al contenedor a expandirse */
   width: 100% !important;
 }
 
@@ -54,17 +53,17 @@
 }
 
 /* --- 5. ELEMENTOS DE LA LISTA (FILAS) --- */
-.reservations-list {
+.loans-list {
   max-height: 65vh; overflow-y: auto; overflow-x: hidden; padding-right: 12px;
   &::-webkit-scrollbar { width: 6px; }
   &::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.1); border-radius: 10px; }
 }
 
 .neo-list-item {
-  background-color: var(--neo-light-bg); border-radius: 24px; /* Bordes más redondeados */
+  background-color: var(--neo-light-bg); border-radius: 24px;
   box-shadow: 6px 6px 15px rgba(148, 163, 184, 0.25), -6px -6px 15px #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.6);
-  border-left: 6px solid transparent; /* Banda de color lateral más ancha */
+  border-left: 6px solid transparent;
   transition: all 0.3s ease;
 
   &:hover {
@@ -73,20 +72,18 @@
     border-color: #ffffff;
   }
 
-  /* Colores de Estado Laterales */
   &.status-green { border-left-color: var(--success-color); }
   &.status-yellow { border-left-color: var(--warning-color); }
   &.status-red { border-left-color: var(--danger-color); }
 
   .item-icon {
-    width: clamp(54px, 6vw, 64px); height: clamp(54px, 6vw, 64px); /* Icono más grande */
+    width: clamp(54px, 6vw, 64px); height: clamp(54px, 6vw, 64px);
     display: flex; align-items: center; justify-content: center;
     border-radius: 16px; font-size: clamp(1.4rem, 2vw, 1.8rem); flex-shrink: 0;
     @include neo-inset; color: var(--primary-color);
   }
 }
 
-/* Micro-iconos para los subtítulos */
 .icon-box-micro {
   width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;
   background-color: var(--neo-light-bg); border-radius: 6px; font-size: 0.8rem;
@@ -128,12 +125,9 @@
 .stagger-2 { animation: fadeInUpStagger 0.5s ease-out 0.15s forwards; opacity: 0; }
 .stagger-3 { animation: fadeInUpStagger 0.5s ease-out 0.2s forwards; opacity: 0; }
 
-/* --- ESTADOS DE CARGA Y ANIMACIONES --- */
 .loading-overlay {
   position: absolute; top: 0; left: 0; border-radius: 28px;
-  background-color: rgba(241, 245, 249, 0.7); backdrop-filter: blur(8px);
-  z-index: 10;
+  background-color: rgba(241, 245, 249, 0.7); backdrop-filter: blur(8px); z-index: 10;
 }
-
 .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
