@@ -1,10 +1,24 @@
+export type TipoUsuario = 'estudiante' | 'personal';
+export type UserRole = 'admin' | 'tecnico' | 'estudiante';
+
 export interface User {
-  id_usuario: string;        // ID único (puede ser UUID o generado por BD)
+  id_usuario: string;
+  nombre?: string;
+  apellidos?: string;
   nombre_completo: string;
-  matricula: string;         // 9 dígitos para estudiantes, o ID de empleado
+  matricula: string;
   email: string;
-  carrera_departamento: string;
-  tipo_usuario: 'estudiante' | 'personal';
-  rol: 'admin' | 'tecnico' | 'estudiante'; // Vital para ocultar/mostrar menús en el Dashboard
-  avatarUrl?: string;        // Opcional (?) por si luego agregamos fotos de perfil
+  carrera?: string;
+  carrera_departamento?: string;
+  tipo_usuario: TipoUsuario;
+  rol: UserRole;
+  avatarUrl?: string | null;
+}
+
+export interface CurrentUserUpdatePayload {
+  nombre?: string;
+  apellidos?: string;
+  carrera?: string;
+  carrera_departamento?: string;
+  avatarUrl?: string | null;
 }

@@ -1,24 +1,34 @@
 <div class="profile-wrapper d-flex flex-column h-100 pb-4">
-
   <header class="dashboard-header mb-5 stagger-1">
     <div class="header-titles">
       <h2 class="title-high-end text-dark mb-1">Mi Perfil Institucional</h2>
-      <p class="text-muted small m-0 fw-medium">Administra tu información y revisa tus estadísticas en ReservaLab.</p>
+      <p class="text-muted small m-0 fw-medium">
+        Administra tu informacion y revisa tus estadisticas en ReservaLab.
+      </p>
     </div>
   </header>
 
+  @if (loadError()) {
+    <div class="neo-alert-danger mb-4 d-flex align-items-center p-3 animate-fade-in">
+      <div class="icon-box-danger me-3">
+        <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+      </div>
+      <div>
+        <h6 class="fw-bold m-0 mb-1">Perfil no disponible</h6>
+        <span class="small lh-sm d-block">{{ loadError() }}</span>
+      </div>
+    </div>
+  }
+
   @if (isLoading()) {
     <div class="loading-overlay d-flex flex-column align-items-center justify-content-center flex-grow-1 w-100">
-      <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+      <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem" role="status"></div>
       <h5 class="fw-bold text-dark">Cargando Perfil...</h5>
     </div>
   } @else {
-    
     <div class="row g-5 m-0 w-100 align-items-start">
-      
       <div class="col-12 col-xl-4 p-0 pe-xl-3 stagger-2">
         <div class="neo-id-card d-flex flex-column align-items-center p-5 text-center">
-          
           <div class="avatar-large d-flex align-items-center justify-content-center text-primary fw-bolder mb-4">
             {{ (user()?.nombre_completo || 'U').charAt(0) }}
           </div>
@@ -28,25 +38,24 @@
 
           <div class="w-100 text-start border-top-neo pt-4">
             <div class="mb-3">
-              <span class="d-block small text-muted fw-bold text-uppercase mb-1">Matrícula / ID</span>
+              <span class="d-block small text-muted fw-bold text-uppercase mb-1">Matricula / ID</span>
               <span class="d-flex align-items-center fw-bold text-dark font-monospace">
                 <i class="bi bi-upc-scan me-2 text-primary"></i> {{ user()?.matricula || 'No registrada' }}
               </span>
             </div>
-            
+
             <div class="mb-3">
-              <span class="d-block small text-muted fw-bold text-uppercase mb-1">Carrera / Área</span>
+              <span class="d-block small text-muted fw-bold text-uppercase mb-1">Carrera / Area</span>
               <span class="d-flex align-items-center fw-bold text-dark">
-                <i class="bi bi-mortarboard-fill me-2 text-primary"></i> {{ user()?.carrera || 'No registrada' }}
+                <i class="bi bi-mortarboard-fill me-2 text-primary"></i>
+                {{ user()?.carrera || user()?.carrera_departamento || 'No registrada' }}
               </span>
             </div>
           </div>
-
         </div>
       </div>
 
       <div class="col-12 col-xl-8 p-0 ps-xl-4 stagger-3">
-        
         <div class="row g-4 mb-5">
           <div class="col-md-6">
             <div class="neo-stat-card p-4 d-flex align-items-center">
@@ -59,7 +68,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="col-md-6">
             <div class="neo-stat-card p-4 d-flex align-items-center">
               <div class="icon-box-stat bg-success-soft text-success me-4">
@@ -67,7 +76,7 @@
               </div>
               <div>
                 <h3 class="fw-bold text-dark mb-0">{{ profileStats().totalPrestamos }}</h3>
-                <span class="small text-muted fw-bold text-uppercase">Préstamos de Equipo</span>
+                <span class="small text-muted fw-bold text-uppercase">Prestamos de Equipo</span>
               </div>
             </div>
           </div>
@@ -75,7 +84,7 @@
 
         <div class="neo-info-panel p-4 p-xl-5">
           <h5 class="fw-bold text-dark mb-4 border-bottom-neo pb-3">
-            <i class="bi bi-person-lines-fill text-primary me-2"></i> Información de Contacto
+            <i class="bi bi-person-lines-fill text-primary me-2"></i> Informacion de la Cuenta
           </h5>
 
           <div class="row g-4">
@@ -91,33 +100,40 @@
 
             <div class="col-md-6">
               <div class="info-group">
-                <label class="small text-muted fw-bold text-uppercase">Miembro Desde</label>
+                <label class="small text-muted fw-bold text-uppercase">Tipo de Usuario</label>
                 <div class="neo-read-only-input mt-2 d-flex align-items-center">
-                  <i class="bi bi-clock-history me-3 text-muted"></i>
-                  <span class="fw-medium text-dark">{{ profileStats().fechaRegistro }}</span>
+                  <i class="bi bi-person-badge-fill me-3 text-muted"></i>
+                  <span class="fw-medium text-dark">{{ user()?.tipo_usuario }}</span>
                 </div>
               </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-md-6">
               <div class="info-group">
-                <label class="small text-muted fw-bold text-uppercase">Dirección Registrada</label>
+                <label class="small text-muted fw-bold text-uppercase">Rol Actual</label>
                 <div class="neo-read-only-input mt-2 d-flex align-items-center">
-                  <i class="bi bi-geo-alt-fill me-3 text-muted"></i>
-                  <span class="fw-medium text-dark">{{ profileStats().direccion }}</span>
+                  <i class="bi bi-shield-lock-fill me-3 text-muted"></i>
+                  <span class="fw-medium text-dark">{{ user()?.rol }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="info-group">
+                <label class="small text-muted fw-bold text-uppercase">Estado</label>
+                <div class="neo-read-only-input mt-2 d-flex align-items-center">
+                  <i class="bi bi-check-circle-fill me-3 text-muted"></i>
+                  <span class="fw-medium text-dark">Cuenta activa</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="mt-5 d-flex justify-content-end">
-            <button class="btn-neo-primary px-4 py-2 fw-bold d-flex align-items-center">
-              <i class="bi bi-pencil-square me-2"></i> Editar Información
-            </button>
-          </div>
-
+          <p class="small text-muted mt-5 mb-0">
+            La edicion de perfil quedara habilitada cuando terminemos la integracion del
+            modulo de cuenta.
+          </p>
         </div>
-
       </div>
     </div>
   }

@@ -1,7 +1,13 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { SHARED_IMPORTS } from '../../../shared/shared-imports';
-import { AuthService } from '../../../services/auth.service'; // <-- 1. Importamos el servicio
+import { AuthService } from '../../../services/auth.service';
+import { extractErrorMessage } from '../../../shared/utils/http-error.utils';
+
+interface LoginErrors {
+  email?: string;
+  password?: string;
+}
 
 @Component({
   selector: 'app-login-screen',
@@ -12,14 +18,12 @@ import { AuthService } from '../../../services/auth.service'; // <-- 1. Importam
 })
 export class LoginScreen {
   private router = inject(Router);
-  private authService = inject(AuthService); // <-- 2. Inyectamos el servicio
+  private authService = inject(AuthService);
 
-  public user: any = {};
-  public errors: any = {};
-
-  // Signal para manejar la transición inmersiva de Glassmorphism
+  public user: { email?: string; password?: string } = {};
+  public errors: LoginErrors = {};
+  public serverError = signal<string | null>(null);
   public isLoading = signal(false);
-
   public hidePassword = true;
   public inputType: 'password' | 'text' = 'password';
 
@@ -30,40 +34,42 @@ export class LoginScreen {
 
   public validarFormulario(): boolean {
     this.errors = {};
+    this.serverError.set(null);
     let esValido = true;
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
     if (!this.user.email || !emailRegex.test(this.user.email)) {
-      this.errors.email = 'Ingresa un correo institucional válido.';
+      this.errors.email = 'Ingresa un correo institucional valido.';
       esValido = false;
     }
 
     if (!this.user.password) {
-      this.errors.password = 'La contraseña es requerida.';
+      this.errors.password = 'La contrasena es requerida.';
       esValido = false;
     }
 
     return esValido;
   }
 
-  // 3. ACTUALIZAMOS EL MÉTODO DE LOGIN
   public login(): void {
-    if (this.validarFormulario()) {
-      this.isLoading.set(true);
-
-      // Delegamos el trabajo al AuthService
-      this.authService.login(this.user.email, this.user.password).subscribe({
-        next: (usuarioAutenticado) => {
-          // Cuando el servicio responde que todo salió bien (después de 1.5s)
-          this.isLoading.set(false);
-          console.log('Login conectado al AuthService:', usuarioAutenticado);
-          this.router.navigate(['/dashboard']);
-        },
-        error: (err) => {
-          this.isLoading.set(false);
-          console.error('Error al iniciar sesión', err);
-        }
-      });
+    if (!this.validarFormulario()) {
+      return;
     }
+
+    this.isLoading.set(true);
+
+    this.authService.login(this.user.email!, this.user.password!).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.router.navigate(['/dashboard']);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.serverError.set(
+          extractErrorMessage(error, 'No se pudo iniciar sesion. Verifica tus credenciales.')
+        );
+      }
+    });
   }
 }

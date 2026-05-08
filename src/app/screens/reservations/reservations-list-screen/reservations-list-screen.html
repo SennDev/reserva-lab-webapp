@@ -1,22 +1,43 @@
 <div class="reservations-wrapper d-flex flex-column h-100">
-
   <header class="dashboard-header mb-5 stagger-1">
     <div class="header-titles">
-      <h2 class="title-high-end text-dark mb-1">Mis Reservas</h2>
-      <p class="text-muted small m-0 fw-medium">Administra y consulta el estado de tus solicitudes personales de espacios.</p>
+      <h2 class="title-high-end text-dark mb-1">{{ pageTitle() }}</h2>
+      <p class="text-muted small m-0 fw-medium">
+        Administra y consulta el estado de las solicitudes de espacios.
+      </p>
     </div>
 
-    <button class="btn-neo-primary px-4 py-2 fw-bold d-flex align-items-center hover-glow-primary" routerLink="/dashboard/reservas/nueva">
+    <button
+      class="btn-neo-primary px-4 py-2 fw-bold d-flex align-items-center hover-glow-primary"
+      routerLink="/dashboard/reservas/nueva"
+    >
       <i class="bi bi-calendar-plus me-2 fs-5"></i> Nueva Reserva
     </button>
   </header>
+
+  @if (loadError()) {
+    <div class="neo-alert-danger mb-4 d-flex align-items-center p-3 animate-fade-in">
+      <div class="icon-box-danger me-3">
+        <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+      </div>
+      <div>
+        <h6 class="fw-bold m-0 mb-1">Historial no disponible</h6>
+        <span class="small lh-sm d-block">{{ loadError() }}</span>
+      </div>
+    </div>
+  }
 
   <div class="search-section mb-4 stagger-2">
     <div class="row">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
         <div class="neo-search-bar position-relative">
-          <input type="text" class="neo-input-search w-100" placeholder="Buscar por materia, laboratorio o estado... "
-                 (input)="updateSearch($event)" [disabled]="isLoading()">
+          <input
+            type="text"
+            class="neo-input-search w-100"
+            placeholder="Buscar por materia, laboratorio, usuario o estado..."
+            (input)="updateSearch($event)"
+            [disabled]="isLoading()"
+          />
           <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-4 text-muted"></i>
         </div>
       </div>
@@ -24,44 +45,61 @@
   </div>
 
   <div class="neo-widget-content p-4 p-xl-5 flex-grow-1 d-flex flex-column stagger-3 mb-4 w-100 position-relative">
-
     @if (isLoading()) {
       <div class="loading-overlay d-flex flex-column align-items-center justify-content-center h-100 w-100">
-        <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+        <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem" role="status"></div>
         <h5 class="fw-bold text-dark">Sincronizando Historial...</h5>
       </div>
     } @else {
       <div class="d-none d-xl-flex justify-content-between align-items-center mb-4 pb-3 border-bottom-neo w-100 px-3 animate-fade-in">
-        <h6 class="fw-bold text-muted m-0 tracking-wide text-uppercase" style="font-size: 0.85rem;">Detalles de la Práctica / Materia</h6>
-        <h6 class="fw-bold text-muted m-0 tracking-wide text-uppercase" style="font-size: 0.85rem; min-width: 320px; text-align: center;">Estado y Fechas</h6>
+        <h6 class="fw-bold text-muted m-0 tracking-wide text-uppercase" style="font-size: 0.85rem">
+          Detalles de la Practica / Materia
+        </h6>
+        <h6
+          class="fw-bold text-muted m-0 tracking-wide text-uppercase"
+          style="font-size: 0.85rem; min-width: 360px; text-align: center"
+        >
+          Estado, Fechas y Gestion
+        </h6>
       </div>
 
       <div class="reservations-list flex-grow-1 w-100 animate-fade-in">
         @if (filteredReservas().length === 0) {
           <div class="empty-state d-flex flex-column align-items-center justify-content-center h-100 opacity-50 py-5 text-center">
             <i class="bi bi-calendar-x fs-1 text-muted mb-3 display-4"></i>
-            <h5 class="fw-bold text-dark m-0">No tienes reservas registradas</h5>
-            <p class="small text-muted mt-2">Intenta cambiar los términos de búsqueda o realiza una nueva solicitud.</p>
+            <h5 class="fw-bold text-dark m-0">No hay reservas registradas</h5>
+            <p class="small text-muted mt-2">
+              Intenta cambiar los terminos de busqueda o realiza una nueva solicitud.
+            </p>
           </div>
         } @else {
           <div class="d-flex flex-column gap-4 w-100">
             @for (res of filteredReservas(); track res.id) {
-
-              <div class="neo-list-item d-flex flex-column flex-xl-row justify-content-between align-items-xl-center p-4 w-100"
-                   [class.status-green]="res.estado === 'Aprobada' || res.estado === 'Completada'"
-                   [class.status-yellow]="res.estado === 'Pendiente'"
-                   [class.status-red]="res.estado === 'Rechazada'">
-
+              <div
+                class="neo-list-item d-flex flex-column flex-xl-row justify-content-between align-items-xl-center p-4 w-100"
+                [class.status-green]="res.estado === 'Aprobada' || res.estado === 'Completada'"
+                [class.status-yellow]="res.estado === 'Pendiente'"
+                [class.status-red]="res.estado === 'Rechazada'"
+              >
                 <div class="d-flex align-items-center gap-4 mb-4 mb-xl-0 flex-grow-1 overflow-hidden me-xl-4">
                   <div class="item-icon text-primary"><i class="bi bi-journal-bookmark-fill"></i></div>
 
                   <div class="item-text overflow-hidden d-flex flex-column justify-content-center">
-                    <h5 class="fw-bolder text-dark mb-2 tracking-tight text-truncate" title="{{res.materia}}">{{res.materia}}</h5>
+                    <h5 class="fw-bolder text-dark mb-2 tracking-tight text-truncate" title="{{ res.materia }}">
+                      {{ res.materia }}
+                    </h5>
                     <div class="d-flex flex-wrap align-items-center gap-3 small text-muted fw-medium">
                       <span class="d-flex align-items-center text-truncate">
                         <div class="icon-box-micro me-2"><i class="bi bi-geo-alt-fill"></i></div>
-                        <span class="text-dark fw-bold me-1">Lab:</span> {{res.lab}}
+                        <span class="text-dark fw-bold me-1">Lab:</span> {{ res.lab }}
                       </span>
+                      @if (isStaff()) {
+                        <span class="d-flex align-items-center text-truncate">
+                          <div class="icon-box-micro me-2"><i class="bi bi-person-fill"></i></div>
+                          <span class="text-dark fw-bold me-1">Solicita:</span>
+                          {{ res.solicitante }}
+                        </span>
+                      }
                     </div>
                   </div>
                 </div>
@@ -69,25 +107,61 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-xl-end gap-4 flex-shrink-0">
                   <div class="text-start text-xl-end text-muted small fw-medium me-xl-3">
                     <div class="d-flex align-items-center justify-content-xl-end mb-1">
-                      <i class="bi bi-calendar-event me-2 text-primary"></i> <span class="text-dark fw-bold">{{res.fecha}}</span>
+                      <i class="bi bi-calendar-event me-2 text-primary"></i>
+                      <span class="text-dark fw-bold">{{ res.fecha }}</span>
                     </div>
                     <div class="d-flex align-items-center justify-content-xl-end">
-                      <i class="bi bi-clock me-2 text-primary"></i> {{res.horario}}
+                      <i class="bi bi-clock me-2 text-primary"></i> {{ res.horario }}
                     </div>
                   </div>
 
-                  <div style="min-width: 130px; text-align: center;">
-                    <span class="neo-badge-status w-100 d-inline-block"
-                          [class.badge-success-neo]="res.estado === 'Aprobada' || res.estado === 'Completada'"
-                          [class.badge-warning-neo]="res.estado === 'Pendiente'"
-                          [class.badge-danger-neo]="res.estado === 'Rechazada'">
-                      {{res.estado}}
+                  <div style="min-width: 130px; text-align: center">
+                    <span
+                      class="neo-badge-status w-100 d-inline-block"
+                      [class.badge-success-neo]="res.estado === 'Aprobada' || res.estado === 'Completada'"
+                      [class.badge-warning-neo]="res.estado === 'Pendiente'"
+                      [class.badge-danger-neo]="res.estado === 'Rechazada'"
+                    >
+                      {{ res.estado }}
                     </span>
                   </div>
 
                   <div class="d-flex align-items-center gap-2 ps-xl-4 ms-auto ms-xl-0 py-2">
-                    <button class="btn-neo-mini text-primary" title="Ver Detalles"><i class="bi bi-eye-fill"></i></button>
-                    </div>
+                    @if (isStaff() && res.estado === 'Pendiente') {
+                      <button
+                        class="btn-neo-mini text-success"
+                        title="Aprobar"
+                        (click)="updateStatus(res.id, 'Aprobada')"
+                      >
+                        <i class="bi bi-check-lg"></i>
+                      </button>
+                      <button
+                        class="btn-neo-mini text-danger"
+                        title="Rechazar"
+                        (click)="updateStatus(res.id, 'Rechazada')"
+                      >
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    }
+                    @if (res.estado === 'Aprobada' && isStaff()) {
+                      <button
+                        class="btn-neo-mini text-primary"
+                        title="Marcar completada"
+                        (click)="updateStatus(res.id, 'Completada')"
+                      >
+                        <i class="bi bi-check2-circle"></i>
+                      </button>
+                    }
+                    @if (canCancel(res)) {
+                      <button
+                        class="btn-neo-mini text-danger"
+                        title="Cancelar reserva"
+                        (click)="cancelReservation(res.id)"
+                      >
+                        <i class="bi bi-trash3"></i>
+                      </button>
+                    }
+                  </div>
                 </div>
               </div>
             }

@@ -1,15 +1,26 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { forkJoin } from 'rxjs';
 import { SHARED_IMPORTS } from '../../../shared/shared-imports';
 import { AuthService } from '../../../services/auth.service';
+import { LoansService } from '../../../services/loans.service';
+import { ReservationsService } from '../../../services/reservations.service';
+import { LoanStatusUpdate, Prestamo } from '../../../shared/models/loan.model';
+import { ReservationStatusUpdate, Reserva } from '../../../shared/models/reservation.model';
+import { extractErrorMessage } from '../../../shared/utils/http-error.utils';
 
-// Interfaz unificada para el catálogo administrativo
-export interface CatalogoAdmin {
+type AdminTab = 'reservas' | 'prestamos';
+
+interface AdminRequestItem {
   id: string;
-  tipo: 'laboratorio' | 'equipo';
-  nombre: string;
-  ubicacion_serie: string; // Guarda el edificio (Labs) o el Número de Serie (Equipos)
-  estado: 'Disponible' | 'En Mantenimiento' | 'Ocupado' | 'En Préstamo' | 'Baja';
-  icon: string;
+  tipo: AdminTab;
+  recurso: string;
+  solicitante: string;
+  fecha: string;
+  horario: string;
+  descripcion: string;
+  estado: 'Pendiente' | 'Aprobada' | 'Aprobado' | 'Rechazada' | 'Rechazado' | 'Completada' | 'Devuelto';
+  cantidad?: number;
 }
 
 @Component({
@@ -20,64 +31,159 @@ export interface CatalogoAdmin {
   styleUrl: './reports-list-screen.scss'
 })
 export class ReportsListScreen implements OnInit {
-  public authService = inject(AuthService);
+  private authService = inject(AuthService);
+  private reservationsService = inject(ReservationsService);
+  private loansService = inject(LoansService);
+  private snackBar = inject(MatSnackBar);
 
-  // Las pestañas ahora controlan qué tipo de catálogo vemos
-  public activeTab = signal<'laboratorios' | 'equipos'>('laboratorios');
-  public searchTerm = signal<string>('');
-  public isLoading = signal<boolean>(true);
-  
-  public catalogo = signal<CatalogoAdmin[]>([]);
+  public isStaff = signal(false);
+  public activeTab = signal<AdminTab>('reservas');
+  public searchTerm = signal('');
+  public isLoading = signal(true);
+  public loadError = signal<string | null>(null);
+  public catalogo = signal<AdminRequestItem[]>([]);
 
-  // Filtro Dinámico: Primero por pestaña, luego por búsqueda
   public filteredCatalogo = computed(() => {
-    const term = this.searchTerm().toLowerCase();
-    const tabActual = this.activeTab();
+    const term = this.searchTerm().trim().toLowerCase();
+    const tab = this.activeTab();
 
-    // 1. Filtrar por el tipo de pestaña seleccionada
-    let lista = this.catalogo().filter(item => item.tipo === (tabActual === 'laboratorios' ? 'laboratorio' : 'equipo'));
+    return this.catalogo().filter((item) => {
+      if (item.tipo !== tab) {
+        return false;
+      }
 
-    // 2. Aplicar búsqueda global
-    if (term) {
-      lista = lista.filter(item =>
-        item.nombre.toLowerCase().includes(term) ||
-        item.ubicacion_serie.toLowerCase().includes(term) ||
+      if (!term) {
+        return true;
+      }
+
+      return (
+        item.recurso.toLowerCase().includes(term) ||
+        item.solicitante.toLowerCase().includes(term) ||
+        item.descripcion.toLowerCase().includes(term) ||
         item.estado.toLowerCase().includes(term)
       );
-    }
-
-    return lista;
+    });
   });
 
+  public pendientes = computed(() => this.filteredCatalogo().filter((item) => item.estado === 'Pendiente'));
+
   ngOnInit(): void {
+    this.authService.currentUser$.subscribe((user) => {
+      this.isStaff.set(!!user && (user.rol === 'admin' || user.rol === 'tecnico'));
+    });
+
     this.fetchCatalogoGlobal();
   }
 
-  private fetchCatalogoGlobal(): void {
+  public fetchCatalogoGlobal(): void {
     this.isLoading.set(true);
+    this.loadError.set(null);
 
-    setTimeout(() => {
-      const mockDataGlobal: CatalogoAdmin[] = [
-        // --- LABORATORIOS ---
-        { id: 'LAB-CCO1', tipo: 'laboratorio', nombre: 'Laboratorio de Computación Avanzada', ubicacion_serie: 'Edificio CCO1', estado: 'Disponible', icon: 'bi-pc-display' },
-        { id: 'LAB-CCO2', tipo: 'laboratorio', nombre: 'Laboratorio de Redes y Seguridad', ubicacion_serie: 'Edificio CCO2', estado: 'En Mantenimiento', icon: 'bi-hdd-network' },
-        { id: 'LAB-FIS1', tipo: 'laboratorio', nombre: 'Laboratorio de Hardware y Robótica', ubicacion_serie: 'Edificio CCO3', estado: 'Disponible', icon: 'bi-cpu' },
-        { id: 'LAB-CCO4', tipo: 'laboratorio', nombre: 'Sala de Posgrado e Investigación', ubicacion_serie: 'Edificio CCO4', estado: 'Ocupado', icon: 'bi-building-gear' },
-        
-        // --- EQUIPOS ---
-        { id: 'EQ-001', tipo: 'equipo', nombre: 'Osciloscopio Digital Rigol', ubicacion_serie: 'SN-RIG-8472', estado: 'Disponible', icon: 'bi-activity' },
-        { id: 'EQ-002', tipo: 'equipo', nombre: 'Router Cisco 2901', ubicacion_serie: 'SN-CIS-9921', estado: 'En Préstamo', icon: 'bi-hdd-network' },
-        { id: 'EQ-003', tipo: 'equipo', nombre: 'Kit Arduino Mega 2560', ubicacion_serie: 'SN-ARD-1104', estado: 'Disponible', icon: 'bi-cpu' },
-        { id: 'EQ-004', tipo: 'equipo', nombre: 'Impresora 3D Creality Ender 3', ubicacion_serie: 'SN-CRE-3349', estado: 'En Mantenimiento', icon: 'bi-printer' }
-      ];
+    forkJoin({
+      reservas: this.reservationsService.list(),
+      prestamos: this.loansService.list()
+    }).subscribe({
+      next: ({ reservas, prestamos }) => {
+        this.catalogo.set([
+          ...reservas.map((reserva) => this.mapReservation(reserva)),
+          ...prestamos.map((prestamo) => this.mapLoan(prestamo))
+        ]);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.loadError.set(extractErrorMessage(error, 'No se pudo cargar la bandeja operativa.'));
+      }
+    });
+  }
 
-      this.catalogo.set(mockDataGlobal);
-      this.isLoading.set(false);
-    }, 1200);
+  public approve(item: AdminRequestItem): void {
+    if (item.tipo === 'reservas') {
+      this.updateReservationStatus(item.id, 'Aprobada');
+      return;
+    }
+
+    this.updateLoanStatus(item.id, 'Aprobado');
+  }
+
+  public reject(item: AdminRequestItem): void {
+    if (item.tipo === 'reservas') {
+      this.updateReservationStatus(item.id, 'Rechazada');
+      return;
+    }
+
+    this.updateLoanStatus(item.id, 'Rechazado');
   }
 
   public updateSearch(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.searchTerm.set(input.value);
+  }
+
+  private updateReservationStatus(id: string, estado: ReservationStatusUpdate): void {
+    this.reservationsService.updateStatus(id, estado).subscribe({
+      next: (updated) => {
+        this.catalogo.update((items) =>
+          items.map((item) => (item.id === id ? this.mapReservation(updated) : item))
+        );
+        this.snackBar.open(`Reserva ${estado.toLowerCase()} correctamente.`, 'Cerrar', {
+          duration: 3000
+        });
+      },
+      error: (error) => {
+        this.snackBar.open(
+          extractErrorMessage(error, 'No se pudo actualizar la reserva.'),
+          'Cerrar',
+          { duration: 4000 }
+        );
+      }
+    });
+  }
+
+  private updateLoanStatus(id: string, estado: LoanStatusUpdate): void {
+    this.loansService.updateStatus(id, estado).subscribe({
+      next: (updated) => {
+        this.catalogo.update((items) =>
+          items.map((item) => (item.id === id ? this.mapLoan(updated) : item))
+        );
+        this.snackBar.open(`Prestamo ${estado.toLowerCase()} correctamente.`, 'Cerrar', {
+          duration: 3000
+        });
+      },
+      error: (error) => {
+        this.snackBar.open(
+          extractErrorMessage(error, 'No se pudo actualizar el prestamo.'),
+          'Cerrar',
+          { duration: 4000 }
+        );
+      }
+    });
+  }
+
+  private mapReservation(reserva: Reserva): AdminRequestItem {
+    return {
+      id: reserva.id,
+      tipo: 'reservas',
+      recurso: reserva.lab,
+      solicitante: reserva.solicitante,
+      fecha: reserva.fecha,
+      horario: reserva.horario,
+      descripcion: reserva.materia,
+      estado: reserva.estado
+    };
+  }
+
+  private mapLoan(prestamo: Prestamo): AdminRequestItem {
+    return {
+      id: prestamo.id,
+      tipo: 'prestamos',
+      recurso: prestamo.equipo,
+      solicitante: prestamo.solicitante,
+      fecha: prestamo.fecha,
+      horario: prestamo.horario,
+      descripcion: prestamo.proyecto,
+      estado: prestamo.estado,
+      cantidad: prestamo.cantidad
+    };
   }
 }

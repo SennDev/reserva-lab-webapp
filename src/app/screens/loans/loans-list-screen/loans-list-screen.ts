@@ -1,16 +1,10 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SHARED_IMPORTS } from '../../../shared/shared-imports';
 import { AuthService } from '../../../services/auth.service';
-
-export interface Prestamo {
-  id: string;
-  equipo: string;
-  numero_serie: string;
-  fecha: string;
-  horario: string;
-  estado: 'Pendiente' | 'Aprobado' | 'Rechazado' | 'Devuelto';
-  solicitante: string;
-}
+import { LoansService } from '../../../services/loans.service';
+import { LoanStatusUpdate, Prestamo } from '../../../shared/models/loan.model';
+import { extractErrorMessage } from '../../../shared/utils/http-error.utils';
 
 @Component({
   selector: 'app-loans-list-screen',
@@ -21,59 +15,74 @@ export interface Prestamo {
 })
 export class LoansListScreen implements OnInit {
   private authService = inject(AuthService);
+  private loansService = inject(LoansService);
+  private snackBar = inject(MatSnackBar);
 
-  public userName = signal<string>(''); 
-  public searchTerm = signal<string>('');
-  public isLoading = signal<boolean>(true);
+  public isStaff = signal(false);
+  public searchTerm = signal('');
+  public isLoading = signal(true);
+  public loadError = signal<string | null>(null);
   public prestamos = signal<Prestamo[]>([]);
 
+  public pageTitle = computed(() => (this.isStaff() ? 'Prestamos del Sistema' : 'Mis Prestamos'));
+
   public filteredPrestamos = computed(() => {
-    const term = this.searchTerm().toLowerCase();
-    const currentName = this.userName();
+    const term = this.searchTerm().trim().toLowerCase();
 
-    let listaResultante = this.prestamos();
-
-    if (currentName) {
-      listaResultante = listaResultante.filter(p => p.solicitante === currentName);
+    if (!term) {
+      return this.prestamos();
     }
 
-    if (term) {
-      listaResultante = listaResultante.filter(p =>
-        p.equipo.toLowerCase().includes(term) ||
-        p.numero_serie.toLowerCase().includes(term) ||
-        p.estado.toLowerCase().includes(term)
-      );
-    }
-
-    return listaResultante;
+    return this.prestamos().filter(
+      (prestamo) =>
+        prestamo.equipo.toLowerCase().includes(term) ||
+        prestamo.numero_serie.toLowerCase().includes(term) ||
+        prestamo.estado.toLowerCase().includes(term) ||
+        prestamo.solicitante.toLowerCase().includes(term) ||
+        prestamo.proyecto.toLowerCase().includes(term)
+    );
   });
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
-      if (user) {
-        this.userName.set(user.nombre_completo || '');
-      } else {
-        this.userName.set('');
-      }
+    this.authService.currentUser$.subscribe((user) => {
+      this.isStaff.set(!!user && (user.rol === 'admin' || user.rol === 'tecnico'));
     });
 
     this.fetchPrestamosFromBackend();
   }
 
-  private fetchPrestamosFromBackend(): void {
+  public fetchPrestamosFromBackend(): void {
     this.isLoading.set(true);
+    this.loadError.set(null);
 
-    setTimeout(() => {
-      const mockDataFromDB: Prestamo[] = [
-        { id: 'PR-001', equipo: 'Osciloscopio Digital Rigol', numero_serie: 'SN-RIG-8472', fecha: '25 Mar 2026', horario: '14:00 - 16:00', estado: 'Aprobado', solicitante: 'Pablo Ivan Ibarra Valencia' },
-        { id: 'PR-002', equipo: 'Router Cisco 2901', numero_serie: 'SN-CIS-9921', fecha: '26 Mar 2026', horario: '09:00 - 11:00', estado: 'Pendiente', solicitante: 'Ana Martínez' },
-        { id: 'PR-003', equipo: 'Kit Arduino Mega 2560', numero_serie: 'SN-ARD-1104', fecha: '20 Mar 2026', horario: '10:00 - 12:00', estado: 'Devuelto', solicitante: 'Pablo Ivan Ibarra Valencia' },
-        { id: 'PR-004', equipo: 'Impresora 3D Creality Ender 3', numero_serie: 'SN-CRE-3349', fecha: '28 Mar 2026', horario: '16:00 - 18:00', estado: 'Rechazado', solicitante: 'Gerson Contreras' }
-      ];
+    this.loansService.list().subscribe({
+      next: (prestamos) => {
+        this.prestamos.set(prestamos);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.loadError.set(extractErrorMessage(error, 'No se pudo cargar el historial de prestamos.'));
+      }
+    });
+  }
 
-      this.prestamos.set(mockDataFromDB);
-      this.isLoading.set(false);
-    }, 1500);
+  public updateStatus(id: string, estado: LoanStatusUpdate): void {
+    this.loansService.updateStatus(id, estado).subscribe({
+      next: (updated) => {
+        this.prestamos.update((items) => items.map((item) => (item.id === id ? updated : item)));
+        this.snackBar.open(`Prestamo ${estado.toLowerCase()} correctamente.`, 'Cerrar', {
+          duration: 3000
+        });
+      },
+      error: (error) => {
+        this.snackBar.open(
+          extractErrorMessage(error, 'No se pudo actualizar el estado del prestamo.'),
+          'Cerrar',
+          { duration: 4000 }
+        );
+      }
+    });
   }
 
   public updateSearch(event: Event): void {

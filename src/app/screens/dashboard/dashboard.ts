@@ -1,10 +1,10 @@
 import { Component, OnInit, signal, inject, HostListener, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { SHARED_IMPORTS } from '../../shared/shared-imports';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 import { User } from '../../shared/models/user.model';
-import { CommonModule } from '@angular/common';
-import { NotificationService } from '../../services/notification.service'; // Ajusta la ruta
 
 @Component({
   selector: 'app-dashboard',
@@ -17,43 +17,53 @@ export class DashboardScreen implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private eRef = inject(ElementRef);
-  
-  // INYECTAMOS EL NUEVO SERVICIO
   private notificationService = inject(NotificationService);
 
   public user = signal<User | null>(null);
   public isSidebarOpen = signal(false);
   public isNotificationsOpen = signal(false);
-
-  // VINCULAMOS LAS SIGNALS DEL SERVICIO AL COMPONENTE
   public notifications = this.notificationService.notifications;
   public unreadCount = this.notificationService.unreadCount;
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(currentUser => {
+    this.authService.currentUser$.subscribe((currentUser) => {
       this.user.set(currentUser);
     });
-    
-    // Opcional: Cargar notificaciones al iniciar
+
+    if (this.authService.accessToken) {
+      this.authService.fetchCurrentUser().subscribe({
+        error: () => {
+          // El interceptor ya limpia la sesion si el token no es valido.
+        }
+      });
+    }
+
     this.notificationService.loadNotifications();
   }
 
-  // --- MÉTODOS DEL LAYOUT ---
-  public toggleSidebar(): void { this.isSidebarOpen.update(val => !val); }
-  public closeSidebar(): void { this.isSidebarOpen.set(false); }
+  public toggleSidebar(): void {
+    this.isSidebarOpen.update((value) => !value);
+  }
+
+  public closeSidebar(): void {
+    this.isSidebarOpen.set(false);
+  }
+
   public logout(): void {
     this.authService.logout();
     this.router.navigate(['/auth/login']);
   }
 
-  // --- MÉTODOS DE NOTIFICACIONES ---
   public toggleNotifications(event: Event): void {
     event.stopPropagation();
-    this.isNotificationsOpen.update(val => !val);
+    this.isNotificationsOpen.update((value) => !value);
   }
 
   public markAsRead(id: number, event?: Event): void {
-    if (event) event.stopPropagation(); // Evita que se cierre el menú al hacer clic
+    if (event) {
+      event.stopPropagation();
+    }
+
     this.notificationService.markAsRead(id);
   }
 
@@ -63,8 +73,11 @@ export class DashboardScreen implements OnInit {
   }
 
   @HostListener('document:click', ['$event'])
-  public clickout(event: Event) {
-    if (this.isNotificationsOpen() && !this.eRef.nativeElement.querySelector('.notification-container')?.contains(event.target)) {
+  public clickout(event: Event): void {
+    if (
+      this.isNotificationsOpen() &&
+      !this.eRef.nativeElement.querySelector('.notification-container')?.contains(event.target)
+    ) {
       this.isNotificationsOpen.set(false);
     }
   }

@@ -1,6 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { SHARED_IMPORTS } from '../../../shared/shared-imports';
 import { AuthService } from '../../../services/auth.service';
+import { ReservationsService } from '../../../services/reservations.service';
+import { LoansService } from '../../../services/loans.service';
+import { User } from '../../../shared/models/user.model';
+import { extractErrorMessage } from '../../../shared/utils/http-error.utils';
 
 @Component({
   selector: 'app-profile-screen',
@@ -11,24 +16,20 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class ProfileScreen implements OnInit {
   private authService = inject(AuthService);
+  private reservationsService = inject(ReservationsService);
+  private loansService = inject(LoansService);
 
-  public user = signal<any>(null);
-  public isLoading = signal<boolean>(true);
-  
-  // Estadísticas y datos extra simulados
-  public profileStats = signal<any>({
+  public user = signal<User | null>(null);
+  public isLoading = signal(true);
+  public loadError = signal<string | null>(null);
+  public profileStats = signal({
     totalReservas: 0,
-    totalPrestamos: 0,
-    fechaRegistro: '',
-    direccion: ''
+    totalPrestamos: 0
   });
 
   ngOnInit(): void {
-    // 1. Obtenemos los datos básicos de la sesión actual
-    this.authService.currentUser$.subscribe(currentUser => {
-      if (currentUser) {
-        this.user.set(currentUser);
-      }
+    this.authService.currentUser$.subscribe((currentUser) => {
+      this.user.set(currentUser);
     });
 
     this.fetchProfileData();
@@ -36,16 +37,23 @@ export class ProfileScreen implements OnInit {
 
   private fetchProfileData(): void {
     this.isLoading.set(true);
+    this.loadError.set(null);
 
-    // 2. Simulamos una consulta al backend para traer estadísticas y detalles extra
-    setTimeout(() => {
-      this.profileStats.set({
-        totalReservas: 14,
-        totalPrestamos: 8,
-        fechaRegistro: '15 de Agosto, 2024',
-        direccion: 'Blvd. Valsequillo S/N, San Manuel, Puebla, Pue.'
-      });
-      this.isLoading.set(false);
-    }, 1200);
+    forkJoin({
+      reservas: this.reservationsService.list(),
+      prestamos: this.loansService.list()
+    }).subscribe({
+      next: ({ reservas, prestamos }) => {
+        this.profileStats.set({
+          totalReservas: reservas.length,
+          totalPrestamos: prestamos.length
+        });
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.loadError.set(extractErrorMessage(error, 'No se pudo cargar la informacion del perfil.'));
+      }
+    });
   }
 }

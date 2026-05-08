@@ -1,16 +1,13 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SHARED_IMPORTS } from '../../../shared/shared-imports';
 import { AuthService } from '../../../services/auth.service';
-
-export interface Reserva {
-  id: string;
-  lab: string;
-  fecha: string;
-  horario: string;
-  materia: string;
-  estado: 'Pendiente' | 'Aprobada' | 'Rechazada' | 'Completada';
-  solicitante: string;
-}
+import { ReservationsService } from '../../../services/reservations.service';
+import {
+  Reserva,
+  ReservationStatusUpdate
+} from '../../../shared/models/reservation.model';
+import { extractErrorMessage } from '../../../shared/utils/http-error.utils';
 
 @Component({
   selector: 'app-reservations-list',
@@ -21,59 +18,103 @@ export interface Reserva {
 })
 export class ReservationsListScreen implements OnInit {
   private authService = inject(AuthService);
+  private reservationsService = inject(ReservationsService);
+  private snackBar = inject(MatSnackBar);
 
-  public userName = signal<string>(''); 
-  public searchTerm = signal<string>('');
-  public isLoading = signal<boolean>(true);
+  public currentUserId = signal<string | null>(null);
+  public isStaff = signal(false);
+  public isAdmin = signal(false);
+  public searchTerm = signal('');
+  public isLoading = signal(true);
+  public loadError = signal<string | null>(null);
   public reservas = signal<Reserva[]>([]);
 
+  public pageTitle = computed(() => (this.isStaff() ? 'Reservas del Sistema' : 'Mis Reservas'));
+
   public filteredReservas = computed(() => {
-    const term = this.searchTerm().toLowerCase();
-    const currentName = this.userName();
+    const term = this.searchTerm().trim().toLowerCase();
 
-    let listaResultante = this.reservas();
-
-    if (currentName) {
-      listaResultante = listaResultante.filter(res => res.solicitante === currentName);
+    if (!term) {
+      return this.reservas();
     }
 
-    if (term) {
-      listaResultante = listaResultante.filter(res =>
+    return this.reservas().filter(
+      (res) =>
         res.lab.toLowerCase().includes(term) ||
         res.materia.toLowerCase().includes(term) ||
-        res.estado.toLowerCase().includes(term)
-      );
-    }
-
-    return listaResultante;
+        res.estado.toLowerCase().includes(term) ||
+        res.solicitante.toLowerCase().includes(term)
+    );
   });
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
-      if (user) {
-        this.userName.set(user.nombre_completo || '');
-      } else {
-        this.userName.set('');
-      }
+    this.authService.currentUser$.subscribe((user) => {
+      this.currentUserId.set(user?.id_usuario ?? null);
+      this.isStaff.set(!!user && (user.rol === 'admin' || user.rol === 'tecnico'));
+      this.isAdmin.set(user?.rol === 'admin');
     });
 
     this.fetchReservationsFromBackend();
   }
 
-  private fetchReservationsFromBackend(): void {
+  public fetchReservationsFromBackend(): void {
     this.isLoading.set(true);
+    this.loadError.set(null);
 
-    setTimeout(() => {
-      const mockDataFromDB: Reserva[] = [
-        { id: 'RES-001', lab: 'Laboratorio de Computación Avanzada', fecha: '25 Mar 2026', horario: '14:00 - 16:00', materia: 'Desarrollo Web', estado: 'Aprobada', solicitante: 'Pablo Ivan Ibarra Valencia' },
-        { id: 'RES-002', lab: 'Laboratorio de Redes y Seguridad', fecha: '26 Mar 2026', horario: '09:00 - 11:00', materia: 'Ciberseguridad', estado: 'Pendiente', solicitante: 'Ana Martínez' },
-        { id: 'RES-003', lab: 'Laboratorio de Física Experimental', fecha: '22 Mar 2026', horario: '10:00 - 12:00', materia: 'Óptica', estado: 'Completada', solicitante: 'Carlos López' },
-        { id: 'RES-004', lab: 'Sala de Posgrado e Investigación', fecha: '28 Mar 2026', horario: '16:00 - 18:00', materia: 'Tesis', estado: 'Rechazada', solicitante: 'Gerson Contreras' }
-      ];
+    this.reservationsService.list().subscribe({
+      next: (reservas) => {
+        this.reservas.set(reservas);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.loadError.set(extractErrorMessage(error, 'No se pudo cargar el historial de reservas.'));
+      }
+    });
+  }
 
-      this.reservas.set(mockDataFromDB);
-      this.isLoading.set(false); 
-    }, 1500); 
+  public canCancel(reserva: Reserva): boolean {
+    return this.isAdmin() || reserva.solicitanteId === this.currentUserId();
+  }
+
+  public updateStatus(id: string, estado: ReservationStatusUpdate): void {
+    this.reservationsService.updateStatus(id, estado).subscribe({
+      next: (updated) => {
+        this.reservas.update((items) => items.map((item) => (item.id === id ? updated : item)));
+        this.snackBar.open(`Reserva ${estado.toLowerCase()} correctamente.`, 'Cerrar', {
+          duration: 3000
+        });
+      },
+      error: (error) => {
+        this.snackBar.open(
+          extractErrorMessage(error, 'No se pudo actualizar el estado de la reserva.'),
+          'Cerrar',
+          { duration: 4000 }
+        );
+      }
+    });
+  }
+
+  public cancelReservation(id: string): void {
+    if (!confirm('Esta accion cancelara la reserva seleccionada. Deseas continuar?')) {
+      return;
+    }
+
+    this.reservationsService.cancel(id).subscribe({
+      next: () => {
+        this.reservas.update((items) => items.filter((item) => item.id !== id));
+        this.snackBar.open('Reserva cancelada correctamente.', 'Cerrar', {
+          duration: 3000
+        });
+      },
+      error: (error) => {
+        this.snackBar.open(
+          extractErrorMessage(error, 'No se pudo cancelar la reserva.'),
+          'Cerrar',
+          { duration: 4000 }
+        );
+      }
+    });
   }
 
   public updateSearch(event: Event): void {

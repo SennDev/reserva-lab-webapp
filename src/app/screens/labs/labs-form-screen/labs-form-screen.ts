@@ -1,14 +1,17 @@
-import { Component, signal, computed, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, signal, computed, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SHARED_IMPORTS } from '../../../shared/shared-imports';
+import { LaboratorioPayload } from '../../../shared/models/lab.model';
+import { LabsService } from '../../../services/labs.service';
+import { extractErrorMessage, extractFieldErrors } from '../../../shared/utils/http-error.utils';
 
-// 1. INTERFAZ ESTRICTA: El contrato de datos que Django espera recibir
-export interface LaboratorioPayload {
-  nombre: string;
-  edificio: string;
-  capacidad: number | null;
-  estado: 'Disponible' | 'En Mantenimiento' | 'Ocupado';
-  equipamiento: string;
+interface LabFormErrors {
+  nombre?: string;
+  edificio?: string;
+  tipo?: string;
+  capacidad?: string;
+  equipamiento?: string;
 }
 
 @Component({
@@ -19,37 +22,48 @@ export interface LaboratorioPayload {
   styleUrl: './labs-form-screen.scss'
 })
 export class LabsFormScreen implements OnInit {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private labsService = inject(LabsService);
+  private snackBar = inject(MatSnackBar);
+
   public labData: LaboratorioPayload = {
     nombre: '',
     edificio: '',
+    tipo: '',
     capacidad: null,
     estado: 'Disponible',
     equipamiento: ''
   };
 
-  public errors: any = {};
-  public isSaving = signal<boolean>(false);
+  public errors: LabFormErrors = {};
+  public isSaving = signal(false);
+  public isLoading = signal(false);
+  public isEditMode = signal(false);
+  public serverError = signal<string | null>(null);
+  private labId: string | null = null;
 
-  // 2. VARIABLES DE BACKEND-READINESS
-  public isEditMode = signal<boolean>(false); // Detectará si estamos creando o editando
-  public serverError = signal<string | null>(null); // Almacenará errores que envíe Django
-
-  // PREVISUALIZACIÓN EN VIVO
   public equipamientoTags = computed(() => {
     const text = this.labData.equipamiento;
     if (!text) return [];
-    return text.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0);
+    return text
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0);
   });
 
-  constructor(private router: Router) {}
-
   ngOnInit(): void {
-    // Aquí en el futuro leeremos la URL.
-    // Si la URL dice /laboratorios/editar/5, isEditMode será true y haremos un this.http.get()
+    this.labId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode.set(!!this.labId);
+
+    if (this.labId) {
+      this.loadLab(this.labId);
+    }
   }
 
   public validarFormulario(): boolean {
     this.errors = {};
+    this.serverError.set(null);
     let esValido = true;
 
     if (!this.labData.nombre || this.labData.nombre.trim().length < 5) {
@@ -58,7 +72,12 @@ export class LabsFormScreen implements OnInit {
     }
 
     if (!this.labData.edificio || this.labData.edificio.trim().length < 2) {
-      this.errors.edificio = 'Ingresa un edificio o ubicación válida.';
+      this.errors.edificio = 'Ingresa un edificio o ubicacion valida.';
+      esValido = false;
+    }
+
+    if (!this.labData.tipo || this.labData.tipo.trim().length < 3) {
+      this.errors.tipo = 'Ingresa el tipo de laboratorio.';
       esValido = false;
     }
 
@@ -76,23 +95,62 @@ export class LabsFormScreen implements OnInit {
   }
 
   public saveLab(): void {
-    if (this.validarFormulario()) {
-      this.isSaving.set(true);
-      this.serverError.set(null); // Limpiamos errores previos del servidor
-
-      // Simulación de Petición HTTP POST/PUT a Django
-      setTimeout(() => {
-        // 3. SIMULACIÓN DE ERROR DE BASE DE DATOS (Constraint de Nombre Único)
-        if (this.labData.nombre.toLowerCase() === 'laboratorio de computación avanzada') {
-          this.serverError.set('Error 400: Ya existe un laboratorio registrado con ese nombre exacto en la base de datos.');
-          this.isSaving.set(false);
-          return; // Detenemos la ejecución
-        }
-
-        // Si todo sale bien, guardamos y redirigimos
-        this.isSaving.set(false);
-        this.router.navigate(['/dashboard/laboratorios']);
-      }, 1500);
+    if (!this.validarFormulario()) {
+      return;
     }
+
+    this.isSaving.set(true);
+
+    const request$ =
+      this.labId && this.isEditMode()
+        ? this.labsService.update(this.labId, this.labData)
+        : this.labsService.create(this.labData);
+
+    request$.subscribe({
+      next: () => {
+        this.isSaving.set(false);
+        this.snackBar.open(
+          this.isEditMode() ? 'Laboratorio actualizado correctamente.' : 'Laboratorio registrado correctamente.',
+          'Cerrar',
+          { duration: 3000 }
+        );
+        this.router.navigate(['/dashboard/laboratorios']);
+      },
+      error: (error) => {
+        this.isSaving.set(false);
+        this.errors = {
+          ...this.errors,
+          ...(extractFieldErrors(error) as LabFormErrors)
+        };
+        this.serverError.set(
+          extractErrorMessage(error, 'No se pudo guardar la informacion del laboratorio.')
+        );
+      }
+    });
+  }
+
+  private loadLab(id: string): void {
+    this.isLoading.set(true);
+    this.serverError.set(null);
+
+    this.labsService.getById(id).subscribe({
+      next: (lab) => {
+        this.labData = {
+          nombre: lab.nombre,
+          edificio: lab.edificio,
+          tipo: lab.tipo,
+          capacidad: lab.capacidad,
+          estado: lab.estado,
+          equipamiento: lab.equipamiento.join(', ')
+        };
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.serverError.set(
+          extractErrorMessage(error, 'No se pudo cargar el laboratorio seleccionado.')
+        );
+      }
+    });
   }
 }
