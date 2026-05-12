@@ -1,73 +1,129 @@
 <app-navbar></app-navbar>
 
-<div class="global-glass-background">
+<div class="global-glass-background" aria-hidden="true">
   <div class="glass-orb orb-primary"></div>
   <div class="glass-orb orb-secondary"></div>
   <div class="glass-orb orb-accent"></div>
 </div>
 
 <div class="home-wrapper position-relative z-2" id="inicio">
-
   <main class="hero-section container d-flex align-items-center justify-content-center">
-    <div class="row align-items-center w-100 flex-column-reverse flex-lg-row gy-5">
-
+    <div class="row align-items-center w-100 flex-column-reverse flex-lg-row gy-5 gx-xl-5">
       <div class="col-12 col-lg-6 text-center text-lg-start animate-fade-in-right">
-        <div class="neo-badge-glass mb-4 d-inline-flex align-items-center mx-auto mx-lg-0">
-          <span class="pulse-dot me-2"></span> Sistema Académico 2026
-        </div>
+        <div class="hero-copy">
+          <div
+            class="neo-badge-glass mb-4 d-inline-flex align-items-center justify-content-center justify-content-lg-start mx-auto mx-lg-0"
+          >
+            <span class="pulse-dot me-2"></span>
+            Sistema Academico 2026
+          </div>
 
-        <h1 class="hero-title fw-bold text-dark mb-4">
-          Control total sobre tus <br>
-          <span class="gradient-text-glass">Espacios de Ciencia</span>
-        </h1>
+          <h1 class="hero-title fw-bold text-dark mb-4">
+            Control total sobre tus
+            <span class="hero-title-break">espacios de ciencia</span>
+          </h1>
 
-        <p class="hero-subtitle text-muted mb-5 mx-auto mx-lg-0">
-          Digitaliza la gestión de laboratorios. Una arquitectura neomórfica diseñada para la eficiencia, eliminando conflictos de horarios y maximizando el uso de recursos.
-        </p>
+          <p class="hero-subtitle text-muted mb-5 mx-auto mx-lg-0">
+            Digitaliza la gestion de laboratorios con una experiencia premium, clara y
+            precisa. Elimina conflictos de horarios, organiza prestamos y da visibilidad
+            completa al uso de cada recurso.
+          </p>
 
-        <div class="hero-cta-group d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start mb-4">
-          <button class="btn-neo-primary btn-lg wave-btn mb-3 mb-sm-0 me-sm-3" routerLink="/auth/registro">
-            Comenzar <i class="bi bi-arrow-right ms-2 fs-5"></i>
-          </button>
+          <div
+            class="hero-cta-group d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start mb-4"
+          >
+            <button class="btn-neo-primary btn-lg wave-btn" routerLink="/auth/registro">
+              Comenzar
+              <i class="bi bi-arrow-right ms-2 fs-5"></i>
+            </button>
 
-          <button class="btn-neo-outline btn-lg" routerLink="/auth/login">
-            Acceder
-          </button>
-        </div>
+            <button class="btn-neo-outline btn-lg" routerLink="/auth/login">Acceder</button>
+          </div>
 
-        <div class="academic-proof d-flex align-items-center justify-content-center justify-content-lg-start gap-3 animate-fade-in-up delay-2">
-          <div class="proof-item"><i class="bi bi-shield-check text-primary me-2"></i><span>Seguridad JWT</span></div>
-          <div class="divider-vertical"></div>
-          <div class="proof-item"><i class="bi bi-lightning-charge-fill text-warning me-2"></i><span>Respuesta Real-time</span></div>
+          <div class="hero-link-row mb-4">
+            <a class="hero-inline-link" routerLink="/nosotros">
+              Conoce la vision del proyecto
+              <i class="bi bi-arrow-up-right ms-2"></i>
+            </a>
+          </div>
+
+          <div
+            class="academic-proof d-flex flex-column flex-sm-row align-items-center justify-content-center justify-content-lg-start gap-3 animate-fade-in-up delay-2"
+          >
+            <div class="proof-item">
+              <i class="bi bi-shield-check me-2"></i>
+              <span>Seguridad JWT</span>
+            </div>
+            <div class="divider-vertical d-none d-sm-block"></div>
+            <div class="proof-item">
+              <i class="bi bi-lightning-charge-fill me-2"></i>
+              <span>Respuesta en tiempo real</span>
+            </div>
+            <div class="divider-vertical d-none d-sm-block"></div>
+            <div class="proof-item">
+              <i class="bi bi-grid-1x2-fill me-2"></i>
+              <span>Operacion centralizada</span>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="col-12 col-lg-6 animate-fade-in-left">
-        <div class="glass-card-hero mx-auto floating-anim">
-          <div class="glass-header d-flex justify-content-between align-items-center mb-3 px-2">
-            <div class="d-flex gap-2">
-              <span class="dot bg-danger"></span><span class="dot bg-warning"></span><span class="dot bg-success"></span>
-            </div>
-            <span class="small fw-bold text-muted"></span>
+        <div class="hero-visual-shell mx-auto">
+          <div class="hero-floating-note note-top floating-anim">
+            <span class="note-dot"></span>
+            Disponibilidad sincronizada
           </div>
-          <div class="image-inner-wrapper border-glass-highlight">
-            <img src="assets/images/lab.jpg" alt="Interface" class="img-fluid object-fit-cover shadow-sm">
+
+          <div class="glass-card-hero mx-auto">
+            <div class="glass-header d-flex justify-content-between align-items-center mb-3 px-2">
+              <div class="d-flex gap-2" aria-hidden="true">
+                <span class="dot dot-danger"></span>
+                <span class="dot dot-warning"></span>
+                <span class="dot dot-success"></span>
+              </div>
+              <span class="small fw-semibold text-muted">ReservaLab Dashboard</span>
+            </div>
+
+            <div class="image-inner-wrapper border-glass-highlight">
+              <img
+                src="assets/images/lab.jpg"
+                alt="Laboratorio universitario con equipo tecnologico"
+                class="img-fluid object-fit-cover shadow-sm"
+              />
+            </div>
+          </div>
+
+          <div class="hero-floating-note note-bottom">
+            <i class="bi bi-calendar2-check me-2"></i>
+            Agenda y recursos en una sola vista
           </div>
         </div>
       </div>
     </div>
   </main>
 
-  <section class="py-5 section-steps position-relative">
+  <section class="py-5 section-steps position-relative" aria-labelledby="pasos-title">
     <div class="container py-4">
+      <div class="section-heading text-center mb-5 animate-fade-in-up">
+        <span class="section-kicker">Flujo Inteligente</span>
+        <h2 id="pasos-title" class="section-title text-dark mb-3">
+          Reserva en minutos, sin friccion operativa
+        </h2>
+        <p class="section-copy text-muted mx-auto">
+          Un flujo claro para estudiantes, docentes y personal tecnico, pensado para una
+          operacion academica moderna.
+        </p>
+      </div>
+
       <div class="row g-4 justify-content-center">
         @for (step of steps; track step.num) {
           <div class="col-12 col-md-4 animate-fade-in-up delay-{{$index + 1}}">
-            <div class="step-card-mini d-flex align-items-center p-4">
-              <div class="step-number-box me-3">{{step.num}}</div>
-              <div>
-                <h6 class="fw-bold m-0 text-dark">{{step.title}}</h6>
-                <p class="small text-muted m-0">{{step.desc}}</p>
+            <div class="step-card-mini d-flex align-items-start p-4 h-100">
+              <div class="step-number-box me-3 flex-shrink-0">{{ step.num }}</div>
+              <div class="step-copy">
+                <h3 class="step-title fw-bold m-0 mb-2 text-dark">{{ step.title }}</h3>
+                <p class="small text-muted m-0">{{ step.desc }}</p>
               </div>
             </div>
           </div>
@@ -80,30 +136,64 @@
     <div class="container py-5">
       <div class="row align-items-center gy-5">
         <div class="col-12 col-xl-5 text-center text-xl-start animate-fade-in-up">
-          <h2 class="title-primary fw-bold text-dark mb-4">Potencia tu <br><span class="text-primary">Productividad</span></h2>
-          <p class="subtitle text-muted mb-4">
-            ReservaLab centraliza procesos complejos en una interfaz intuitiva y táctil. Optimiza tu tiempo y el de tus alumnos.
-          </p>
-          <div class="d-none d-xl-block">
-            <div class="neo-decorative-circle"></div>
+          <div class="features-copy">
+            <span class="section-kicker">Experiencia Tactil</span>
+            <h2 class="title-primary fw-bold text-dark mb-4">
+              Potencia tu
+              <span class="text-primary d-inline-block">productividad academica</span>
+            </h2>
+            <p class="subtitle text-muted mb-4">
+              ReservaLab centraliza procesos complejos dentro de una interfaz suave,
+              inmersiva y lista para una integracion completa con backend.
+            </p>
+
+            <div class="feature-side-card d-inline-flex align-items-center text-start">
+              <div class="feature-side-icon me-3">
+                <i class="bi bi-stars"></i>
+              </div>
+              <div>
+                <h3 class="fw-bold text-dark mb-1 fs-6">Diseno orientado a operacion real</h3>
+                <p class="small text-muted mb-0">
+                  Visibilidad clara, navegacion rapida y decisiones con menos friccion.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="col-12 col-xl-7 animate-fade-in-up delay-1">
           <div class="neo-accordion-container mx-auto mx-xl-0">
             @for (feat of features; track feat.title; let i = $index) {
-              <div class="neo-panel" [class.active]="activeFeatureIndex() === i" (click)="toggleFeature(i)">
+              <div
+                class="neo-panel"
+                [class.active]="activeFeatureIndex() === i"
+                (click)="toggleFeature(i)"
+                (keydown.enter)="toggleFeature(i)"
+                (keydown.space)="toggleFeature(i)"
+                [attr.aria-expanded]="activeFeatureIndex() === i"
+                [attr.aria-controls]="'feature-panel-' + i"
+                role="button"
+                tabindex="0"
+              >
                 <div class="setting-title d-flex align-items-center">
                   <div class="icon-neo-small me-3" [class]="feat.colorClass">
-                    <i class="bi {{feat.icon}}"></i>
+                    <i class="bi {{ feat.icon }}"></i>
                   </div>
-                  <h3 class="m-0 fw-bold fs-5">{{feat.title}}</h3>
-                  <div class="ms-auto icon-indicator transition-smooth" [class.active-indicator]="activeFeatureIndex() === i">
+                  <div class="setting-heading">
+                    <h3 class="m-0 fw-bold fs-5">{{ feat.title }}</h3>
+                    <span class="setting-label small text-muted">Modulo estrategico</span>
+                  </div>
+                  <div
+                    class="ms-auto icon-indicator transition-smooth"
+                    [class.active-indicator]="activeFeatureIndex() === i"
+                    aria-hidden="true"
+                  >
                     <i class="bi bi-chevron-down text-muted"></i>
                   </div>
                 </div>
-                <div class="setting-content">
-                  <p class="text-muted m-0">{{feat.desc}}</p>
+
+                <div class="setting-content" [id]="'feature-panel-' + i">
+                  <p class="text-muted m-0">{{ feat.desc }}</p>
                 </div>
               </div>
             }
@@ -113,45 +203,55 @@
     </div>
   </section>
 
-  <section id="laboratorios" class="py-5 mb-5 section-neo-base">
+  <section id="laboratorios" class="py-5 mb-5 section-neo-base section-labs">
     <div class="container">
-      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-end mb-5 animate-fade-in-up">
+      <div
+        class="labs-heading d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-end mb-5 animate-fade-in-up gap-4"
+      >
         <div class="text-center text-md-start">
-          <h2 class="title-primary fw-bold text-dark mb-2">Espacios Disponibles</h2>
-          <p class="subtitle text-muted m-0">Explora la infraestructura tecnológica a tu alcance.</p>
+          <span class="section-kicker">Infraestructura Disponible</span>
+          <h2 class="title-primary fw-bold text-dark mb-2">Espacios listos para reservar</h2>
+          <p class="subtitle text-muted m-0">
+            Explora laboratorios con distintas capacidades y equipamiento clave.
+          </p>
         </div>
-        <button class="btn-neo-outline mt-4 mt-md-0 px-4" routerLink="/auth/registro">Catálogo Completo</button>
+
+        <button class="btn-neo-outline px-4" routerLink="/auth/registro">
+          Catalogo completo
+        </button>
       </div>
 
       <div class="row g-4">
         @for (lab of laboratorios; track lab.nombre; let i = $index) {
-          <div class="col-12 col-md-6 animate-fade-in-up delay-{{i + 1}}">
-            <div class="neo-card-lab p-4 p-lg-5 d-flex flex-column h-100">
-              <div class="d-flex align-items-center w-100 mb-4">
+          <div class="col-12 col-md-6 animate-fade-in-up delay-{{ i + 1 }}">
+            <article class="neo-card-lab p-4 p-lg-5 d-flex flex-column h-100">
+              <div class="lab-card-top d-flex align-items-center w-100 mb-4">
                 <div class="lab-icon-neo me-4 flex-shrink-0">
-                  <i class="bi {{lab.icon}} fs-2 {{lab.color}}"></i>
+                  <i class="bi {{ lab.icon }} fs-2 {{ lab.color }}"></i>
                 </div>
-                <div>
-                  <!-- Correccion de especiado entre el nombre y capacidad, se ajusto el "mb-1" a "mb-3" -->
-                  <h4 class="fw-bold mb-3 text-dark fs-5">{{lab.nombre}}</h4>
-                  <span class="neo-badge-light small fw-bold"><i class="bi bi-people-fill me-1"></i> Capacidad: {{lab.capacidad}}</span>
+
+                <div class="lab-copy">
+                  <h3 class="fw-bold mb-2 text-dark fs-5">{{ lab.nombre }}</h3>
+                  <span class="neo-badge-light small fw-bold">
+                    <i class="bi bi-people-fill me-1"></i>
+                    Capacidad: {{ lab.capacidad }}
+                  </span>
                 </div>
               </div>
 
               <div class="mt-auto pt-4 border-top-neo">
                 <div class="d-flex flex-wrap gap-2">
                   @for (item of lab.equipamiento; track item) {
-                    <span class="neo-tag">{{item}}</span>
+                    <span class="neo-tag">{{ item }}</span>
                   }
                 </div>
               </div>
-            </div>
+            </article>
           </div>
         }
       </div>
     </div>
   </section>
-
 </div>
 
 <app-footer></app-footer>

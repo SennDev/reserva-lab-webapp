@@ -7,6 +7,10 @@ export const routes: Routes = [
     loadComponent: () => import('./screens/home-screen/home-screen').then((m) => m.HomeScreen)
   },
   {
+    path: 'nosotros',
+    loadComponent: () => import('./screens/about-screen/about-screen').then((m) => m.AboutScreen)
+  },
+  {
     path: 'auth/login',
     canActivate: [guestOnlyGuard],
     loadComponent: () => import('./screens/auth/login-screen/login-screen').then((m) => m.LoginScreen)

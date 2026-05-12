@@ -2,27 +2,41 @@
   <aside
     class="info-panel d-flex flex-column justify-content-center col-12 col-lg-5 p-4 p-xl-5 position-relative overflow-hidden"
   >
-    <div class="glass-orb orb-1"></div>
-    <div class="glass-orb orb-2"></div>
+    <div class="glass-orb orb-1" aria-hidden="true"></div>
+    <div class="glass-orb orb-2" aria-hidden="true"></div>
 
     <div class="visual-content z-2 text-center text-lg-start animate-fade-in-left">
+      <span class="visual-kicker">ReservaLab FCC BUAP</span>
+
       <div
         class="logo-box mx-auto mx-lg-0 mb-4 d-flex align-items-center justify-content-center"
       >
         <i class="bi bi-beaker-fill text-white fs-2"></i>
       </div>
-      <h1 class="visual-title mb-3 fw-bold gradient-text-light">Bienvenido de <br />Nuevo</h1>
+
+      <h1 class="visual-title mb-3 fw-bold gradient-text-light">Bienvenido de nuevo</h1>
       <p class="visual-subtitle text-white-50 mx-auto mx-lg-0 mb-0">
-        Accede a tu panel de control para gestionar tus reservas de laboratorios,
-        validar horarios y solicitar prestamos de equipo.
+        Accede a tu panel para gestionar reservas, validar horarios y dar seguimiento a
+        prestamos de equipo desde una sola experiencia.
       </p>
 
+      <div class="visual-metrics d-flex flex-column gap-3 mt-4">
+        <div class="metric-pill">
+          <i class="bi bi-grid-1x2-fill me-2"></i>
+          Flujo centralizado para laboratorios y recursos
+        </div>
+        <div class="metric-pill">
+          <i class="bi bi-shield-check me-2"></i>
+          Acceso institucional con autenticacion segura
+        </div>
+      </div>
+
       <div class="glass-card-mini floating-anim mt-5 d-none d-lg-flex align-items-center">
-        <div class="icon-box-glow bg-primary-soft text-primary-light me-3">
+        <div class="icon-box-glow me-3">
           <i class="bi bi-shield-check"></i>
         </div>
         <div>
-          <h6 class="fw-bold text-white mb-0">Conexion Segura</h6>
+          <h6 class="fw-bold text-white mb-0">Conexion segura</h6>
           <span class="small text-white-50">Autenticacion cifrada institucional</span>
         </div>
       </div>
@@ -33,7 +47,10 @@
     class="form-panel d-flex justify-content-center align-items-lg-center col-12 col-lg-7 p-0 bg-neo-light position-relative"
   >
     @if (isLoading()) {
-      <div class="wave-transition-overlay d-flex flex-column align-items-center justify-content-center">
+      <div
+        class="wave-transition-overlay d-flex flex-column align-items-center justify-content-center"
+        aria-live="polite"
+      >
         <div class="wave-ripple ripple-login"></div>
         <div class="logo-box-auth animate-pulse mb-3">
           <i class="bi bi-fingerprint text-primary fs-1"></i>
@@ -43,116 +60,149 @@
     }
 
     <div class="form-scroll-wrapper w-100 p-4 p-xl-5">
-      <div class="form-content mx-auto" style="max-width: 480px">
-        <header class="mb-5 text-center text-lg-start stagger-1">
-          <h2 class="fw-bold text-dark mb-2">Iniciar Sesion</h2>
-          <p class="text-muted small">
-            Ingresa tus credenciales institucionales para acceder
-          </p>
-        </header>
+      <section class="auth-scene">
+        <div class="auth-card mx-auto stagger-1">
+          <div class="auth-card-light" aria-hidden="true"></div>
 
-        @if (serverError()) {
-          <div class="neo-alert-danger mb-4 d-flex align-items-center p-3 animate-fade-in">
-            <div class="icon-box-danger me-3">
-              <i class="bi bi-exclamation-triangle-fill fs-5"></i>
-            </div>
-            <div>
-              <h6 class="fw-bold m-0 mb-1">No se pudo iniciar sesion</h6>
-              <span class="small lh-sm d-block">{{ serverError() }}</span>
-            </div>
-          </div>
-        }
+          <div class="form-content auth-card-body mx-auto">
+            <header class="auth-header mb-5 text-center text-lg-start">
+              <span class="auth-kicker">Acceso institucional</span>
+              <h2 class="fw-bold text-dark mb-2">Iniciar sesion</h2>
+              <p class="text-muted small mb-0">
+                Ingresa tus credenciales institucionales para acceder al sistema.
+              </p>
+            </header>
 
-        <form (ngSubmit)="login()" #loginForm="ngForm">
-          <div class="mb-4 stagger-2">
-            <label class="form-label fw-semibold text-dark small mb-2">Correo Institucional</label>
-            <div class="position-relative">
-              <i
-                class="bi bi-envelope position-absolute top-50 start-0 translate-middle-y ms-3 text-muted fs-5"
-              ></i>
-              <input
-                type="email"
-                class="neo-input w-100 ps-5 py-3"
-                placeholder="ejemplo@alumno.buap.mx"
-                name="email"
-                [(ngModel)]="user.email"
-                [class.border-danger]="errors.email"
-                required
-              />
-            </div>
-            @if (errors.email) {
-              <span class="text-danger small mt-1 d-block">{{ errors.email }}</span>
-            }
-          </div>
-
-          <div class="mb-5 stagger-3">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <label class="form-label fw-semibold text-dark small m-0">Contrasena</label>
-              <a
-                href="javascript:void(0)"
-                class="small text-primary fw-bold text-decoration-none transition-smooth hover-scale"
-                >Olvidaste tu contrasena?</a
+            @if (serverError()) {
+              <div
+                class="neo-alert-danger auth-alert mb-4 d-flex align-items-start p-3 animate-fade-in"
+                aria-live="polite"
               >
-            </div>
-            <div class="position-relative">
-              <i
-                class="bi bi-lock position-absolute top-50 start-0 translate-middle-y ms-3 text-muted fs-5"
-              ></i>
-              <input
-                [type]="inputType"
-                class="neo-input w-100 px-5 py-3"
-                placeholder="••••••••"
-                name="password"
-                [(ngModel)]="user.password"
-                [class.border-danger]="errors.password"
-                required
-              />
-              <i
-                class="bi position-absolute top-50 end-0 translate-middle-y me-3 text-muted fs-5 cursor-pointer transition-smooth"
-                [class.bi-eye]="hidePassword"
-                [class.bi-eye-slash]="!hidePassword"
-                (click)="showPassword()"
-              ></i>
-            </div>
-            @if (errors.password) {
-              <span class="text-danger small mt-1 d-block">{{ errors.password }}</span>
+                <div class="icon-box-danger me-3">
+                  <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                </div>
+                <div>
+                  <h6 class="fw-bold m-0 mb-1">No se pudo iniciar sesion</h6>
+                  <span class="small lh-sm d-block">{{ serverError() }}</span>
+                </div>
+              </div>
             }
-          </div>
 
-          <button
-            type="submit"
-            class="btn-neo-primary w-100 py-3 mt-2 d-flex justify-content-center align-items-center fw-bold stagger-4 wave-btn"
-            [disabled]="isLoading()"
-          >
-            @if (isLoading()) {
-              <span
-                class="spinner-border spinner-border-sm me-2"
-                role="status"
-                aria-hidden="true"
-              ></span>
-              Conectando...
-            } @else {
-              Ingresar al Sistema <i class="bi bi-box-arrow-in-right ms-2 fs-5"></i>
-            }
-          </button>
-        </form>
+            <form (ngSubmit)="login()" #loginForm="ngForm">
+              <div class="field-stack mb-4 stagger-2">
+                <label class="form-label fw-semibold text-dark small mb-2" for="loginEmail">
+                  Correo institucional
+                </label>
+                <div class="input-shell position-relative">
+                  <i
+                    class="bi bi-envelope input-icon position-absolute top-50 start-0 translate-middle-y ms-3 fs-5"
+                  ></i>
+                  <input
+                    id="loginEmail"
+                    type="email"
+                    class="neo-input pill-input w-100 ps-5 py-3"
+                    placeholder="ejemplo@alumno.buap.mx"
+                    name="email"
+                    [(ngModel)]="user.email"
+                    [class.border-danger]="errors.email"
+                    autocomplete="email"
+                    required
+                  />
+                </div>
+                @if (errors.email) {
+                  <span class="text-danger small mt-2 d-block field-error">{{ errors.email }}</span>
+                }
+              </div>
 
-        <footer class="text-center mt-5 pt-4 border-top-neo stagger-5">
-          <span class="text-muted small">No tienes cuenta? </span>
-          <a
-            routerLink="/auth/registro"
-            class="text-primary fw-bold text-decoration-none small transition-smooth hover-scale"
-            >Registrate aqui</a
-          >
-          <div class="mt-4">
-            <a
-              routerLink="/"
-              class="text-muted text-decoration-none small transition-smooth hover-scale"
-              ><i class="bi bi-arrow-left me-1"></i> Volver al inicio publico</a
-            >
+              <div class="field-stack mb-5 stagger-3">
+                <div class="d-flex justify-content-between align-items-center mb-2 gap-3 flex-wrap">
+                  <label class="form-label fw-semibold text-dark small m-0" for="loginPassword">
+                    Contrasena
+                  </label>
+                  <a
+                    href="javascript:void(0)"
+                    class="small text-primary fw-bold text-decoration-none transition-smooth hover-scale"
+                  >
+                    Olvidaste tu contrasena?
+                  </a>
+                </div>
+
+                <div class="input-shell position-relative">
+                  <i
+                    class="bi bi-lock input-icon position-absolute top-50 start-0 translate-middle-y ms-3 fs-5"
+                  ></i>
+                  <input
+                    id="loginPassword"
+                    [type]="inputType"
+                    class="neo-input pill-input w-100 px-5 py-3"
+                    placeholder="••••••••"
+                    name="password"
+                    [(ngModel)]="user.password"
+                    [class.border-danger]="errors.password"
+                    autocomplete="current-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    class="input-action position-absolute top-50 end-0 translate-middle-y me-2"
+                    (click)="showPassword()"
+                    [attr.aria-label]="hidePassword ? 'Mostrar contrasena' : 'Ocultar contrasena'"
+                  >
+                    <i
+                      class="bi fs-5"
+                      [class.bi-eye]="hidePassword"
+                      [class.bi-eye-slash]="!hidePassword"
+                    ></i>
+                  </button>
+                </div>
+                @if (errors.password) {
+                  <span class="text-danger small mt-2 d-block field-error">{{
+                    errors.password
+                  }}</span>
+                }
+              </div>
+
+              <button
+                type="submit"
+                class="btn-neo-primary btn-auth w-100 py-3 mt-2 d-flex justify-content-center align-items-center fw-bold stagger-4 wave-btn"
+                [disabled]="isLoading()"
+              >
+                @if (isLoading()) {
+                  <span
+                    class="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Conectando...
+                } @else {
+                  Ingresar al sistema
+                  <i class="bi bi-box-arrow-in-right ms-2 fs-5"></i>
+                }
+              </button>
+            </form>
+
+            <footer class="text-center mt-5 pt-4 border-top-neo stagger-5">
+              <span class="text-muted small">No tienes cuenta? </span>
+              <a
+                routerLink="/auth/registro"
+                class="text-primary fw-bold text-decoration-none small transition-smooth hover-scale"
+              >
+                Registrate aqui
+              </a>
+
+              <div class="mt-4">
+                <a
+                  routerLink="/"
+                  class="text-muted text-decoration-none small transition-smooth hover-scale"
+                >
+                  <i class="bi bi-arrow-left me-1"></i>
+                  Volver al inicio publico
+                </a>
+              </div>
+            </footer>
           </div>
-        </footer>
-      </div>
+        </div>
+      </section>
     </div>
   </main>
 </div>

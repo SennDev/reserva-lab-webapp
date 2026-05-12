@@ -1,0 +1,320 @@
+@mixin neo-outset {
+  background: var(--neo-light-bg);
+  box-shadow: var(--shadow-dark), var(--shadow-light);
+}
+
+@mixin neo-inset {
+  background: var(--neo-light-bg);
+  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
+}
+
+@mixin glass-panel($mix: 72%) {
+  background: color-mix(in srgb, var(--surface-color) $mix, transparent);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid color-mix(in srgb, var(--surface-color) 78%, transparent);
+}
+
+.about-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--primary-color) 12%, transparent), transparent 38%),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--success-color) 10%, transparent), transparent 42%),
+    var(--neo-light-bg);
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(95px);
+  opacity: 0.7;
+  animation: orb-float 16s ease-in-out infinite alternate;
+}
+
+.orb-primary {
+  width: min(42rem, 48vw);
+  aspect-ratio: 1;
+  top: -10%;
+  right: -8%;
+  background: color-mix(in srgb, var(--primary-color) 26%, transparent);
+}
+
+.orb-secondary {
+  width: min(34rem, 40vw);
+  aspect-ratio: 1;
+  bottom: -10%;
+  left: -6%;
+  background: color-mix(in srgb, var(--secondary-color) 24%, transparent);
+  animation-delay: -5s;
+}
+
+.orb-accent {
+  width: min(24rem, 28vw);
+  aspect-ratio: 1;
+  top: 35%;
+  left: 24%;
+  background: color-mix(in srgb, var(--success-color) 20%, transparent);
+  animation-delay: -8s;
+}
+
+.about-wrapper {
+  position: relative;
+  padding-bottom: 4rem;
+}
+
+.about-hero {
+  padding-top: clamp(2rem, 5vw, 4rem);
+  padding-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.hero-panel {
+  @include glass-panel(70%);
+  max-width: 76rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: 2.25rem;
+  box-shadow:
+    0 1.5rem 3rem color-mix(in srgb, var(--primary-color) 10%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--surface-color) 56%, transparent);
+}
+
+.hero-kicker,
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.2rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--radius-pill);
+  color: var(--primary-color);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  @include neo-inset;
+}
+
+.hero-kicker {
+  margin-bottom: 1.25rem;
+}
+
+.hero-copy {
+  max-width: 40rem;
+}
+
+.hero-title,
+.section-title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.hero-text,
+.section-copy,
+.team-card p,
+.story-card p,
+.pillar-card p {
+  font-size: clamp(1rem, 2vw, 1.08rem);
+  line-height: 1.8;
+}
+
+.hero-side-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.hero-side-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.metric-chip {
+  @include neo-outset;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.8rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-pill);
+  color: var(--text-main);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.vision-card,
+.story-card,
+.tech-panel {
+  @include neo-outset;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: 1.8rem;
+}
+
+.vision-icon,
+.pillar-icon,
+.team-avatar {
+  @include neo-inset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vision-icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+}
+
+.vision-title {
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+  letter-spacing: -0.03em;
+}
+
+.about-section {
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+}
+
+.section-heading {
+  max-width: 42rem;
+  margin-bottom: 2rem;
+}
+
+.team-card {
+  @include neo-outset;
+  display: flex;
+  gap: 1.25rem;
+  height: 100%;
+  padding: clamp(1.25rem, 3vw, 1.8rem);
+  border-radius: 1.75rem;
+  transition: var(--transition-smooth);
+
+  &:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow:
+      var(--shadow-hover-dark),
+      var(--shadow-hover-light),
+      0 1rem 2rem color-mix(in srgb, var(--primary-color) 10%, transparent);
+  }
+}
+
+.team-avatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1.4rem;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.team-name,
+.pillar-title {
+  font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+  letter-spacing: -0.03em;
+}
+
+.team-role {
+  color: var(--primary-color);
+  font-size: 0.84rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pillar-card {
+  @include neo-outset;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  padding: 1.35rem;
+  border-radius: 1.5rem;
+  height: 100%;
+}
+
+.pillar-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  color: var(--primary-color);
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.about-tech .tech-panel {
+  @include glass-panel(72%);
+}
+
+.tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  justify-content: center;
+}
+
+.tech-chip {
+  @include neo-outset;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.8rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-pill);
+  color: var(--text-main);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+@media (max-width: 767.98px) {
+  .hero-panel {
+    border-radius: 1.8rem;
+  }
+
+  .team-card {
+    flex-direction: column;
+  }
+
+  .team-avatar {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .pillar-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .hero-title,
+  .section-title {
+    font-size: clamp(1.8rem, 8vw, 2.35rem);
+  }
+
+  .metric-chip,
+  .tech-chip {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-orb {
+    animation: none !important;
+  }
+
+  .team-card {
+    transition: none !important;
+  }
+}
+
+@keyframes orb-float {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(2.5rem, -3rem, 0) scale(1.08);
+  }
+}

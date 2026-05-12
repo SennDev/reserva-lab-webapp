@@ -1,7 +1,7 @@
 <div class="reports-wrapper d-flex flex-column h-100">
   <header class="dashboard-header mb-5 stagger-1">
     <div class="header-titles">
-      <h2 class="title-high-end text-dark mb-1">Bandeja Operativa</h2>
+      <h2 class="title-high-end text-dark mb-1">Bandeja operativa</h2>
       <p class="text-muted small m-0 fw-medium">
         Revisa y atiende solicitudes pendientes de reservas y prestamos.
       </p>
@@ -42,42 +42,50 @@
           </div>
         </div>
 
-        <div class="col-12 col-lg-6 col-xl-5 d-flex gap-2">
+        <div class="col-12 col-lg-6 col-xl-5 d-flex gap-2 tab-actions">
           <button
             (click)="activeTab.set('reservas')"
-            class="flex-grow-1 border-0 fw-bold py-3 px-3 transition-smooth rounded-4 d-flex align-items-center justify-content-center"
+            class="tab-button flex-grow-1 border-0 fw-bold py-3 px-3 transition-smooth rounded-4 d-flex align-items-center justify-content-center"
             [class.btn-neo-primary]="activeTab() === 'reservas'"
             [class.neo-badge-status]="activeTab() !== 'reservas'"
             [class.text-muted]="activeTab() !== 'reservas'"
           >
-            <i class="bi bi-calendar2-check-fill me-2"></i> Reservas
+            <i class="bi bi-calendar2-check-fill me-2"></i>
+            Reservas
           </button>
 
           <button
             (click)="activeTab.set('prestamos')"
-            class="flex-grow-1 border-0 fw-bold py-3 px-3 transition-smooth rounded-4 d-flex align-items-center justify-content-center"
+            class="tab-button flex-grow-1 border-0 fw-bold py-3 px-3 transition-smooth rounded-4 d-flex align-items-center justify-content-center"
             [class.btn-neo-primary]="activeTab() === 'prestamos'"
             [class.neo-badge-status]="activeTab() !== 'prestamos'"
             [class.text-muted]="activeTab() !== 'prestamos'"
           >
-            <i class="bi bi-tools me-2"></i> Prestamos
+            <i class="bi bi-tools me-2"></i>
+            Prestamos
           </button>
         </div>
       </div>
     </div>
 
-    <div class="neo-widget-content p-4 p-xl-5 flex-grow-1 d-flex flex-column stagger-3 mb-4 w-100 position-relative">
+    <div
+      class="neo-widget-content p-4 p-xl-5 flex-grow-1 d-flex flex-column stagger-3 mb-4 w-100 position-relative"
+    >
       @if (isLoading()) {
         <div class="loading-overlay d-flex flex-column align-items-center justify-content-center h-100 w-100">
-          <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem" role="status"></div>
-          <h5 class="fw-bold text-dark">Cargando Bandeja...</h5>
+          <div class="spinner-border text-primary mb-3 loading-spinner" role="status"></div>
+          <h5 class="fw-bold text-dark">Cargando bandeja...</h5>
           <p class="text-muted small">Sincronizando solicitudes del backend</p>
         </div>
       } @else {
-        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom-neo w-100 px-1 animate-fade-in">
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom-neo w-100 px-1 animate-fade-in header-row">
           <div>
             <h6 class="fw-bold text-dark m-0">
-              {{ activeTab() === 'reservas' ? 'Solicitudes de reservas' : 'Solicitudes de prestamos' }}
+              {{
+                activeTab() === 'reservas'
+                  ? 'Solicitudes de reservas'
+                  : 'Solicitudes de prestamos'
+              }}
             </h6>
             <span class="small text-muted">Pendientes visibles: {{ pendientes().length }}</span>
           </div>
@@ -91,12 +99,14 @@
             <div class="empty-state d-flex flex-column align-items-center justify-content-center h-100 opacity-50 py-5 text-center">
               <i class="bi bi-archive fs-1 text-muted mb-3 display-4"></i>
               <h5 class="fw-bold text-dark m-0">No hay registros</h5>
-              <p class="small text-muted mt-2">No hay solicitudes para mostrar con los filtros actuales.</p>
+              <p class="small text-muted mt-2">
+                No hay solicitudes para mostrar con los filtros actuales.
+              </p>
             </div>
           } @else {
             <div class="d-flex flex-column gap-4 w-100">
               @for (item of filteredCatalogo(); track item.id) {
-                <div
+                <article
                   class="neo-list-item d-flex flex-column flex-xl-row justify-content-between align-items-xl-center p-4 w-100"
                   [class.status-green]="item.estado === 'Aprobada' || item.estado === 'Aprobado' || item.estado === 'Completada' || item.estado === 'Devuelto'"
                   [class.status-yellow]="item.estado === 'Pendiente'"
@@ -104,18 +114,26 @@
                 >
                   <div class="d-flex align-items-center gap-4 mb-4 mb-xl-0 flex-grow-1 overflow-hidden me-xl-4">
                     <div class="item-icon text-primary">
-                      <i class="bi" [class.bi-building-fill]="item.tipo === 'reservas'" [class.bi-tools]="item.tipo === 'prestamos'"></i>
+                      <i
+                        class="bi"
+                        [class.bi-building-fill]="item.tipo === 'reservas'"
+                        [class.bi-tools]="item.tipo === 'prestamos'"
+                      ></i>
                     </div>
 
                     <div class="item-text overflow-hidden d-flex flex-column justify-content-center w-100">
-                      <h5 class="fw-bolder text-dark mb-2 tracking-tight text-truncate" title="{{ item.recurso }}">
+                      <h5
+                        class="fw-bolder text-dark mb-2 tracking-tight text-truncate"
+                        title="{{ item.recurso }}"
+                      >
                         {{ item.recurso }}
                       </h5>
 
                       <div class="d-flex flex-wrap align-items-center gap-3 small text-muted fw-medium">
                         <span class="d-flex align-items-center text-truncate">
                           <div class="icon-box-micro me-2"><i class="bi bi-person-fill"></i></div>
-                          <span class="text-dark fw-bold me-1">Solicita:</span> {{ item.solicitante }}
+                          <span class="text-dark fw-bold me-1">Solicita:</span>
+                          {{ item.solicitante }}
                         </span>
                         <span class="d-flex align-items-center text-truncate">
                           <div class="icon-box-micro me-2"><i class="bi bi-journal-text"></i></div>
@@ -132,16 +150,18 @@
                   </div>
 
                   <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-xl-end gap-4 flex-shrink-0">
-                    <div class="text-start text-xl-end text-muted small fw-medium me-xl-3">
+                    <div class="date-meta text-start text-xl-end text-muted small fw-medium me-xl-3">
                       <div class="d-flex align-items-center justify-content-xl-end mb-1">
-                        <i class="bi bi-calendar-event me-2 text-primary"></i> <span class="text-dark fw-bold">{{ item.fecha }}</span>
+                        <i class="bi bi-calendar-event me-2 text-primary"></i>
+                        <span class="text-dark fw-bold">{{ item.fecha }}</span>
                       </div>
                       <div class="d-flex align-items-center justify-content-xl-end">
-                        <i class="bi bi-clock me-2 text-primary"></i> {{ item.horario }}
+                        <i class="bi bi-clock me-2 text-primary"></i>
+                        {{ item.horario }}
                       </div>
                     </div>
 
-                    <div style="min-width: 140px; text-align: center">
+                    <div class="status-slot">
                       <span
                         class="neo-badge-status w-100 d-inline-block"
                         [class.badge-success-neo]="item.estado === 'Aprobada' || item.estado === 'Aprobado' || item.estado === 'Completada' || item.estado === 'Devuelto'"
@@ -152,20 +172,28 @@
                       </span>
                     </div>
 
-                    <div class="d-flex align-items-center gap-2 ps-xl-4 ms-auto ms-xl-0 py-2 border-start-neo">
+                    <div class="d-flex align-items-center gap-2 ps-xl-4 ms-auto ms-xl-0 py-2 actions-row">
                       @if (item.estado === 'Pendiente') {
-                        <button class="btn-neo-primary px-4 py-2 small fw-bold d-flex align-items-center" (click)="approve(item)">
-                          Aprobar <i class="bi bi-check-lg ms-2"></i>
+                        <button
+                          class="btn-neo-primary px-4 py-2 small fw-bold d-flex align-items-center"
+                          (click)="approve(item)"
+                        >
+                          Aprobar
+                          <i class="bi bi-check-lg ms-2"></i>
                         </button>
-                        <button class="btn-action-outline px-4 py-2 small fw-bold text-danger" (click)="reject(item)">
-                          Rechazar <i class="bi bi-x-lg ms-2"></i>
+                        <button
+                          class="btn-action-outline px-4 py-2 small fw-bold text-danger"
+                          (click)="reject(item)"
+                        >
+                          Rechazar
+                          <i class="bi bi-x-lg ms-2"></i>
                         </button>
                       } @else {
                         <span class="small text-muted fw-semibold">Solicitud procesada</span>
                       }
                     </div>
                   </div>
-                </div>
+                </article>
               }
             </div>
           }

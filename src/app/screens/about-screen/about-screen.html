@@ -1,0 +1,145 @@
+<app-navbar></app-navbar>
+
+<div class="about-background" aria-hidden="true">
+  <div class="ambient-orb orb-primary"></div>
+  <div class="ambient-orb orb-secondary"></div>
+  <div class="ambient-orb orb-accent"></div>
+</div>
+
+<div class="about-wrapper position-relative z-2">
+
+  <main class="about-hero container">
+    <section class="hero-panel mx-auto animate-fade-in-up">
+      <div class="d-flex justify-content-center justify-content-xl-start mb-4">
+        <span class="hero-kicker"><span class="pulse-dot me-2"></span> FCC BUAP · Proyecto Académico</span>
+      </div>
+
+      <div class="row align-items-center gy-5">
+        <div class="col-12 col-xl-7 text-center text-xl-start">
+          <div class="hero-copy mx-auto mx-xl-0">
+            <h1 class="hero-title text-dark mb-4">La ingeniería y visión detrás de <span class="text-primary">ReservaLab</span></h1>
+            <p class="hero-text text-muted mb-4">
+              Una plataforma creada desde cero para transformar la gestión de
+              laboratorios, reservas y préstamos de equipo dentro de la Facultad de
+              Ciencias de la Computación.
+            </p>
+            <p class="hero-text text-muted mb-0">
+              Nuestro objetivo es dotar a estudiantes y docentes de una
+              herramienta de calidad empresarial, preparada para integrarse con un
+              backend real y evolucionar hacia el estándar institucional.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 col-xl-5">
+          <div class="hero-side-card">
+            <div class="hero-side-top justify-content-center justify-content-xl-start">
+              <span class="metric-chip"><i class="bi bi-grid-1x2-fill me-2 text-primary"></i> Plataforma Full-Stack</span>
+              <span class="metric-chip"><i class="bi bi-buildings-fill me-2 text-primary"></i> Contexto FCC</span>
+            </div>
+
+            <div class="vision-card mt-3">
+              <div class="vision-icon"><i class="bi bi-stars"></i></div>
+              <h2 class="vision-title text-dark mb-2">Misión del proyecto</h2>
+              <p class="text-muted mb-0 small lh-base">
+                Organizar la infraestructura académica con una interfaz premium, trazable, segura y
+                lista para procesos reales de operación.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="about-section">
+    <div class="container">
+      <div class="section-heading text-center mx-auto animate-fade-in-up delay-1">
+        <span class="section-kicker mb-3">Equipo de Ingeniería</span>
+        <h2 class="section-title text-dark mb-3">Las mentes detrás del código</h2>
+        <p class="section-copy text-muted mb-0">
+          Un proyecto construido con pasión por estudiantes universitarios para resolver necesidades
+          reales de organización y disponibilidad.
+        </p>
+      </div>
+
+      <div class="row g-4 mt-2">
+        @for (member of team; track member.name; let i = $index) {
+          <div class="col-12 col-md-6 animate-fade-in-up delay-{{i + 1}}">
+            <article class="team-card h-100 interactive-card">
+              <div class="team-avatar shadow-inner">
+                {{ member.name.charAt(0) }}
+              </div>
+              <div class="team-copy">
+                <h3 class="team-name text-dark mb-1">{{ member.name }}</h3>
+                <p class="team-role mb-3">{{ member.role }}</p>
+                <p class="text-muted mb-0 small lh-base fw-medium">{{ member.contribution }}</p>
+              </div>
+            </article>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section">
+    <div class="container">
+      <div class="row g-5 align-items-stretch animate-fade-in-up delay-2">
+        <div class="col-12 col-xl-5">
+          <section class="story-card h-100 d-flex flex-column justify-content-center">
+            <span class="section-kicker mb-3 align-self-start">Nuestra Visión</span>
+            <h2 class="section-title text-dark mb-4">¿Por qué existe ReservaLab?</h2>
+            <p class="text-muted lh-lg">
+              La gestión manual de laboratorios suele producir cruces de horario,
+              poca visibilidad y procesos lentos para quienes necesitan una herramienta urgente.
+            </p>
+            <p class="text-muted mb-0 lh-lg">
+              Nosotros respondemos a ese reto con una experiencia de usuario clara,
+              reduciendo la fricción administrativa y elevando el estándar tecnológico de nuestra facultad.
+            </p>
+          </section>
+        </div>
+
+        <div class="col-12 col-xl-7">
+          <div class="row g-4">
+            @for (pillar of pillars; track pillar.title) {
+              <div class="col-12">
+                <article class="pillar-card interactive-card">
+                  <div class="pillar-icon shadow-inner">
+                    <i class="{{ pillar.icon }}"></i>
+                  </div>
+                  <div>
+                    <h3 class="pillar-title text-dark mb-2">{{ pillar.title }}</h3>
+                    <p class="text-muted mb-0 small fw-medium lh-base">{{ pillar.description }}</p>
+                  </div>
+                </article>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section about-tech pb-5">
+    <div class="container">
+      <div class="tech-panel animate-fade-in-up delay-3">
+        <div class="section-heading text-center mx-auto mb-5">
+          <span class="section-kicker mb-3">Stack Tecnológico</span>
+          <h2 class="section-title text-dark mb-3">Herramientas que hacen posible el sistema</h2>
+          <p class="section-copy text-muted mb-0">
+            Una arquitectura moderna, escalable y dividida perfectamente entre cliente y servidor.
+          </p>
+        </div>
+
+        <div class="tech-grid">
+          @for (tech of technologies; track tech) {
+            <div class="tech-chip hover-glow"><i class="bi bi-check-circle-fill text-success me-2"></i> {{ tech }}</div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<app-footer></app-footer>

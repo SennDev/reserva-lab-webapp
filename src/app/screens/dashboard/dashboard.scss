@@ -1,294 +1,449 @@
-/* ==========================================================================
-   DASHBOARD MASTER LAYOUT - "APP SHELL" ARCHITECTURE
-   ========================================================================== */
-
-/* --- 1. MIXINS --- */
 @mixin neo-out {
-  background-color: var(--neo-light-bg);
+  background: var(--neo-light-bg);
   box-shadow: var(--shadow-dark), var(--shadow-light);
 }
 
 @mixin neo-in {
-  background-color: var(--neo-light-bg);
+  background: var(--neo-light-bg);
   box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
 }
 
 @mixin glass-panel {
-  background: rgba(241, 245, 249, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+  background: color-mix(in srgb, var(--surface-color) 76%, transparent);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border-bottom: 1px solid color-mix(in srgb, var(--surface-color) 82%, transparent);
 }
 
-/* --- 2. LAYOUT BASE (EL FIX MAESTRO) --- */
 .dashboard-layout {
   display: flex;
-  background-color: var(--neo-light-bg);
   width: 100%;
-  height: 100vh; /* Altura forzada y clavada al monitor */
-  overflow: hidden; /* Matamos el scroll general del navegador */
+  height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--primary-color) 10%, transparent), transparent 32%),
+    radial-gradient(circle at bottom left, color-mix(in srgb, var(--secondary-color) 8%, transparent), transparent 34%),
+    var(--neo-light-bg);
 }
 
-.tracking-tight { letter-spacing: -0.5px; }
-.tracking-wide { letter-spacing: 0.5px; text-transform: uppercase; }
-.transition-smooth { transition: var(--transition-smooth); }
+.tracking-tight {
+  letter-spacing: -0.03em;
+}
 
-/* --- 3. SIDEBAR NEOMÓRFICO --- */
+.tracking-wide {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.transition-smooth {
+  transition: var(--transition-smooth);
+}
+
 .neo-sidebar {
-  width: 280px;
-  background-color: var(--neo-light-bg);
-  box-shadow: 10px 0 30px rgba(148, 163, 184, 0.25), inset -2px 0 5px #ffffff;
-  z-index: 1040;
+  width: 18rem;
   flex-shrink: 0;
-  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  z-index: 1040;
+  @include neo-out;
+  box-shadow:
+    0.8rem 0 2rem color-mix(in srgb, var(--primary-color) 8%, transparent),
+    inset -1px 0 0 color-mix(in srgb, var(--surface-color) 70%, transparent);
+  transition: transform 0.35s ease;
 
   @media (max-width: 991.98px) {
-    position: fixed; top: 0; left: 0; height: 100vh;
-    transform: translateX(-100%);
-    &.open { transform: translateX(0); }
-  }
-  @media (min-width: 992px) {
-    position: relative; /* Adiós al Sticky roto */
+    position: fixed;
+    inset: 0 auto 0 0;
     height: 100vh;
-    transform: translateX(0);
-  }
+    transform: translateX(-100%);
 
-  .sidebar-header {
-    .logo-box {
-      width: 44px; height: 44px;
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      color: white; border-radius: 14px; font-size: 1.4rem;
-      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.35);
-    }
-    .btn-close-sidebar {
-      background: transparent; border: none; font-size: 1.5rem; color: var(--text-muted);
+    &.open {
+      transform: translateX(0);
     }
   }
 
-  .sidebar-nav {
-    overflow-y: auto; padding-top: 1rem;
-    &::-webkit-scrollbar { width: 4px; }
-    &::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.08); border-radius: 10px; }
-
-    .nav-item {
-      text-decoration: none; color: var(--text-muted);
-      border-radius: 16px; border: 1px solid transparent;
-      padding: 0.85rem 1rem;
-
-      .icon-wrapper {
-        width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;
-        border-radius: 12px; font-size: 1.25rem; background: transparent;
-        transition: var(--transition-smooth);
-      }
-
-      &:hover {
-        color: var(--primary-color); background-color: rgba(255,255,255,0.6);
-        .icon-wrapper { @include neo-out; background-color: var(--surface-color); }
-      }
-
-      &.active {
-        color: var(--primary-color);
-        border-color: rgba(255,255,255,0.7);
-        @include neo-in;
-
-        .icon-wrapper {
-          color: white;
-          background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-          box-shadow: 0 4px 15px rgba(79, 70, 229, 0.35);
-        }
-      }
-    }
+  @media (min-width: 992px) {
+    height: 100vh;
   }
 }
 
-/* --- BADGE DE ROL (NUEVO DISEÑO PREMIUM) --- */
-.user-role-badge {
-  background: rgba(79, 70, 229, 0.05);
-  border: 1px solid rgba(79, 70, 229, 0.15);
-  padding: 12px 16px;
-  border-radius: 16px;
-  color: var(--primary-color);
-  cursor: pointer;
-  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
-  position: relative;
-  overflow: hidden;
+.sidebar-header {
+  gap: 0.15rem;
+}
 
-  &::before {
-    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    transition: all 0.5s ease; z-index: 0;
-  }
+.logo-box {
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 1rem;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    color-mix(in srgb, var(--secondary-color) 78%, var(--primary-color) 22%)
+  );
+  color: var(--surface-color);
+  font-size: 1.3rem;
+  box-shadow: 0 1rem 1.8rem color-mix(in srgb, var(--primary-color) 18%, transparent);
+}
+
+.brand-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sidebar-kicker {
+  color: var(--primary-color);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.btn-close-sidebar {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+}
+
+.sidebar-nav {
+  overflow-y: auto;
+  padding-top: 0.75rem;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--text-muted) 24%, transparent) transparent;
+}
+
+.nav-item {
+  gap: 0.15rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: 1.15rem;
+  border: 1px solid transparent;
+  transition: var(--transition-smooth);
 
   &:hover {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: #ffffff; border-color: transparent;
-    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35), inset 2px 2px 5px rgba(255,255,255,0.3);
-    transform: translateY(-3px);
+    color: var(--primary-color);
+    background: color-mix(in srgb, var(--surface-color) 82%, transparent);
+    box-shadow: var(--shadow-dark), var(--shadow-light);
 
-    &::before { left: 100%; }
-
-    .role-dot {
-      background-color: #10b981;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+    .icon-wrapper {
+      @include neo-out;
+      color: var(--primary-color);
     }
   }
 
-  &:active { transform: translateY(0); box-shadow: var(--shadow-inset-dark); }
+  &.active {
+    color: var(--primary-color);
+    @include neo-in;
+    border-color: color-mix(in srgb, var(--surface-color) 86%, transparent);
 
-  .role-dot {
-    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-    background-color: var(--primary-color); transition: all 0.3s ease;
-    box-shadow: 0 0 8px rgba(79, 70, 229, 0.5);
+    .icon-wrapper {
+      color: var(--surface-color);
+      background: linear-gradient(
+        135deg,
+        var(--primary-color),
+        color-mix(in srgb, var(--secondary-color) 78%, var(--primary-color) 22%)
+      );
+      box-shadow: 0 0.9rem 1.6rem color-mix(in srgb, var(--primary-color) 18%, transparent);
+    }
   }
 }
 
-.border-top-neo {
-  border-top: 2px solid rgba(255,255,255,0.8);
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.02);
+.icon-wrapper {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.95rem;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  transition: var(--transition-smooth);
+}
+
+.nav-item-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.nav-item-subtitle {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+
+.sidebar-footer {
+  border-top: 1px solid color-mix(in srgb, var(--surface-color) 80%, transparent);
+}
+
+.user-role-badge {
+  position: relative;
+  overflow: hidden;
+  padding: 0.9rem 1rem;
+  border-radius: 1.1rem;
+  color: var(--primary-color);
+  cursor: default;
+  @include neo-in;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--surface-color) 35%, transparent),
+      transparent
+    );
+    transform: translateX(-120%);
+    transition: transform 0.5s ease;
+  }
+
+  &:hover::before {
+    transform: translateX(120%);
+  }
+}
+
+.role-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  display: inline-block;
+  border-radius: 50%;
+  background: var(--success-color);
+  box-shadow: 0 0 0.7rem color-mix(in srgb, var(--success-color) 22%, transparent);
 }
 
 .sidebar-overlay {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 1030;
+  position: fixed;
+  inset: 0;
+  z-index: 1030;
+  background: color-mix(in srgb, var(--text-main) 24%, transparent);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-/* --- 4. ÁREA PRINCIPAL & TOPBAR (SCROLL INDEPENDIENTE) --- */
 .main-wrapper {
   min-width: 0;
-  height: 100vh; /* Se clava a la pantalla */
-  overflow-y: auto; /* AHORA SOLAMENTE ESTE CONTENEDOR HACE SCROLL */
+  height: 100vh;
+  overflow-y: auto;
   overflow-x: hidden;
-
-  /* Scrollbar exclusiva para la vista principal */
-  &::-webkit-scrollbar { width: 8px; }
-  &::-webkit-scrollbar-track { background: var(--neo-light-bg); }
-  &::-webkit-scrollbar-thumb { background-color: rgba(148, 163, 184, 0.4); border-radius: 20px; }
-  &::-webkit-scrollbar-thumb:hover { background-color: var(--primary-color); }
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--text-muted) 26%, transparent) transparent;
 }
 
 .neo-topbar {
   @include glass-panel;
-  box-shadow: 0 10px 30px rgba(148, 163, 184, 0.08);
   z-index: 1020;
+  box-shadow: 0 0.9rem 1.7rem color-mix(in srgb, var(--primary-color) 6%, transparent);
 }
 
-.btn-neo-circle {
-  width: 44px; height: 44px;
-  display: flex; align-items: center; justify-content: center;
-  border: none; border-radius: 50%; font-size: 1.3rem; color: var(--text-muted);
-  @include neo-out;
-
-  &:hover { color: var(--primary-color); transform: translateY(-3px); }
-  &:active { @include neo-in; transform: translateY(0); }
+.topbar-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
 }
 
-.avatar-neo {
-  width: 44px; height: 44px; border-radius: 50%; font-size: 1.3rem;
-  background: var(--surface-color); border: 2px solid rgba(255,255,255,0.8);
+.topbar-kicker {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 1.9rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  color: var(--primary-color);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   @include neo-in;
 }
 
-/* --- 5. SOLUCIONES ESPECÍFICAS (FIXES) --- */
+.topbar-caption {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.btn-neo-circle {
+  width: 2.85rem;
+  height: 2.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--text-muted);
+  @include neo-out;
+  transition: var(--transition-smooth);
+
+  &:hover {
+    color: var(--primary-color);
+    transform: translateY(-0.12rem);
+  }
+
+  &:active {
+    @include neo-in;
+    transform: translateY(0);
+  }
+}
+
 .badge-notification {
-  position: absolute; top: 0; right: 0; width: 12px; height: 12px;
-  transform: translate(10%, -10%); border: 2px solid var(--neo-light-bg) !important;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  transform: translate(15%, -10%);
+  border: 2px solid var(--neo-light-bg) !important;
+}
+
+.notification-container {
+  position: relative;
+}
+
+.notifications-dropdown {
+  position: absolute;
+  top: calc(100% + 0.9rem);
+  right: -0.5rem;
+  width: 21rem;
+  border-radius: 1.25rem;
+  background: color-mix(in srgb, var(--surface-color) 88%, transparent);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow:
+    0 1.5rem 3rem color-mix(in srgb, var(--primary-color) 10%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--surface-color) 78%, transparent);
+  overflow: hidden;
+  z-index: 1050;
+
+  @media (max-width: 575.98px) {
+    position: fixed;
+    top: 5rem;
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+  }
+}
+
+.notifications-head {
+  border-bottom: 1px solid color-mix(in srgb, var(--surface-color) 84%, transparent);
+}
+
+.notifications-caption,
+.profile-id,
+.notif-time {
+  font-size: 0.74rem;
+}
+
+.notif-time {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.notifications-list {
+  max-height: 23rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.notification-item {
+  cursor: pointer;
+  background: transparent;
+
+  &:hover {
+    background: color-mix(in srgb, var(--primary-color) 4%, transparent);
+  }
+
+  &.unread-bg {
+    background: color-mix(in srgb, var(--primary-color) 7%, transparent);
+    border-left: 3px solid var(--primary-color);
+  }
+}
+
+.notif-message {
+  font-size: 0.8rem;
+}
+
+.notification-icon {
+  width: 2.35rem;
+  height: 2.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+  @include neo-in;
+
+  &.success {
+    color: var(--success-color);
+  }
+
+  &.warning {
+    color: var(--warning-color);
+  }
+
+  &.info {
+    color: var(--primary-color);
+  }
+
+  &.error {
+    color: var(--danger-color);
+  }
+}
+
+.profile-meta {
+  gap: 0.1rem;
+}
+
+.avatar-neo {
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 50%;
+  @include neo-in;
+  background: color-mix(in srgb, var(--surface-color) 86%, transparent);
 }
 
 .btn-danger-hover {
   color: var(--danger-color);
+
   &:hover {
-    color: #ffffff !important; background-color: var(--danger-color);
-    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4), var(--shadow-hover-dark), var(--shadow-hover-light);
-    transform: translateY(-3px) scale(1.05);
-  }
-  &:active {
-    background-color: #dc2626; box-shadow: inset 3px 3px 6px rgba(0,0,0,0.2), inset -3px -3px 6px rgba(255,255,255,0.1);
-    transform: translateY(0) scale(0.95);
+    color: var(--surface-color) !important;
+    background: color-mix(in srgb, var(--danger-color) 88%, transparent);
+    box-shadow: 0 1rem 2rem color-mix(in srgb, var(--danger-color) 18%, transparent);
   }
 }
 
 .content-area {
   position: relative;
   z-index: 1;
-
-  /* EL TOQUE MAESTRO DE UX */
-  max-width: 1600px; /* El límite perfecto para monitores grandes */
-  margin: 0 auto; /* Si el monitor es más grande que 1600px, centra el contenido */
   width: 100%;
+  max-width: 100rem;
+  margin-inline: auto;
 }
 
-.animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-/* --- 6. SISTEMA DE NOTIFICACIONES (DROPDOWN) --- */
-.notification-container {
-  /* Mantiene el dropdown anclado al botón de la campana */
-  position: relative;
+.border-top-neo {
+  border-top: 1px solid color-mix(in srgb, var(--surface-color) 86%, transparent);
 }
 
-.notifications-dropdown {
-  position: absolute;
-  top: 130%; /* Ligeramente separado del botón */
-  right: -20px; /* Alineado hacia la derecha del perfil */
-  width: 340px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(148, 163, 184, 0.25), inset 0 2px 5px rgba(255,255,255,0.8);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  z-index: 1050;
-  overflow: hidden;
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out forwards;
+}
 
-  /* Comportamiento en móviles: Pantalla completa centrada como modal */
-  @media (max-width: 575.98px) {
-    position: fixed;
-    top: 80px;
-    right: 15px;
-    left: 15px;
-    width: auto;
+@media (max-width: 767.98px) {
+  .neo-topbar {
+    padding-inline: 1rem !important;
   }
 
-  .notifications-list {
-    max-height: 380px;
-    overflow-y: auto;
+  .content-area {
+    padding: 1.25rem !important;
+  }
+}
 
-    &::-webkit-scrollbar { width: 6px; }
-    &::-webkit-scrollbar-track { background: transparent; }
-    &::-webkit-scrollbar-thumb { background-color: rgba(148, 163, 184, 0.3); border-radius: 10px; }
-    &::-webkit-scrollbar-thumb:hover { background-color: var(--primary-color); }
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
 
-    .notification-item {
-      cursor: pointer;
-      background-color: transparent;
-
-      &:hover {
-        background-color: rgba(79, 70, 229, 0.04);
-      }
-
-      /* Fondo sutil para notificaciones no leídas */
-      &.unread-bg {
-        background-color: rgba(79, 70, 229, 0.08);
-        border-left: 3px solid var(--primary-color);
-      }
-
-      .notification-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.1rem;
-        flex-shrink: 0;
-        box-shadow: inset 2px 2px 5px rgba(255,255,255,0.5), inset -2px -2px 5px rgba(0,0,0,0.05);
-
-        /* Colores dinámicos por tipo */
-        &.success { background: rgba(16, 185, 129, 0.15); color: #10b981; }
-        &.warning { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-        &.info    { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
-        &.error   { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
-      }
-    }
+  to {
+    opacity: 1;
   }
 }

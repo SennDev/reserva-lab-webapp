@@ -1,12 +1,14 @@
 <div class="dashboard-layout w-100">
-
   <aside class="neo-sidebar d-flex flex-column" [class.open]="isSidebarOpen()">
-
     <div class="sidebar-header d-flex align-items-center px-4 py-4 mb-3">
       <div class="logo-box me-3 d-flex justify-content-center align-items-center">
         <i class="bi bi-flask-fill"></i>
       </div>
-      <span class="fs-4 fw-bold text-dark tracking-tight">ReservaLab</span>
+
+      <div class="brand-meta">
+        <span class="sidebar-kicker">Panel operativo</span>
+        <span class="fs-4 fw-bold text-dark tracking-tight">ReservaLab</span>
+      </div>
 
       <button class="btn-close-sidebar d-lg-none ms-auto" (click)="closeSidebar()">
         <i class="bi bi-x-lg"></i>
@@ -14,46 +16,95 @@
     </div>
 
     <nav class="sidebar-nav px-3 flex-grow-1">
-
-      <a routerLink="/dashboard" class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth" (click)="closeSidebar()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <a
+        routerLink="/dashboard"
+        class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth"
+        (click)="closeSidebar()"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
         <div class="icon-wrapper me-3"><i class="bi bi-grid-1x2-fill"></i></div>
-        <span class="fw-semibold">Panel de Control</span>
+        <div class="nav-item-copy">
+          <span class="fw-semibold">Panel de control</span>
+          <small class="nav-item-subtitle">Resumen general</small>
+        </div>
       </a>
 
-      <a routerLink="/dashboard/reservas" class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth" (click)="closeSidebar()" routerLinkActive="active">
+      <a
+        routerLink="/dashboard/reservas"
+        class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth"
+        (click)="closeSidebar()"
+        routerLinkActive="active"
+      >
         <div class="icon-wrapper me-3"><i class="bi bi-calendar2-check-fill"></i></div>
-        <span class="fw-semibold">Mis Reservas</span>
+        <div class="nav-item-copy">
+          <span class="fw-semibold">Mis reservas</span>
+          <small class="nav-item-subtitle">Solicitudes y agenda</small>
+        </div>
       </a>
 
-      <a routerLink="/dashboard/prestamos" class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth" (click)="closeSidebar()" routerLinkActive="active">
+      <a
+        routerLink="/dashboard/prestamos"
+        class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth"
+        (click)="closeSidebar()"
+        routerLinkActive="active"
+      >
         <div class="icon-wrapper me-3"><i class="bi bi-box-seam-fill"></i></div>
-        <span class="fw-semibold">Mis Prestamos</span>
+        <div class="nav-item-copy">
+          <span class="fw-semibold">Mis prestamos</span>
+          <small class="nav-item-subtitle">Herramientas y devoluciones</small>
+        </div>
       </a>
 
-      <a routerLink="/dashboard/laboratorios" class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth" (click)="closeSidebar()" routerLinkActive="active">
+      <a
+        routerLink="/dashboard/laboratorios"
+        class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth"
+        (click)="closeSidebar()"
+        routerLinkActive="active"
+      >
         <div class="icon-wrapper me-3"><i class="bi bi-building-fill"></i></div>
-        <span class="fw-semibold">Catálogo Labs</span>
+        <div class="nav-item-copy">
+          <span class="fw-semibold">Catalogo labs</span>
+          <small class="nav-item-subtitle">Espacios y capacidad</small>
+        </div>
       </a>
 
-      <a routerLink="/dashboard/equipos" class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth" (click)="closeSidebar()" routerLinkActive="active">
+      <a
+        routerLink="/dashboard/equipos"
+        class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth"
+        (click)="closeSidebar()"
+        routerLinkActive="active"
+      >
         <div class="icon-wrapper me-3"><i class="bi bi-tools"></i></div>
-        <span class="fw-semibold">Catálogo Equipos</span>
+        <div class="nav-item-copy">
+          <span class="fw-semibold">Catalogo equipos</span>
+          <small class="nav-item-subtitle">Inventario operativo</small>
+        </div>
       </a>
 
       @if (user()?.rol === 'admin' || user()?.rol === 'tecnico') {
-        <a routerLink="/dashboard/reportes" class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth" (click)="closeSidebar()" routerLinkActive="active">
+        <a
+          routerLink="/dashboard/reportes"
+          class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth"
+          (click)="closeSidebar()"
+          routerLinkActive="active"
+        >
           <div class="icon-wrapper me-3"><i class="bi bi-clipboard-data-fill"></i></div>
-          <span class="fw-semibold">Reportes</span>
+          <div class="nav-item-copy">
+            <span class="fw-semibold">Reportes</span>
+            <small class="nav-item-subtitle">Bandeja del staff</small>
+          </div>
         </a>
       }
-
     </nav>
 
     <div class="sidebar-footer p-4 border-top-neo mt-auto">
       <div class="user-role-badge transition-smooth" title="Privilegios actuales">
         <div class="d-flex align-items-center justify-content-center position-relative z-1">
           <span class="role-dot me-2"></span>
-          <span class="fw-bolder text-uppercase tracking-wide small">Rol: {{ user()?.rol || 'No definido' }}</span>
+          <span class="fw-bolder text-uppercase tracking-wide small">
+            Rol: {{ user()?.rol || 'No definido' }}
+          </span>
         </div>
       </div>
     </div>
@@ -64,22 +115,30 @@
   }
 
   <div class="main-wrapper d-flex flex-column flex-grow-1">
-
     <header class="neo-topbar d-flex justify-content-between align-items-center px-4 py-3 position-sticky top-0">
-
-      <div class="d-flex align-items-center">
-        <button class="btn-neo-circle d-lg-none me-3" (click)="toggleSidebar()">
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn-neo-circle d-lg-none" (click)="toggleSidebar()">
           <i class="bi bi-list fs-4"></i>
         </button>
-        <div class="d-none d-sm-block">
-          <h4 class="m-0 fw-bold text-dark tracking-tight">Bienvenido {{ (user()?.nombre_completo || 'Usuario').split(' ')[0] }}</h4>
-          <span class="small text-muted fw-medium">Facultad de Ciencias de la Computación</span>
+
+        <div class="topbar-copy">
+          <span class="topbar-kicker d-none d-sm-inline-flex">Operacion academica</span>
+          <h4 class="m-0 fw-bold text-dark tracking-tight">
+            Bienvenido {{ (user()?.nombre_completo || 'Usuario').split(' ')[0] }}
+          </h4>
+          <span class="topbar-caption d-none d-sm-block">
+            Facultad de Ciencias de la Computacion
+          </span>
         </div>
       </div>
 
       <div class="d-flex align-items-center gap-3">
         <div class="notification-container position-relative d-flex align-items-center">
-          <button class="btn-neo-circle position-relative transition-smooth" (click)="toggleNotifications($event)" title="Notificaciones">
+          <button
+            class="btn-neo-circle position-relative transition-smooth"
+            (click)="toggleNotifications($event)"
+            title="Notificaciones"
+          >
             <i class="bi bi-bell-fill"></i>
             @if (unreadCount() > 0) {
               <span class="badge-notification bg-danger border border-light rounded-circle"></span>
@@ -88,9 +147,13 @@
 
           @if (isNotificationsOpen()) {
             <div class="notifications-dropdown animate-fade-in shadow-lg">
-              
-              <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
-                <h6 class="m-0 fw-bold text-dark tracking-tight">Notificaciones</h6>
+              <div class="notifications-head d-flex justify-content-between align-items-center p-3">
+                <div>
+                  <h6 class="m-0 fw-bold text-dark tracking-tight">Notificaciones</h6>
+                  <span class="notifications-caption small text-muted">
+                    Resumen de actividad reciente
+                  </span>
+                </div>
                 @if (unreadCount() > 0) {
                   <span class="badge bg-primary rounded-pill">{{ unreadCount() }} nuevas</span>
                 }
@@ -98,24 +161,35 @@
 
               <div class="notifications-list">
                 @for (notif of notifications(); track notif.id) {
-                  <div class="notification-item p-3 border-bottom transition-smooth" 
-                      [class.unread-bg]="!notif.read" 
-                      (click)="markAsRead(notif.id)">
-                    
+                  <div
+                    class="notification-item p-3 border-bottom transition-smooth"
+                    [class.unread-bg]="!notif.read"
+                    (click)="markAsRead(notif.id)"
+                  >
                     <div class="d-flex align-items-start gap-3">
                       <div class="notification-icon" [ngClass]="notif.type">
-                        @if (notif.type === 'success') { <i class="bi bi-check-circle-fill"></i> }
-                        @if (notif.type === 'warning') { <i class="bi bi-exclamation-triangle-fill"></i> }
-                        @if (notif.type === 'info')    { <i class="bi bi-info-circle-fill"></i> }
-                        @if (notif.type === 'error')   { <i class="bi bi-x-circle-fill"></i> }
+                        @if (notif.type === 'success') {
+                          <i class="bi bi-check-circle-fill"></i>
+                        }
+                        @if (notif.type === 'warning') {
+                          <i class="bi bi-exclamation-triangle-fill"></i>
+                        }
+                        @if (notif.type === 'info') {
+                          <i class="bi bi-info-circle-fill"></i>
+                        }
+                        @if (notif.type === 'error') {
+                          <i class="bi bi-x-circle-fill"></i>
+                        }
                       </div>
-                      <div>
+
+                      <div class="notif-copy">
                         <p class="m-0 fw-bold small text-dark lh-sm mb-1">{{ notif.title }}</p>
-                        <p class="m-0 small text-muted lh-sm mb-1" style="font-size: 0.8rem;">{{ notif.message }}</p>
-                        <small class="text-primary fw-semibold" style="font-size: 0.7rem;">Hace un momento</small>
+                        <p class="m-0 small text-muted lh-sm mb-1 notif-message">
+                          {{ notif.message }}
+                        </p>
+                        <small class="notif-time">Hace un momento</small>
                       </div>
                     </div>
-
                   </div>
                 } @empty {
                   <div class="p-4 text-center text-muted d-flex flex-column align-items-center">
@@ -128,17 +202,27 @@
           }
         </div>
 
-        <div class="user-profile-menu d-flex align-items-center gap-3 ps-3 ">
-          <div class="d-none d-md-flex flex-column text-end">
-            <span class="fw-bold text-dark small m-0 lh-1">{{ user()?.nombre_completo || 'Cargando...' }}</span>
-            <span class="text-muted fw-medium" style="font-size: 0.75rem;">{{ user()?.matricula }}</span>
+        <div class="user-profile-menu d-flex align-items-center gap-3 ps-3">
+          <div class="profile-meta d-none d-md-flex flex-column text-end">
+            <span class="fw-bold text-dark small m-0 lh-1">
+              {{ user()?.nombre_completo || 'Cargando...' }}
+            </span>
+            <span class="profile-id">{{ user()?.matricula }}</span>
           </div>
 
-          <button class="avatar-neo d-flex align-items-center justify-content-center text-primary fw-bold border-0 transition-smooth" style="cursor: pointer;" routerLink="/dashboard/perfil" title="Ver mi Perfil">
+          <button
+            class="avatar-neo d-flex align-items-center justify-content-center text-primary fw-bold border-0 transition-smooth"
+            routerLink="/dashboard/perfil"
+            title="Ver mi perfil"
+          >
             {{ (user()?.nombre_completo || 'U').charAt(0) }}
           </button>
 
-          <button class="btn-neo-circle btn-danger-hover transition-smooth" (click)="logout()" title="Cerrar Sesión">
+          <button
+            class="btn-neo-circle btn-danger-hover transition-smooth"
+            (click)="logout()"
+            title="Cerrar sesion"
+          >
             <i class="bi bi-box-arrow-right"></i>
           </button>
         </div>
@@ -148,6 +232,5 @@
     <main class="content-area flex-grow-1 d-flex flex-column w-100 p-4 p-md-5">
       <router-outlet></router-outlet>
     </main>
-
   </div>
 </div>

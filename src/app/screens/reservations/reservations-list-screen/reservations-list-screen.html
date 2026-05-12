@@ -11,7 +11,8 @@
       class="btn-neo-primary px-4 py-2 fw-bold d-flex align-items-center hover-glow-primary"
       routerLink="/dashboard/reservas/nueva"
     >
-      <i class="bi bi-calendar-plus me-2 fs-5"></i> Nueva Reserva
+      <i class="bi bi-calendar-plus me-2 fs-5"></i>
+      Nueva reserva
     </button>
   </header>
 
@@ -44,22 +45,21 @@
     </div>
   </div>
 
-  <div class="neo-widget-content p-4 p-xl-5 flex-grow-1 d-flex flex-column stagger-3 mb-4 w-100 position-relative">
+  <div
+    class="neo-widget-content p-4 p-xl-5 flex-grow-1 d-flex flex-column stagger-3 mb-4 w-100 position-relative"
+  >
     @if (isLoading()) {
       <div class="loading-overlay d-flex flex-column align-items-center justify-content-center h-100 w-100">
-        <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem" role="status"></div>
-        <h5 class="fw-bold text-dark">Sincronizando Historial...</h5>
+        <div class="spinner-border text-primary mb-3 loading-spinner" role="status"></div>
+        <h5 class="fw-bold text-dark">Sincronizando historial...</h5>
       </div>
     } @else {
       <div class="d-none d-xl-flex justify-content-between align-items-center mb-4 pb-3 border-bottom-neo w-100 px-3 animate-fade-in">
-        <h6 class="fw-bold text-muted m-0 tracking-wide text-uppercase" style="font-size: 0.85rem">
-          Detalles de la Practica / Materia
+        <h6 class="desktop-heading fw-bold text-muted m-0 tracking-wide text-uppercase">
+          Detalles de la practica / materia
         </h6>
-        <h6
-          class="fw-bold text-muted m-0 tracking-wide text-uppercase"
-          style="font-size: 0.85rem; min-width: 360px; text-align: center"
-        >
-          Estado, Fechas y Gestion
+        <h6 class="desktop-heading desktop-heading-right fw-bold text-muted m-0 tracking-wide text-uppercase">
+          Estado, fechas y gestion
         </h6>
       </div>
 
@@ -75,23 +75,29 @@
         } @else {
           <div class="d-flex flex-column gap-4 w-100">
             @for (res of filteredReservas(); track res.id) {
-              <div
+              <article
                 class="neo-list-item d-flex flex-column flex-xl-row justify-content-between align-items-xl-center p-4 w-100"
                 [class.status-green]="res.estado === 'Aprobada' || res.estado === 'Completada'"
                 [class.status-yellow]="res.estado === 'Pendiente'"
                 [class.status-red]="res.estado === 'Rechazada'"
               >
                 <div class="d-flex align-items-center gap-4 mb-4 mb-xl-0 flex-grow-1 overflow-hidden me-xl-4">
-                  <div class="item-icon text-primary"><i class="bi bi-journal-bookmark-fill"></i></div>
+                  <div class="item-icon text-primary">
+                    <i class="bi bi-journal-bookmark-fill"></i>
+                  </div>
 
                   <div class="item-text overflow-hidden d-flex flex-column justify-content-center">
-                    <h5 class="fw-bolder text-dark mb-2 tracking-tight text-truncate" title="{{ res.materia }}">
+                    <h5
+                      class="fw-bolder text-dark mb-2 tracking-tight text-truncate"
+                      title="{{ res.materia }}"
+                    >
                       {{ res.materia }}
                     </h5>
                     <div class="d-flex flex-wrap align-items-center gap-3 small text-muted fw-medium">
                       <span class="d-flex align-items-center text-truncate">
                         <div class="icon-box-micro me-2"><i class="bi bi-geo-alt-fill"></i></div>
-                        <span class="text-dark fw-bold me-1">Lab:</span> {{ res.lab }}
+                        <span class="text-dark fw-bold me-1">Lab:</span>
+                        {{ res.lab }}
                       </span>
                       @if (isStaff()) {
                         <span class="d-flex align-items-center text-truncate">
@@ -105,17 +111,18 @@
                 </div>
 
                 <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-xl-end gap-4 flex-shrink-0">
-                  <div class="text-start text-xl-end text-muted small fw-medium me-xl-3">
+                  <div class="date-meta text-start text-xl-end text-muted small fw-medium me-xl-3">
                     <div class="d-flex align-items-center justify-content-xl-end mb-1">
                       <i class="bi bi-calendar-event me-2 text-primary"></i>
                       <span class="text-dark fw-bold">{{ res.fecha }}</span>
                     </div>
                     <div class="d-flex align-items-center justify-content-xl-end">
-                      <i class="bi bi-clock me-2 text-primary"></i> {{ res.horario }}
+                      <i class="bi bi-clock me-2 text-primary"></i>
+                      {{ res.horario }}
                     </div>
                   </div>
 
-                  <div style="min-width: 130px; text-align: center">
+                  <div class="status-slot">
                     <span
                       class="neo-badge-status w-100 d-inline-block"
                       [class.badge-success-neo]="res.estado === 'Aprobada' || res.estado === 'Completada'"
@@ -126,7 +133,7 @@
                     </span>
                   </div>
 
-                  <div class="d-flex align-items-center gap-2 ps-xl-4 ms-auto ms-xl-0 py-2">
+                  <div class="d-flex align-items-center gap-2 ps-xl-4 ms-auto ms-xl-0 py-2 actions-row">
                     @if (isStaff() && res.estado === 'Pendiente') {
                       <button
                         class="btn-neo-mini text-success"
@@ -163,7 +170,7 @@
                     }
                   </div>
                 </div>
-              </div>
+              </article>
             }
           </div>
         }
