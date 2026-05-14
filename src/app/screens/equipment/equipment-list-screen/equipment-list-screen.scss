@@ -12,11 +12,37 @@
   @media (max-width: 767.98px) { flex-direction: column; align-items: flex-start; gap: 1rem; .btn-neo-primary { width: 100%; text-align: center; justify-content: center; } }
 }
 
-.neo-search-bar .neo-input-search {
-  background-color: var(--neo-light-bg); border-radius: var(--radius-pill); padding: 1.1rem 1.5rem 1.1rem 2rem;
-  font-size: 0.95rem; font-weight: 600; color: var(--text-main); @include neo-inset; transition: all 0.3s ease;
-  &::placeholder { color: var(--text-muted); opacity: 0.5; font-weight: 500; }
-  &:focus { outline: none; box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light), 0 0 0 4px rgba(79, 70, 229, 0.15); border-color: var(--primary-color); }
+.neo-search-bar {
+  max-width: 28rem;
+  min-height: 3.4rem;
+  border-radius: var(--radius-pill);
+  @include neo-inset;
+  transition: var(--transition-smooth);
+
+  // Pasamos el brillo (glow) al contenedor cuando haces clic
+  &:focus-within {
+    box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light), var(--shadow-primary-glow);
+  }
+
+  .neo-input-search {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.5rem 0; // El padding lateral ya lo da el contenedor padre (px-4)
+
+    &::placeholder {
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: none; // Evitamos el borde azul por defecto de los navegadores
+    }
+  }
 }
 
 .neo-card-equipment {

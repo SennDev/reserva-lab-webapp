@@ -45,17 +45,25 @@
 }
 
 .neo-search-bar {
+  max-width: 28rem;
+  min-height: 3.4rem;
+  border-radius: var(--radius-pill);
+  @include neo-inset;
+  transition: var(--transition-smooth);
+
+  // Pasamos el brillo (glow) al contenedor cuando haces clic
+  &:focus-within {
+    box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light), var(--shadow-primary-glow);
+  }
+
   .neo-input-search {
     width: 100%;
-    min-height: 3.4rem;
-    padding: 1rem 1.25rem 1rem 3.1rem;
-    border: 1px solid transparent;
-    border-radius: var(--radius-pill);
+    border: none;
+    background: transparent;
     color: var(--text-main);
     font-size: 0.95rem;
     font-weight: 600;
-    @include neo-inset;
-    transition: var(--transition-smooth);
+    padding: 0.5rem 0; // El padding lateral ya lo da el contenedor padre (px-4)
 
     &::placeholder {
       color: var(--text-muted);
@@ -64,8 +72,7 @@
 
     &:focus {
       outline: none;
-      border-color: var(--primary-color);
-      box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light), var(--shadow-primary-glow);
+      box-shadow: none; // Evitamos el borde azul por defecto de los navegadores
     }
   }
 }
