@@ -1,15 +1,54 @@
-<div class="profile-wrapper d-flex flex-column h-100 pb-4">
-  <header class="dashboard-header mb-5 stagger-1">
-    <div class="header-titles">
-      <h2 class="title-high-end text-dark mb-1">Mi Perfil Institucional</h2>
-      <p class="text-muted small m-0 fw-medium">
-        Administra tu informacion y revisa tus estadisticas en ReservaLab.
-      </p>
+<div class="profile-aero-shell d-flex flex-column gap-4 pb-4">
+  <header class="profile-hero glass-panel p-4 p-lg-5">
+    <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-4">
+      <div class="d-flex align-items-center gap-3 gap-md-4">
+        <div class="avatar-halo">
+          <div class="avatar-large d-flex align-items-center justify-content-center fw-bolder">
+            {{ initials() }}
+          </div>
+        </div>
+
+        <div class="header-copy">
+          <span class="profile-kicker">Perfil institucional</span>
+          <h2 class="profile-title text-dark mb-2">{{ user()?.nombre_completo || 'Usuario' }}</h2>
+          <div class="d-flex flex-wrap align-items-center gap-2">
+            <span class="role-badge {{ roleTone() }}">
+              @switch (userRole()) {
+                @case ('admin') {
+                  <i class="bi bi-shield-lock-fill me-2"></i>
+                }
+                @case ('tecnico') {
+                  <i class="bi bi-tools me-2"></i>
+                }
+                @default {
+                  <i class="bi bi-mortarboard-fill me-2"></i>
+                }
+              }
+              {{ roleLabel() }}
+            </span>
+            <span class="status-chip">
+              <i class="bi bi-check-circle-fill me-2"></i>
+              Cuenta activa
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-stat-grid">
+        <article class="hero-stat-card">
+          <span class="stat-label">Reservas</span>
+          <strong>{{ profileStats().totalReservas }}</strong>
+        </article>
+        <article class="hero-stat-card">
+          <span class="stat-label">Préstamos</span>
+          <strong>{{ profileStats().totalPrestamos }}</strong>
+        </article>
+      </div>
     </div>
   </header>
 
   @if (loadError()) {
-    <div class="neo-alert-danger mb-4 d-flex align-items-center p-3 animate-fade-in">
+    <div class="neo-alert-danger d-flex align-items-center p-3 animate-fade-in" aria-live="polite">
       <div class="icon-box-danger me-3">
         <i class="bi bi-exclamation-triangle-fill fs-5"></i>
       </div>
@@ -20,121 +59,105 @@
     </div>
   }
 
-  @if (isLoading()) {
-    <div class="loading-overlay d-flex flex-column align-items-center justify-content-center flex-grow-1 w-100">
-      <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem" role="status"></div>
-      <h5 class="fw-bold text-dark">Cargando Perfil...</h5>
-    </div>
-  } @else {
-    <div class="row g-5 m-0 w-100 align-items-start">
-      <div class="col-12 col-xl-4 p-0 pe-xl-3 stagger-2">
-        <div class="neo-id-card d-flex flex-column align-items-center p-5 text-center">
-          <div class="avatar-large d-flex align-items-center justify-content-center text-primary fw-bolder mb-4">
-            {{ (user()?.nombre_completo || 'U').charAt(0) }}
-          </div>
-
-          <h4 class="fw-bold text-dark mb-1 tracking-tight">{{ user()?.nombre_completo }}</h4>
-          <p class="text-primary fw-bold small text-uppercase tracking-wide mb-4">{{ user()?.rol }}</p>
-
-          <div class="w-100 text-start border-top-neo pt-4">
-            <div class="mb-3">
-              <span class="d-block small text-muted fw-bold text-uppercase mb-1">Matricula / ID</span>
-              <span class="d-flex align-items-center fw-bold text-dark font-monospace">
-                <i class="bi bi-upc-scan me-2 text-primary"></i> {{ user()?.matricula || 'No registrada' }}
-              </span>
-            </div>
-
-            <div class="mb-3">
-              <span class="d-block small text-muted fw-bold text-uppercase mb-1">Carrera / Area</span>
-              <span class="d-flex align-items-center fw-bold text-dark">
-                <i class="bi bi-mortarboard-fill me-2 text-primary"></i>
-                {{ user()?.carrera || user()?.carrera_departamento || 'No registrada' }}
-              </span>
-            </div>
-          </div>
-        </div>
+  <div class="position-relative flex-grow-1">
+    @if (isLoading()) {
+      <div class="loading-overlay d-flex flex-column align-items-center justify-content-center w-100">
+        <div class="spinner-border text-primary mb-3 loading-orb" role="status"></div>
+        <h5 class="fw-bold text-dark mb-1">Cargando perfil</h5>
+        <p class="small text-muted m-0">Sincronizando datos institucionales</p>
       </div>
+    } @else {
+      <section class="profile-card-grid">
+        <article class="floating-card personal-card p-4 p-lg-5 stagger-1">
+          <div class="section-heading d-flex align-items-center justify-content-between gap-3 mb-4">
+            <div>
+              <span class="section-kicker">Identidad</span>
+              <h3 class="section-title text-dark mb-0">Información personal</h3>
+            </div>
+            <div class="section-icon text-primary">
+              <i class="bi bi-person-vcard-fill"></i>
+            </div>
+          </div>
 
-      <div class="col-12 col-xl-8 p-0 ps-xl-4 stagger-3">
-        <div class="row g-4 mb-5">
-          <div class="col-md-6">
-            <div class="neo-stat-card p-4 d-flex align-items-center">
-              <div class="icon-box-stat bg-primary-soft text-primary me-4">
-                <i class="bi bi-calendar-check-fill"></i>
-              </div>
+          <div class="info-stack">
+            <div class="read-field">
+              <span>Nombre completo</span>
+              <strong>{{ user()?.nombre_completo || 'No registrado' }}</strong>
+            </div>
+            <div class="read-field">
+              <span>Correo institucional</span>
+              <strong>{{ user()?.email || 'No registrado' }}</strong>
+            </div>
+            <div class="read-field">
+              <span>Matrícula / ID</span>
+              <strong class="font-monospace">{{ user()?.matricula || 'No registrada' }}</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="floating-card academic-card p-4 p-lg-5 stagger-2">
+          <div class="section-heading d-flex align-items-center justify-content-between gap-3 mb-4">
+            <div>
+              <span class="section-kicker">Trayectoria</span>
+              <h3 class="section-title text-dark mb-0">Área académica</h3>
+            </div>
+            <div class="section-icon text-success">
+              <i class="bi bi-mortarboard-fill"></i>
+            </div>
+          </div>
+
+          <div class="academic-orbit">
+            <span class="orbit-ring"></span>
+            <div class="academic-core">
+              <i class="bi bi-building-fill"></i>
+            </div>
+          </div>
+
+          <div class="info-stack">
+            <div class="read-field">
+              <span>Carrera / Departamento</span>
+              <strong>{{ areaAcademica() }}</strong>
+            </div>
+            <div class="read-field">
+              <span>Tipo de usuario</span>
+              <strong>{{ tipoUsuarioLabel() }}</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="floating-card security-card p-4 p-lg-5 stagger-3">
+          <div class="section-heading d-flex align-items-center justify-content-between gap-3 mb-4">
+            <div>
+              <span class="section-kicker">Acceso</span>
+              <h3 class="section-title text-dark mb-0">Seguridad de cuenta</h3>
+            </div>
+            <div class="section-icon text-warning">
+              <i class="bi bi-shield-lock-fill"></i>
+            </div>
+          </div>
+
+          <div class="security-meter mb-4">
+            <div class="security-fill {{ roleTone() }}"></div>
+          </div>
+
+          <div class="security-list d-flex flex-column gap-3">
+            <div class="security-item d-flex align-items-center gap-3">
+              <i class="bi bi-key-fill"></i>
               <div>
-                <h3 class="fw-bold text-dark mb-0">{{ profileStats().totalReservas }}</h3>
-                <span class="small text-muted fw-bold text-uppercase">Reservas de Labs</span>
+                <strong>Autenticación protegida</strong>
+                <span>Sesión activa mediante tokens institucionales</span>
               </div>
             </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="neo-stat-card p-4 d-flex align-items-center">
-              <div class="icon-box-stat bg-success-soft text-success me-4">
-                <i class="bi bi-tools"></i>
-              </div>
+            <div class="security-item d-flex align-items-center gap-3">
+              <i class="bi bi-person-lock"></i>
               <div>
-                <h3 class="fw-bold text-dark mb-0">{{ profileStats().totalPrestamos }}</h3>
-                <span class="small text-muted fw-bold text-uppercase">Prestamos de Equipo</span>
+                <strong>Rol aplicado</strong>
+                <span>{{ roleLabel() }} con permisos del backend</span>
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="neo-info-panel p-4 p-xl-5">
-          <h5 class="fw-bold text-dark mb-4 border-bottom-neo pb-3">
-            <i class="bi bi-person-lines-fill text-primary me-2"></i> Informacion de la Cuenta
-          </h5>
-
-          <div class="row g-4">
-            <div class="col-md-6">
-              <div class="info-group">
-                <label class="small text-muted fw-bold text-uppercase">Correo Institucional</label>
-                <div class="neo-read-only-input mt-2 d-flex align-items-center">
-                  <i class="bi bi-envelope-fill me-3 text-muted"></i>
-                  <span class="fw-medium text-dark">{{ user()?.email }}</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <div class="info-group">
-                <label class="small text-muted fw-bold text-uppercase">Tipo de Usuario</label>
-                <div class="neo-read-only-input mt-2 d-flex align-items-center">
-                  <i class="bi bi-person-badge-fill me-3 text-muted"></i>
-                  <span class="fw-medium text-dark">{{ user()?.tipo_usuario }}</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <div class="info-group">
-                <label class="small text-muted fw-bold text-uppercase">Rol Actual</label>
-                <div class="neo-read-only-input mt-2 d-flex align-items-center">
-                  <i class="bi bi-shield-lock-fill me-3 text-muted"></i>
-                  <span class="fw-medium text-dark">{{ user()?.rol }}</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <div class="info-group">
-                <label class="small text-muted fw-bold text-uppercase">Estado</label>
-                <div class="neo-read-only-input mt-2 d-flex align-items-center">
-                  <i class="bi bi-check-circle-fill me-3 text-muted"></i>
-                  <span class="fw-medium text-dark">Cuenta activa</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <p class="small text-muted mt-5 mb-0">
-            La edicion de perfil quedara habilitada cuando terminemos la integracion del
-            modulo de cuenta.
-          </p>
-        </div>
-      </div>
-    </div>
-  }
+        </article>
+      </section>
+    }
+  </div>
 </div>

@@ -1,10 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { SHARED_IMPORTS } from '../../../shared/shared-imports';
 import { AuthService } from '../../../services/auth.service';
 import { ReservationsService } from '../../../services/reservations.service';
 import { LoansService } from '../../../services/loans.service';
-import { User } from '../../../shared/models/user.model';
+import { User, UserRole } from '../../../shared/models/user.model';
 import { extractErrorMessage } from '../../../shared/utils/http-error.utils';
 
 @Component({
@@ -25,6 +25,22 @@ export class ProfileScreen implements OnInit {
   public profileStats = signal({
     totalReservas: 0,
     totalPrestamos: 0
+  });
+
+  public userRole = computed<UserRole>(() => this.user()?.rol ?? 'estudiante');
+  public roleLabel = computed(() => this.getRoleLabel(this.userRole()));
+  public roleTone = computed(() => this.getRoleTone(this.userRole()));
+  public initials = computed(() => this.getInitials(this.user()?.nombre_completo));
+  public areaAcademica = computed(
+    () => this.user()?.carrera || this.user()?.carrera_departamento || 'Sin área registrada'
+  );
+  public tipoUsuarioLabel = computed(() => {
+    const tipoUsuario = this.user()?.tipo_usuario;
+
+    if (tipoUsuario === 'admin') return 'Administrador';
+    if (tipoUsuario === 'tecnico' || tipoUsuario === 'personal') return 'Personal técnico';
+
+    return 'Estudiante';
   });
 
   ngOnInit(): void {
@@ -52,8 +68,43 @@ export class ProfileScreen implements OnInit {
       },
       error: (error) => {
         this.isLoading.set(false);
-        this.loadError.set(extractErrorMessage(error, 'No se pudo cargar la informacion del perfil.'));
+        this.loadError.set(
+          extractErrorMessage(error, 'No se pudo cargar la información del perfil.')
+        );
       }
     });
+  }
+
+  private getRoleLabel(role: UserRole): string {
+    const labels: Record<UserRole, string> = {
+      admin: 'Administrador',
+      tecnico: 'Técnico',
+      estudiante: 'Estudiante'
+    };
+
+    return labels[role];
+  }
+
+  private getRoleTone(role: UserRole): string {
+    const tones: Record<UserRole, string> = {
+      admin: 'role-admin',
+      tecnico: 'role-tech',
+      estudiante: 'role-student'
+    };
+
+    return tones[role];
+  }
+
+  private getInitials(fullName?: string | null): string {
+    if (!fullName?.trim()) {
+      return 'U';
+    }
+
+    return fullName
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part.charAt(0).toUpperCase())
+      .join('');
   }
 }

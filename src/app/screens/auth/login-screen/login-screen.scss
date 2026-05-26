@@ -27,12 +27,11 @@
 .info-panel {
   position: relative;
   isolation: isolate;
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--primary-color) 82%, var(--secondary-color) 18%),
-      color-mix(in srgb, var(--secondary-color) 86%, var(--primary-color) 14%)
-    );
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--primary-color) 82%, var(--secondary-color) 18%),
+    color-mix(in srgb, var(--secondary-color) 86%, var(--primary-color) 14%)
+  );
 
   @media (min-width: 992px) {
     position: sticky;
@@ -45,31 +44,31 @@
     border-radius: 50%;
     filter: blur(80px);
     opacity: 0.75;
-    animation: orb-float 14s ease-in-out infinite alternate;
     pointer-events: none;
+    animation: orb-float 14s ease-in-out infinite alternate;
   }
 
   .orb-1 {
     width: min(24rem, 48vw);
     aspect-ratio: 1;
-    top: -5rem;
-    left: -4rem;
-    background: color-mix(in srgb, var(--surface-color) 20%, transparent);
+    top: -4rem;
+    right: -4rem;
+    background: color-mix(in srgb, var(--surface-color) 18%, transparent);
   }
 
   .orb-2 {
-    width: min(22rem, 40vw);
+    width: min(20rem, 42vw);
     aspect-ratio: 1;
-    right: -4rem;
     bottom: -4rem;
-    background: color-mix(in srgb, var(--secondary-color) 22%, transparent);
-    animation-delay: -4s;
+    left: -4rem;
+    background: color-mix(in srgb, var(--secondary-color) 20%, transparent);
+    animation-delay: -5s;
   }
 }
 
 .visual-content {
   position: relative;
-  max-width: 28rem;
+  max-width: 29rem;
   margin-inline: auto;
 }
 
@@ -86,6 +85,7 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   @include glass-layer(14%);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
 .logo-box {
@@ -93,20 +93,23 @@
   height: clamp(4.5rem, 10vw, 5rem);
   border-radius: 1.5rem;
   @include glass-layer(16%);
-  box-shadow: 0 1rem 2rem color-mix(in srgb, var(--text-main) 12%, transparent);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
+    0 1rem 2rem color-mix(in srgb, var(--text-main) 12%, transparent);
 }
 
 .visual-title {
-  font-size: clamp(2.25rem, 5vw, 3.9rem);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
   line-height: 0.98;
   letter-spacing: -0.05em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .gradient-text-light {
   background: linear-gradient(
     145deg,
-    color-mix(in srgb, var(--surface-color) 96%, transparent),
-    color-mix(in srgb, var(--surface-color) 76%, var(--secondary-color) 24%)
+    color-mix(in srgb, var(--surface-color) 100%, transparent),
+    color-mix(in srgb, var(--surface-color) 80%, var(--primary-color) 20%)
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -130,31 +133,11 @@
   color: color-mix(in srgb, var(--surface-color) 90%, transparent);
   font-size: 0.92rem;
   line-height: 1.5;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
 
   i {
-    color: color-mix(in srgb, var(--surface-color) 96%, transparent);
+    color: color-mix(in srgb, var(--surface-color) 100%, transparent);
   }
-}
-
-.glass-card-mini {
-  @include glass-layer(14%);
-  width: fit-content;
-  max-width: 100%;
-  padding: 0.9rem 1.1rem;
-  border-radius: 1.35rem;
-  box-shadow: 0 1rem 2rem color-mix(in srgb, var(--text-main) 12%, transparent);
-}
-
-.icon-box-glow {
-  width: 2.8rem;
-  height: 2.8rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 1rem;
-  color: color-mix(in srgb, var(--surface-color) 95%, transparent);
-  background: color-mix(in srgb, var(--surface-color) 18%, transparent);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--surface-color) 18%, transparent);
 }
 
 .form-panel {
@@ -188,12 +171,13 @@
 .auth-card {
   position: relative;
   width: 100%;
-  max-width: 30rem;
+  max-width: 38rem;
   border-radius: 2rem;
   padding: clamp(1rem, 2vw, 1.2rem);
-  @include glass-layer(56%);
+  @include glass-layer(65%);
   box-shadow:
-    0 1.75rem 3rem color-mix(in srgb, var(--primary-color) 10%, transparent),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
+    0 1.75rem 3rem color-mix(in srgb, var(--primary-color) 8%, transparent),
     0 0 0 1px color-mix(in srgb, var(--surface-color) 52%, transparent);
 }
 
@@ -203,7 +187,7 @@
   border-radius: 1.5rem;
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--surface-color) 44%, transparent),
+    color-mix(in srgb, var(--surface-color) 50%, transparent),
     transparent
   );
   pointer-events: none;
@@ -211,13 +195,13 @@
 
 .auth-card-body {
   position: relative;
-  max-width: 26rem;
+  max-width: 34rem;
   margin-inline: auto;
   padding: clamp(1rem, 2vw, 1.4rem);
 }
 
 .auth-header h2 {
-  font-size: clamp(1.9rem, 4vw, 2.7rem);
+  font-size: clamp(1.85rem, 4vw, 2.65rem);
   letter-spacing: -0.04em;
 }
 
@@ -237,10 +221,11 @@
   border: 1px solid color-mix(in srgb, var(--danger-color) 18%, transparent);
 }
 
-.field-stack {
-  .form-label {
-    letter-spacing: 0.02em;
-  }
+.form-section {
+  @include neo-outset;
+  padding: clamp(1.25rem, 2vw, 1.6rem);
+  border-radius: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--surface-color) 86%, transparent);
 }
 
 .input-shell {
@@ -253,13 +238,15 @@
 }
 
 .pill-input {
+  width: 100%;
   min-height: 3.5rem;
   border-radius: var(--radius-pill);
   border-color: transparent;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
 
   &:focus {
     border-color: var(--primary-color) !important;
-    box-shadow: var(--shadow-primary-glow) !important;
+    box-shadow: var(--shadow-primary-glow), inset 0 1px 2px rgba(0,0,0,0.05) !important;
   }
 
   &.border-danger {
@@ -292,12 +279,54 @@
   animation: fade-in-soft 0.22s ease-out;
 }
 
+/* --- BOTÓN ESQUEUMÓRFICO ESTILO AERO --- */
 .btn-auth {
-  min-height: 3.5rem;
+  position: relative;
+  min-height: 3.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-pill);
+
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--primary-color) 85%, white) 0%,
+    var(--primary-color) 45%,
+    color-mix(in srgb, var(--primary-color) 85%, black) 100%
+  );
+
   box-shadow:
-    var(--shadow-dark),
-    var(--shadow-light),
-    0 1rem 2rem color-mix(in srgb, var(--primary-color) 20%, transparent);
+    inset 0 1px 2px rgba(255, 255, 255, 0.7),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+    0 6px 15px color-mix(in srgb, var(--primary-color) 40%, transparent);
+
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 45%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 100%);
+    border-radius: 999px 999px 0 0;
+    pointer-events: none;
+  }
+
+  &:hover:not([disabled]) {
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.8),
+      inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+      0 8px 20px color-mix(in srgb, var(--primary-color) 50%, transparent);
+  }
+}
+
+.wave-btn:active:not([disabled]) {
+  transform: scale(0.96);
+  box-shadow:
+    inset 0 3px 6px rgba(0, 0, 0, 0.3),
+    0 2px 5px color-mix(in srgb, var(--primary-color) 30%, transparent);
 }
 
 .border-top-neo {
@@ -308,7 +337,6 @@
   position: absolute;
   inset: 0;
   z-index: 50;
-  border-radius: 0;
   background: color-mix(in srgb, var(--neo-light-bg) 72%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -335,34 +363,16 @@
   border-radius: 1.4rem;
 }
 
-.stagger-1,
-.stagger-2,
-.stagger-3,
-.stagger-4,
-.stagger-5 {
+.stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-5 {
   opacity: 0;
   animation: fade-in-up-stagger 0.6s ease-out forwards;
 }
 
-.stagger-1 {
-  animation-delay: 0.08s;
-}
-
-.stagger-2 {
-  animation-delay: 0.16s;
-}
-
-.stagger-3 {
-  animation-delay: 0.24s;
-}
-
-.stagger-4 {
-  animation-delay: 0.32s;
-}
-
-.stagger-5 {
-  animation-delay: 0.4s;
-}
+.stagger-1 { animation-delay: 0.08s; }
+.stagger-2 { animation-delay: 0.16s; }
+.stagger-3 { animation-delay: 0.24s; }
+.stagger-4 { animation-delay: 0.32s; }
+.stagger-5 { animation-delay: 0.4s; }
 
 .animate-fade-in-left {
   opacity: 0;
@@ -373,55 +383,56 @@
   animation: fade-in-soft 0.22s ease-out;
 }
 
-.floating-anim {
-  animation: float-card 6s ease-in-out infinite;
-}
-
 .transition-smooth {
   transition: var(--transition-smooth);
 }
 
-.hover-scale:hover {
-  transform: translateY(-0.1rem);
-}
-
-.wave-btn:active:not([disabled]) {
-  transform: scale(0.98);
-}
-
+/* RESPONSIVE DESIGN EN MOVIL */
 @media (max-width: 991.98px) {
   .info-panel {
     min-height: auto;
-    padding-top: 3rem !important;
-    padding-bottom: 3rem !important;
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+    border-radius: 0 0 2rem 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    z-index: 10;
   }
 
   .visual-content {
-    max-width: 34rem;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .visual-metrics {
-    margin-inline: auto;
+  .logo-box {
+    margin-bottom: 1rem !important;
+  }
+
+  .visual-title {
+    font-size: 2rem;
+    margin-bottom: 0 !important;
   }
 
   .form-scroll-wrapper {
-    padding-top: 2rem !important;
-    padding-bottom: 2rem !important;
+    padding-top: 2.5rem !important;
+    padding-bottom: 3rem !important;
   }
 }
 
 @media (max-width: 767.98px) {
   .auth-card {
-    max-width: 100%;
     border-radius: 1.6rem;
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.05);
   }
 
   .auth-card-body {
     padding: 0.75rem;
   }
 
-  .metric-pill {
-    text-align: left;
+  .form-section {
+    padding: 1.25rem 1rem;
+    border-radius: 1.25rem;
   }
 }
 
@@ -440,120 +451,134 @@
 
   .logo-box,
   .logo-box-auth {
-    width: 4.25rem;
-    height: 4.25rem;
+    width: 4rem;
+    height: 4rem;
   }
 
   .pill-input,
-  .btn-auth {
-    min-height: 3.25rem;
+  .btn-auth,
+  .btn-auth-secondary {
+    min-height: 3.4rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .glass-orb,
-  .floating-anim,
-  .animate-fade-in-left,
-  .stagger-1,
-  .stagger-2,
-  .stagger-3,
-  .stagger-4,
-  .stagger-5,
-  .ripple-login,
-  .pill-input.border-danger {
+  .glass-orb, .animate-fade-in-left, .stagger-1, .stagger-2, .stagger-3,
+  .stagger-4, .stagger-5, .ripple-login, .pill-input.border-danger {
     animation: none !important;
   }
 
-  .hover-scale,
-  .transition-smooth,
-  .input-action,
-  .btn-auth {
+  .transition-smooth, .input-action, .btn-auth {
     transition: none !important;
   }
 }
 
 @keyframes orb-float {
-  from {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  to {
-    transform: translate3d(2rem, 2.5rem, 0) scale(1.08);
-  }
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(2rem, 2.5rem, 0) scale(1.08); }
 }
 
 @keyframes fade-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-1.75rem);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-1.75rem); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes fade-in-up-stagger {
-  from {
-    opacity: 0;
-    transform: translateY(1rem);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(1rem); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fade-in-soft {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes field-shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-0.18rem);
-  }
-
-  75% {
-    transform: translateX(0.18rem);
-  }
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-0.18rem); }
+  75% { transform: translateX(0.18rem); }
 }
 
 @keyframes wave-ripple {
-  0% {
-    transform: scale(0);
-    opacity: 0.2;
-  }
-
-  70% {
-    opacity: 0.12;
-  }
-
-  100% {
-    transform: scale(3);
-    opacity: 0;
-  }
+  0% { transform: scale(0); opacity: 0.2; }
+  70% { opacity: 0.12; }
+  100% { transform: scale(3); opacity: 0; }
 }
 
-@keyframes float-card {
-  0%,
-  100% {
-    transform: translateY(0);
+/* --- BOTONES SECUNDARIOS ESQUEUMÓRFICOS (AERO GLASS) --- */
+.btn-auth-secondary {
+  position: relative;
+  appearance: none;
+  border: 1px solid color-mix(in srgb, var(--text-muted) 20%, transparent);
+  border-radius: var(--radius-pill);
+  color: var(--text-main);
+  min-height: 3.8rem; /* Altura idéntica al botón principal */
+
+  /* Fondo translúcido tipo cristal */
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface-color) 75%, transparent) 0%,
+    color-mix(in srgb, var(--surface-color) 35%, transparent) 100%
+  );
+
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.7), /* Brillo interno superior */
+    inset 0 -1px 2px rgba(0, 0, 0, 0.05),     /* Sombra interna inferior */
+    0 4px 10px rgba(0, 0, 0, 0.04);           /* Sombra exterior suave */
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: pointer;
+
+  /* Reflejo superior redondeado característico de Frutiger Aero */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 45%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+    border-radius: 999px 999px 0 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
   }
 
-  50% {
-    transform: translateY(-0.45rem);
+  /* HOVER: Solo para PCs (evita el hover pegajoso en móviles) */
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-2px);
+      color: #9b51e0;
+      border-color: color-mix(in srgb, #9b51e0 40%, transparent);
+
+      background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--surface-color) 90%, transparent) 0%,
+        color-mix(in srgb, #9b51e0 12%, transparent) 100%
+      );
+
+      box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.9),
+        inset 0 0 12px color-mix(in srgb, #9b51e0 20%, transparent),
+        0 6px 15px color-mix(in srgb, #9b51e0 35%, transparent);
+    }
+  }
+
+  /* ACTIVE (Tap en móvil o clic en PC): Brillo morado táctil y hundimiento */
+  &:active {
+    transform: scale(0.96);
+    color: #9b51e0;
+    border-color: color-mix(in srgb, #9b51e0 50%, transparent);
+
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-color) 80%, transparent) 0%,
+      color-mix(in srgb, #9b51e0 25%, transparent) 100%
+    );
+
+    box-shadow:
+      inset 0 3px 6px rgba(0, 0, 0, 0.15),
+      inset 0 0 15px color-mix(in srgb, #9b51e0 40%, transparent), /* Flash interno morado */
+      0 2px 4px rgba(0, 0, 0, 0.02);
   }
 }

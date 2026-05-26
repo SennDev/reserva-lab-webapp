@@ -1,4 +1,4 @@
-export type TipoUsuario = 'estudiante' | 'personal';
+export type TipoUsuario = 'estudiante' | 'tecnico' | 'admin' | 'personal';
 export type UserRole = 'admin' | 'tecnico' | 'estudiante';
 
 export interface User {

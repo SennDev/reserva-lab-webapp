@@ -20,12 +20,25 @@ export class LoginScreen {
   private router = inject(Router);
   private authService = inject(AuthService);
 
-  public user: { email?: string; password?: string } = {};
+  public user: { email?: string; password?: string } = {
+    email: '',
+    password: ''
+  };
+
   public errors: LoginErrors = {};
   public serverError = signal<string | null>(null);
   public isLoading = signal(false);
   public hidePassword = true;
   public inputType: 'password' | 'text' = 'password';
+
+  public prevenirEspacioInicial(event: KeyboardEvent, valorActual = ''): void {
+    // Si el usuario presiona espacio al inicio del campo de texto, cancela el evento
+    if (event.key === ' ') {
+      if (!valorActual || valorActual.trim().length === 0) {
+        event.preventDefault();
+      }
+    }
+  }
 
   public showPassword(): void {
     this.hidePassword = !this.hidePassword;
@@ -40,12 +53,12 @@ export class LoginScreen {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!this.user.email || !emailRegex.test(this.user.email)) {
-      this.errors.email = 'Ingresa un correo institucional valido.';
+      this.errors.email = 'Ingresa un correo electrónico institucional válido.';
       esValido = false;
     }
 
     if (!this.user.password) {
-      this.errors.password = 'La contrasena es requerida.';
+      this.errors.password = 'La contraseña es requerida.';
       esValido = false;
     }
 
@@ -67,7 +80,7 @@ export class LoginScreen {
       error: (error) => {
         this.isLoading.set(false);
         this.serverError.set(
-          extractErrorMessage(error, 'No se pudo iniciar sesion. Verifica tus credenciales.')
+          extractErrorMessage(error, 'Credenciales incorrectas o problemas de conexión con el servidor institucional.')
         );
       }
     });

@@ -1,143 +1,364 @@
-@mixin neo-outset {
-  background: var(--neo-light-bg);
-  box-shadow: var(--shadow-dark), var(--shadow-light);
+@mixin aero-glass($mix: 68%, $blur: 12px) {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-color) 88%, transparent),
+      color-mix(in srgb, var(--surface-color) $mix, transparent)
+    );
+  border: 1px solid color-mix(in srgb, var(--surface-color) 70%, transparent);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.7),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.05),
+    0 1rem 2rem color-mix(in srgb, var(--text-main) 10%, transparent);
 }
 
-@mixin neo-inset {
-  background: var(--neo-light-bg);
-  box-shadow: var(--shadow-inset-dark), var(--shadow-inset-light);
-}
-
-.profile-wrapper {
+.profile-aero-shell {
+  position: relative;
   width: 100%;
-  padding-top: 0.5rem;
+  min-height: 100%;
+  isolation: isolate;
 }
 
-.title-high-end {
-  font-size: clamp(1.9rem, 4vw, 2.7rem);
+.profile-aero-shell::before {
+  content: '';
+  position: absolute;
+  inset: -2rem;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 8% 8%, color-mix(in srgb, var(--primary-color) 14%, transparent), transparent 32%),
+    radial-gradient(circle at 95% 18%, color-mix(in srgb, var(--success-color) 12%, transparent), transparent 30%),
+    radial-gradient(circle at 60% 100%, color-mix(in srgb, #9b51e0 10%, transparent), transparent 34%);
+}
+
+.glass-panel,
+.floating-card {
+  @include aero-glass;
+  border-radius: 1.5rem;
+}
+
+.profile-hero {
+  overflow: hidden;
+}
+
+.profile-kicker,
+.section-kicker,
+.stat-label {
+  display: inline-flex;
+  color: var(--primary-color);
+  font-size: 0.74rem;
   font-weight: 800;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
-.tracking-tight {
-  letter-spacing: -0.03em;
+.profile-title {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 850;
+  line-height: 1.05;
 }
 
-.tracking-wide {
-  letter-spacing: 0.1em;
-}
-
-.neo-id-card,
-.neo-stat-card,
-.neo-info-panel {
-  @include neo-outset;
-  border-radius: 1.9rem;
-  border: 1px solid color-mix(in srgb, var(--surface-color) 86%, transparent);
-}
-
-.neo-id-card {
-  background-image: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--surface-color) 42%, transparent),
-    transparent
-  );
+.avatar-halo {
+  flex: 0 0 auto;
+  padding: 0.35rem;
+  border-radius: 2rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.25)),
+    color-mix(in srgb, var(--primary-color) 16%, transparent);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.8),
+    0 0.9rem 1.8rem color-mix(in srgb, var(--primary-color) 16%, transparent);
 }
 
 .avatar-large {
-  width: 7rem;
-  height: 7rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-size: 2.4rem;
-  background: color-mix(in srgb, var(--surface-color) 86%, transparent);
-  border: 3px solid color-mix(in srgb, var(--surface-color) 88%, transparent);
-  @include neo-inset;
+  width: clamp(5rem, 18vw, 7.25rem);
+  height: clamp(5rem, 18vw, 7.25rem);
+  border-radius: 1.65rem;
+  color: var(--primary-color);
+  font-size: clamp(1.7rem, 5vw, 2.55rem);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-color) 96%, transparent),
+      color-mix(in srgb, var(--primary-color) 10%, var(--surface-color) 90%)
+    );
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.7),
+    inset 0 -0.25rem 0.6rem rgba(0, 0, 0, 0.08);
 }
 
-.neo-stat-card {
-  transition: var(--transition-smooth);
-
-  &:hover {
-    transform: translateY(-0.35rem);
-  }
-}
-
-.icon-box-stat {
-  width: 3.8rem;
-  height: 3.8rem;
+.role-badge,
+.status-chip {
+  min-height: 2.35rem;
   display: inline-flex;
   align-items: center;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 800;
+  @include aero-glass(54%);
+}
+
+.role-admin {
+  color: #9b51e0;
+}
+
+.role-tech {
+  color: var(--warning-color);
+}
+
+.role-student {
+  color: var(--success-color);
+}
+
+.status-chip {
+  color: var(--success-color);
+}
+
+.hero-stat-grid {
+  width: min(100%, 18rem);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.hero-stat-card {
+  min-height: 5.8rem;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  padding: 1rem;
   border-radius: 1.15rem;
-  font-size: 1.6rem;
-  @include neo-inset;
+  @include aero-glass(52%);
 }
 
-.bg-primary-soft {
-  background: color-mix(in srgb, var(--primary-color) 8%, var(--neo-light-bg) 92%);
+.hero-stat-card strong {
+  color: var(--text-main);
+  font-size: 2rem;
+  line-height: 1;
 }
 
-.bg-success-soft {
-  background: color-mix(in srgb, var(--success-color) 8%, var(--neo-light-bg) 92%);
+.profile-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
 }
 
-.border-top-neo {
-  border-top: 1px solid color-mix(in srgb, var(--surface-color) 84%, transparent);
+.floating-card {
+  min-height: 18rem;
+  transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
-.border-bottom-neo {
-  border-bottom: 1px solid color-mix(in srgb, var(--surface-color) 84%, transparent);
+.floating-card:active,
+.role-badge:active,
+.status-chip:active {
+  transform: scale(0.96);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.7),
+    0 0 1.3rem color-mix(in srgb, #9b51e0 42%, transparent);
 }
 
-.neo-read-only-input {
-  min-height: 3.3rem;
-  padding: 1rem 1.1rem;
-  border-radius: 1rem;
-  @include neo-inset;
+.section-title {
+  font-size: clamp(1.2rem, 3vw, 1.55rem);
+  font-weight: 800;
+}
+
+.section-icon {
+  width: 3.2rem;
+  height: 3.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.1rem;
+  font-size: 1.35rem;
+  @include aero-glass(52%);
+}
+
+.info-stack {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.read-field {
+  min-height: 4.7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 1rem;
+  border-radius: 1.1rem;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-color) 76%, transparent),
+      color-mix(in srgb, var(--surface-color) 44%, transparent)
+    );
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.7),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.read-field span,
+.security-item span {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.read-field strong {
+  color: var(--text-main);
+  font-size: 0.98rem;
+  overflow-wrap: anywhere;
+}
+
+.academic-orbit {
+  position: relative;
+  width: 8rem;
+  height: 8rem;
+  margin: 0 auto 1.5rem;
+}
+
+.orbit-ring,
+.academic-core {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.orbit-ring {
+  border: 1px solid color-mix(in srgb, var(--success-color) 30%, transparent);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.65),
+    0 1rem 2rem color-mix(in srgb, var(--success-color) 12%, transparent);
+}
+
+.academic-core {
+  inset: 1.65rem;
+  display: grid;
+  place-items: center;
+  color: var(--success-color);
+  font-size: 1.8rem;
+  @include aero-glass(60%);
+}
+
+.security-meter {
+  height: 1rem;
+  padding: 0.2rem;
+  border-radius: var(--radius-pill);
+  @include aero-glass(46%);
+}
+
+.security-fill {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--success-color), #9b51e0);
+  box-shadow: 0 0 1rem color-mix(in srgb, #9b51e0 24%, transparent);
+}
+
+.security-item {
+  min-height: 4.6rem;
+  padding: 1rem;
+  border-radius: 1.1rem;
+  @include aero-glass(48%);
+}
+
+.security-item i {
+  width: 2.35rem;
+  height: 2.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: 0.85rem;
+  color: #9b51e0;
+  background: color-mix(in srgb, #9b51e0 10%, transparent);
+}
+
+.security-item strong {
+  display: block;
+  color: var(--text-main);
+  line-height: 1.25;
 }
 
 .loading-overlay {
-  position: absolute;
-  inset: 0;
-  border-radius: 1.8rem;
-  background: color-mix(in srgb, var(--neo-light-bg) 74%, transparent);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 10;
+  min-height: 24rem;
+  border-radius: 1.5rem;
+  @include aero-glass(72%);
+}
+
+.loading-orb {
+  width: 3.4rem;
+  height: 3.4rem;
+}
+
+.animate-fade-in {
+  animation: fade-in 240ms ease-out;
 }
 
 .stagger-1,
 .stagger-2,
 .stagger-3 {
   opacity: 0;
-  animation: fade-in-up 0.55s ease-out forwards;
-}
-
-.stagger-1 {
-  animation-delay: 0.08s;
+  animation: fade-in-up 520ms ease-out forwards;
 }
 
 .stagger-2 {
-  animation-delay: 0.16s;
+  animation-delay: 90ms;
 }
 
 .stagger-3 {
-  animation-delay: 0.24s;
+  animation-delay: 180ms;
+}
+
+@media (hover: hover) {
+  .floating-card:hover {
+    transform: translateY(-0.35rem);
+    box-shadow:
+      inset 0 1px 2px rgba(255, 255, 255, 0.78),
+      0 1.4rem 2.5rem color-mix(in srgb, var(--primary-color) 14%, transparent);
+  }
+}
+
+@media (min-width: 768px) {
+  .profile-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .security-card {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1200px) {
+  .profile-card-grid {
+    grid-template-columns: 1.15fr 0.95fr 1fr;
+  }
+
+  .security-card {
+    grid-column: auto;
+  }
 }
 
 @media (max-width: 575.98px) {
-  .neo-id-card,
-  .neo-stat-card,
-  .neo-info-panel {
-    border-radius: 1.45rem;
+  .profile-hero,
+  .floating-card {
+    border-radius: 1.25rem;
   }
 
-  .avatar-large {
-    width: 6.25rem;
-    height: 6.25rem;
-    font-size: 2rem;
+  .hero-stat-grid {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-card,
+  .stagger-1,
+  .stagger-2,
+  .stagger-3 {
+    animation: none !important;
+    transition: none !important;
   }
 }
 
@@ -150,5 +371,15 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }

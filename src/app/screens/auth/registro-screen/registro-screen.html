@@ -14,20 +14,21 @@
         <i class="bi bi-flask-fill text-white fs-2"></i>
       </div>
 
-      <h1 class="visual-title mb-3 fw-bold gradient-text-light">Unete a ReservaLab</h1>
-      <p class="visual-subtitle text-white-50 mx-auto mx-lg-0 mb-0">
-        Digitaliza la gestion, reserva y trazabilidad de laboratorios y equipos
-        institucionales con una experiencia clara, academica y lista para operar.
+      <h1 class="visual-title mb-3 fw-bold gradient-text-light">Únete a ReservaLab</h1>
+
+      <p class="visual-subtitle text-white-50 mx-auto mx-lg-0 mb-0 d-none d-lg-block">
+        Digitaliza la gestión, reserva y trazabilidad de laboratorios y equipos
+        institucionales con una experiencia clara, académica y lista para operar.
       </p>
 
-      <div class="visual-metrics d-flex flex-column gap-3 mt-4">
+      <div class="visual-metrics mt-4 d-none d-lg-flex flex-column gap-3">
         <div class="metric-pill">
           <i class="bi bi-mortarboard me-2"></i>
-          Perfil listo para estudiantes, docentes y personal tecnico
+          Perfil listo para estudiantes y personal técnico
         </div>
         <div class="metric-pill">
           <i class="bi bi-bezier2 me-2"></i>
-          Registro guiado para una incorporacion sin friccion
+          Registro guiado para una incorporación sin fricción
         </div>
       </div>
 
@@ -55,7 +56,7 @@
         <div class="logo-box-auth animate-pulse mb-3">
           <i class="bi bi-person-check-fill text-success fs-2"></i>
         </div>
-        <p class="text-success fw-bold">Generando tu perfil academico...</p>
+        <p class="text-success fw-bold">Generando tu perfil académico...</p>
       </div>
     }
 
@@ -65,7 +66,7 @@
           <div class="auth-card-light" aria-hidden="true"></div>
 
           <div class="form-content auth-card-body mx-auto">
-            <header class="auth-header mb-5 text-center text-lg-start">
+            <header class="auth-header mb-4 mb-lg-5 text-center text-lg-start">
               <span class="auth-kicker">Registro institucional</span>
               <h2 class="fw-bold text-dark mb-2">Crear cuenta nueva</h2>
               <p class="text-muted small mb-0">
@@ -92,7 +93,7 @@
               <section class="form-section mb-4 text-center text-lg-start stagger-2">
                 <div class="section-head mb-3">
                   <label class="form-label fw-bold text-dark small mb-1">
-                    Cual es tu rol institucional?
+                    ¿Cuál es tu rol institucional?
                   </label>
                   <p class="section-help text-muted small mb-0">
                     Esto ayuda a preparar tu experiencia dentro de la plataforma.
@@ -115,22 +116,34 @@
                   <input
                     type="radio"
                     name="tipo_usuario"
-                    id="tipoPersonal"
-                    value="personal"
+                    id="tipoTecnico"
+                    value="tecnico"
                     [(ngModel)]="user.tipo_usuario"
                   />
-                  <label for="tipoPersonal" class="segment-label">
-                    <i class="bi bi-person-workspace me-2"></i>
-                    Personal / Docente
+                  <label for="tipoTecnico" class="segment-label">
+                    <i class="bi bi-tools me-2"></i>
+                    Técnico
+                  </label>
+
+                  <input
+                    type="radio"
+                    name="tipo_usuario"
+                    id="tipoAdmin"
+                    value="admin"
+                    [(ngModel)]="user.tipo_usuario"
+                  />
+                  <label for="tipoAdmin" class="segment-label">
+                    <i class="bi bi-shield-lock-fill me-2"></i>
+                    Administrador
                   </label>
                 </div>
               </section>
 
               <section class="form-section stagger-3">
                 <div class="section-head mb-3 text-center text-lg-start">
-                  <h3 class="section-title text-dark mb-1">Informacion personal</h3>
+                  <h3 class="section-title text-dark mb-1">Información personal</h3>
                   <p class="section-help text-muted small mb-0">
-                    Usa tus datos institucionales para una validacion mas rapida.
+                    Usa tus datos institucionales para una validación más rápida.
                   </p>
                 </div>
 
@@ -140,9 +153,7 @@
                       Nombre(s)
                     </label>
                     <div class="input-shell position-relative">
-                      <i
-                        class="bi bi-person input-icon position-absolute top-50 start-0 translate-middle-y ms-3"
-                      ></i>
+                      <i class="bi bi-person input-icon position-absolute top-50 start-0 translate-middle-y ms-3"></i>
                       <input
                         id="registroNombre"
                         type="text"
@@ -162,21 +173,16 @@
                   </div>
 
                   <div class="col-md-6 mb-4">
-                    <label
-                      class="form-label fw-semibold text-dark small mb-2"
-                      for="registroApellidos"
-                    >
+                    <label class="form-label fw-semibold text-dark small mb-2" for="registroApellidos">
                       Apellidos
                     </label>
                     <div class="input-shell position-relative">
-                      <i
-                        class="bi bi-person-badge input-icon position-absolute top-50 start-0 translate-middle-y ms-3"
-                      ></i>
+                      <i class="bi bi-person-badge input-icon position-absolute top-50 start-0 translate-middle-y ms-3"></i>
                       <input
                         id="registroApellidos"
                         type="text"
                         class="neo-input pill-input ps-5 py-3"
-                        placeholder="Ej. Garcia Lopez"
+                        placeholder="Ej. García López"
                         name="apellidos"
                         [(ngModel)]="user.apellidos"
                         (keypress)="soloLetras($event, user.apellidos)"
@@ -186,23 +192,16 @@
                       />
                     </div>
                     @if (errors.apellidos) {
-                      <span class="text-danger small mt-2 d-block field-error">{{
-                        errors.apellidos
-                      }}</span>
+                      <span class="text-danger small mt-2 d-block field-error">{{ errors.apellidos }}</span>
                     }
                   </div>
 
                   <div class="col-md-6 mb-4">
-                    <label
-                      class="form-label fw-semibold text-dark small mb-2"
-                      for="registroMatricula"
-                    >
-                      Matricula / ID
+                    <label class="form-label fw-semibold text-dark small mb-2" for="registroMatricula">
+                      Matrícula / ID
                     </label>
                     <div class="input-shell position-relative">
-                      <i
-                        class="bi bi-card-heading input-icon position-absolute top-50 start-0 translate-middle-y ms-3"
-                      ></i>
+                      <i class="bi bi-card-heading input-icon position-absolute top-50 start-0 translate-middle-y ms-3"></i>
                       <input
                         id="registroMatricula"
                         type="text"
@@ -218,9 +217,7 @@
                       />
                     </div>
                     @if (errors.matricula) {
-                      <span class="text-danger small mt-2 d-block field-error">{{
-                        errors.matricula
-                      }}</span>
+                      <span class="text-danger small mt-2 d-block field-error">{{ errors.matricula }}</span>
                     }
                   </div>
 
@@ -229,9 +226,7 @@
                       Correo institucional
                     </label>
                     <div class="input-shell position-relative">
-                      <i
-                        class="bi bi-envelope input-icon position-absolute top-50 start-0 translate-middle-y ms-3"
-                      ></i>
+                      <i class="bi bi-envelope input-icon position-absolute top-50 start-0 translate-middle-y ms-3"></i>
                       <input
                         id="registroEmail"
                         type="email"
@@ -241,6 +236,7 @@
                         [(ngModel)]="user.email"
                         (blur)="validarCorreoRealTime()"
                         (keyup)="validarCorreoRealTime()"
+                        (keypress)="prevenirEspacioInicial($event, user.email)"
                         [class.border-danger]="errors.email"
                         autocomplete="email"
                         required
@@ -255,7 +251,7 @@
 
               <section class="form-section mb-4 stagger-4">
                 <div class="section-head mb-3 text-center text-lg-start">
-                  <h3 class="section-title text-dark mb-1">Area academica</h3>
+                  <h3 class="section-title text-dark mb-1">Área académica</h3>
                   <p class="section-help text-muted small mb-0">
                     Selecciona tu carrera o departamento para personalizar el acceso.
                   </p>
@@ -265,9 +261,7 @@
                   Carrera / Departamento
                 </label>
                 <div class="input-shell position-relative">
-                  <i
-                    class="bi bi-mortarboard input-icon position-absolute top-50 start-0 translate-middle-y ms-3 z-2"
-                  ></i>
+                  <i class="bi bi-mortarboard input-icon position-absolute top-50 start-0 translate-middle-y ms-3 z-2"></i>
                   <select
                     id="registroCarrera"
                     class="neo-input pill-input ps-5 py-3 form-select"
@@ -276,7 +270,7 @@
                     [class.border-danger]="errors.carrera"
                     required
                   >
-                    <option value="" disabled>Selecciona tu area...</option>
+                    <option value="" disabled>Selecciona tu área...</option>
                     @for (carrera of carreras; track carrera) {
                       <option [value]="carrera">{{ carrera }}</option>
                     }
@@ -291,22 +285,17 @@
                 <div class="section-head mb-3 text-center text-lg-start">
                   <h3 class="section-title text-dark mb-1">Seguridad de la cuenta</h3>
                   <p class="section-help text-muted small mb-0">
-                    Define una contrasena segura y confirma tu acceso institucional.
+                    Define una contraseña segura y confirma tu acceso institucional.
                   </p>
                 </div>
 
                 <div class="row">
                   <div class="col-md-6 mb-4">
-                    <label
-                      class="form-label fw-semibold text-dark small mb-2"
-                      for="registroPassword"
-                    >
-                      Contrasena
+                    <label class="form-label fw-semibold text-dark small mb-2" for="registroPassword">
+                      Contraseña
                     </label>
                     <div class="input-shell position-relative">
-                      <i
-                        class="bi bi-lock input-icon position-absolute top-50 start-0 translate-middle-y ms-3"
-                      ></i>
+                      <i class="bi bi-lock input-icon position-absolute top-50 start-0 translate-middle-y ms-3"></i>
                       <input
                         id="registroPassword"
                         [type]="inputType_1"
@@ -315,6 +304,7 @@
                         name="password"
                         [(ngModel)]="user.password"
                         (keyup)="evaluarFuerzaPassword()"
+                        (keypress)="prevenirEspacioInicial($event, user.password)"
                         [class.border-danger]="errors.password"
                         autocomplete="new-password"
                         required
@@ -323,13 +313,9 @@
                         type="button"
                         class="input-action position-absolute top-50 end-0 translate-middle-y me-2"
                         (click)="showPassword()"
-                        [attr.aria-label]="hide_1 ? 'Mostrar contrasena' : 'Ocultar contrasena'"
+                        [attr.aria-label]="hide_1 ? 'Mostrar contraseña' : 'Ocultar contraseña'"
                       >
-                        <i
-                          class="bi fs-5"
-                          [class.bi-eye]="hide_1"
-                          [class.bi-eye-slash]="!hide_1"
-                        ></i>
+                        <i class="bi fs-5" [class.bi-eye]="hide_1" [class.bi-eye-slash]="!hide_1"></i>
                       </button>
                     </div>
 
@@ -340,32 +326,23 @@
                           <div class="pwd-segment seg-2"></div>
                           <div class="pwd-segment seg-3"></div>
                         </div>
-                        <span
-                          class="small fw-bold text-uppercase d-block mt-2 pwd-text {{ claseFuerza }}-text"
-                        >
+                        <span class="small fw-bold text-uppercase d-block mt-2 pwd-text {{ claseFuerza }}-text">
                           {{ nivelFuerza }}
                         </span>
                       </div>
                     }
 
                     @if (errors.password) {
-                      <span class="text-danger small mt-2 d-block field-error">{{
-                        errors.password
-                      }}</span>
+                      <span class="text-danger small mt-2 d-block field-error">{{ errors.password }}</span>
                     }
                   </div>
 
                   <div class="col-md-6 mb-4">
-                    <label
-                      class="form-label fw-semibold text-dark small mb-2"
-                      for="registroConfirmPassword"
-                    >
-                      Confirmar contrasena
+                    <label class="form-label fw-semibold text-dark small mb-2" for="registroConfirmPassword">
+                      Confirmar contraseña
                     </label>
                     <div class="input-shell position-relative">
-                      <i
-                        class="bi bi-lock input-icon position-absolute top-50 start-0 translate-middle-y ms-3"
-                      ></i>
+                      <i class="bi bi-lock input-icon position-absolute top-50 start-0 translate-middle-y ms-3"></i>
                       <input
                         id="registroConfirmPassword"
                         [type]="inputType_2"
@@ -375,38 +352,31 @@
                         [(ngModel)]="user.confirm_password"
                         [class.border-danger]="errors.confirm_password"
                         (keyup)="compararPasswords()"
+                        (keypress)="prevenirEspacioInicial($event, user.confirm_password)"
                         autocomplete="new-password"
                       />
                       <button
                         type="button"
                         class="input-action position-absolute top-50 end-0 translate-middle-y me-2"
                         (click)="showConfirmPassword()"
-                        [attr.aria-label]="hide_2 ? 'Mostrar confirmacion' : 'Ocultar confirmacion'"
+                        [attr.aria-label]="hide_2 ? 'Mostrar confirmación' : 'Ocultar confirmación'"
                       >
-                        <i
-                          class="bi fs-5"
-                          [class.bi-eye]="hide_2"
-                          [class.bi-eye-slash]="!hide_2"
-                        ></i>
+                        <i class="bi fs-5" [class.bi-eye]="hide_2" [class.bi-eye-slash]="!hide_2"></i>
                       </button>
                     </div>
 
                     @if (passwordsCoinciden === false && user.confirm_password.length > 0) {
                       <span class="text-danger small mt-2 d-block fw-medium field-error">
-                        <i class="bi bi-x-circle-fill me-1"></i>
-                        No coinciden
+                        <i class="bi bi-x-circle-fill me-1"></i> No coinciden
                       </span>
                     } @else if (passwordsCoinciden === true) {
                       <span class="text-success small mt-2 d-block fw-medium field-success">
-                        <i class="bi bi-check-circle-fill me-1"></i>
-                        Coinciden
+                        <i class="bi bi-check-circle-fill me-1"></i> Coinciden
                       </span>
                     }
 
                     @if (errors.confirm_password) {
-                      <span class="text-danger small mt-2 d-block field-error">{{
-                        errors.confirm_password
-                      }}</span>
+                      <span class="text-danger small mt-2 d-block field-error">{{ errors.confirm_password }}</span>
                     }
                   </div>
                 </div>
@@ -428,27 +398,28 @@
             </form>
 
             <footer class="text-center mt-5 pt-4 border-top-neo stagger-5">
-                <div class="d-flex flex-column gap-4">
-                  
-                  <div class="mb-2"> <span class="text-muted small d-block mb-3">¿Ya tienes cuenta?</span>
-                    <a
-                      routerLink="/auth/login"
-                      class="btn-neo-outline w-100 py-3 fw-bold transition-smooth d-block"
-                    >
-                      Inicia sesión aquí
-                    </a>
-                  </div>
+              <div class="d-flex flex-column gap-4">
 
-                  <a
-                    routerLink="/"
-                    class="btn-neo-outline w-100 py-3 fw-bold transition-smooth d-block"
-                  >
-                    <i class="bi bi-arrow-left me-2"></i>
-                    Volver al inicio público
-                  </a>
-                  
-                </div>
-              </footer>
+                  <span class="text-muted small d-block mb-3">¿Ya tienes cuenta?</span>
+                <button
+                  type="button"
+                  routerLink="/auth/login"
+                  class="btn-auth-secondary w-100 py-3 fw-bold d-flex justify-content-center align-items-center text-decoration-none"
+                >
+                  <i class="bi  me-2"></i>
+                  Inicia sesión aquí
+                </button>
+                <br>
+                <button
+                  type="button"
+                  routerLink="/"
+                  class="btn-auth-secondary w-100 py-3 fw-bold d-flex justify-content-center align-items-center text-decoration-none"
+                >
+                  <i class="bi  me-2"></i>
+                  Volver
+                </button>
+              </div>
+            </footer>
           </div>
         </div>
       </section>

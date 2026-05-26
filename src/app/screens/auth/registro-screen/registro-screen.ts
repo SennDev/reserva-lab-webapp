@@ -49,24 +49,32 @@ export class RegistroScreen {
   public passwordsCoinciden: boolean | null = null;
 
   public carreras: string[] = [
-    'Ciencias de la Computacion',
-    'Ingenieria en Tecnologias de la Informacion',
-    'Ingenieria en Ciencias de la Computacion',
-    'Matematicas Aplicadas',
+    'Ciencias de la Computación',
+    'Ingeniería en Tecnologías de la Información',
+    'Ingeniería en Ciencias de la Computación',
+    'Matemáticas Aplicadas',
+    'Administración de laboratorio',
     'Otra'
   ];
 
+  public prevenirEspacioInicial(event: KeyboardEvent, valorActual = ''): void {
+    if (event.key === ' ' && (!valorActual || valorActual.trim().length === 0)) {
+      event.preventDefault();
+    }
+  }
+
   public soloLetras(event: KeyboardEvent, valorActual = ''): void {
-    // 1. Validaciones específicas para la tecla espacio
     if (event.key === ' ') {
-      // Previene el espacio si es el primer carácter O si el último carácter ya es un espacio
-      if (valorActual.trim().length === 0 || valorActual.endsWith(' ')) {
+      if (!valorActual || valorActual.trim().length === 0 || valorActual.endsWith(' ')) {
         event.preventDefault();
         return;
       }
     }
 
-    // 2. Validación general (solo letras y el espacio permitido)
+    if (event.key.length > 1) {
+      return;
+    }
+
     const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
 
     if (!regex.test(event.key)) {
@@ -74,22 +82,18 @@ export class RegistroScreen {
     }
   }
 
-  public soloNumeros(event: KeyboardEvent, valorActual: string = ''): void {
-    // 1. Permitir teclas de navegación y borrado (Backspace, flechas, Tab, etc.)
-    // Las teclas de control devuelven strings de más de 1 carácter (ej. 'Backspace')
+  public soloNumeros(event: KeyboardEvent, valorActual = ''): void {
     if (event.key.length > 1) {
       return;
     }
 
-    // 2. Validar que la tecla presionada sea estrictamente un número
     const regex = /^[0-9]$/;
-    
+
     if (!regex.test(event.key)) {
       event.preventDefault();
-      return; // Detenemos la ejecución si no es un número
+      return;
     }
 
-    // 3. Validar la longitud máxima (9 valores)
     if (valorActual.length >= 9) {
       event.preventDefault();
     }
@@ -99,7 +103,7 @@ export class RegistroScreen {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (this.user.email && !emailRegex.test(this.user.email)) {
-      this.errors.email = 'Debe ser un correo institucional valido.';
+      this.errors.email = 'Debe ser un correo institucional válido.';
     } else {
       delete this.errors.email;
     }
@@ -118,7 +122,7 @@ export class RegistroScreen {
       this.nivelFuerza = '';
       this.claseFuerza = '';
     } else if (fuerza <= 1) {
-      this.nivelFuerza = 'Debil';
+      this.nivelFuerza = 'Débil';
       this.claseFuerza = 'fuerza-debil';
     } else if (fuerza === 2 || fuerza === 3) {
       this.nivelFuerza = 'Media';
@@ -129,6 +133,10 @@ export class RegistroScreen {
     }
 
     this.compararPasswords();
+  }
+
+  public abrirLogin(): void {
+    this.router.navigate(['/auth/login']);
   }
 
   public compararPasswords(): void {
@@ -156,17 +164,17 @@ export class RegistroScreen {
     }
 
     if (!this.user.matricula.trim()) {
-      this.errors.matricula = 'La matricula o ID es requerida.';
+      this.errors.matricula = 'La matrícula o ID es requerida.';
       esValido = false;
     } else if (this.user.tipo_usuario === 'estudiante' && !/^\d{9}$/.test(this.user.matricula)) {
-      this.errors.matricula = 'La matricula debe tener exactamente 9 digitos.';
+      this.errors.matricula = 'La matrícula debe tener exactamente 9 dígitos.';
       esValido = false;
     }
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!this.user.email || !emailRegex.test(this.user.email)) {
-      this.errors.email = 'Ingresa un correo institucional valido.';
+      this.errors.email = 'Ingresa un correo institucional válido.';
       esValido = false;
     }
 
@@ -176,15 +184,15 @@ export class RegistroScreen {
     }
 
     if (!this.user.password) {
-      this.errors.password = 'La contrasena es requerida.';
+      this.errors.password = 'La contraseña es requerida.';
       esValido = false;
     } else if (this.user.password.length < 8) {
-      this.errors.password = 'La contrasena debe tener al menos 8 caracteres.';
+      this.errors.password = 'La contraseña debe tener al menos 8 caracteres.';
       esValido = false;
     }
 
     if (this.user.password !== this.user.confirm_password) {
-      this.errors.confirm_password = 'Las contrasenas no coinciden.';
+      this.errors.confirm_password = 'Las contraseñas no coinciden.';
       esValido = false;
     }
 

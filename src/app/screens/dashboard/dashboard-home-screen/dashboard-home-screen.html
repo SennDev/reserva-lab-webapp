@@ -1,25 +1,41 @@
-<div class="dashboard-home-wrapper h-100 d-flex flex-column">
-  <header class="dashboard-header mb-4 stagger-1">
-    <div class="header-titles">
-      <span class="header-kicker">Resumen operativo</span>
-      <h2 class="title-high-end text-dark mb-2">Vision general</h2>
-      <p class="text-muted small m-0 fw-medium">
-        Monitorea tu actividad, la ocupacion y las acciones prioritarias del dia.
-      </p>
-    </div>
+<div class="dashboard-aero-shell d-flex flex-column gap-4">
+  <header class="dashboard-hero glass-panel p-4 p-lg-5 stagger-1">
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-4">
+      <div class="header-copy">
+        <span class="header-kicker">{{ roleLabel() }}</span>
 
-    <button
-      class="btn-neo-circle text-muted hover-glow-primary"
-      title="Actualizar datos"
-      [disabled]="isLoading()"
-      (click)="refresh()"
-    >
-      <i class="bi bi-arrow-clockwise" [class.spin-anim]="isLoading()"></i>
-    </button>
+        @if (isAdmin()) {
+          <h2 class="dashboard-title text-dark mb-2">Centro de mando global</h2>
+          <p class="text-muted small m-0 fw-medium">
+            Métricas activas, solicitudes abiertas y controles de administración.
+          </p>
+        } @else if (isTechnician()) {
+          <h2 class="dashboard-title text-dark mb-2">Bandeja técnica</h2>
+          <p class="text-muted small m-0 fw-medium">
+            Revisa reservas y préstamos pendientes sin crear nuevas solicitudes.
+          </p>
+        } @else {
+          <h2 class="dashboard-title text-dark mb-2">Hola, {{ userName() }}</h2>
+          <p class="text-muted small m-0 fw-medium">
+            Tus reservas, préstamos activos y accesos rápidos personales.
+          </p>
+        }
+      </div>
+
+      <button
+        class="btn-aero-icon"
+        type="button"
+        title="Actualizar datos"
+        [disabled]="isLoading()"
+        (click)="refresh()"
+      >
+        <i class="bi bi-arrow-clockwise" [class.spin-anim]="isLoading()"></i>
+      </button>
+    </div>
   </header>
 
   @if (loadError()) {
-    <div class="neo-alert-danger mb-4 d-flex align-items-center p-3 animate-fade-in">
+    <div class="neo-alert-danger d-flex align-items-center p-3 animate-fade-in" aria-live="polite">
       <div class="icon-box-danger me-3">
         <i class="bi bi-exclamation-triangle-fill fs-5"></i>
       </div>
@@ -32,162 +48,208 @@
 
   <div class="position-relative flex-grow-1">
     @if (isLoading()) {
-      <div
-        class="loading-overlay d-flex flex-column align-items-center justify-content-center h-100 w-100 pb-5"
-      >
+      <div class="loading-overlay d-flex flex-column align-items-center justify-content-center w-100">
         <div class="loading-orb spinner-border text-primary mb-3" role="status"></div>
-        <h5 class="fw-bold text-dark">Recopilando metricas...</h5>
-        <p class="text-muted small">Sincronizando tus reservas y ocupacion global</p>
+        <h5 class="fw-bold text-dark mb-1">Recopilando métricas</h5>
+        <p class="text-muted small m-0">Sincronizando dashboard operativo</p>
       </div>
     } @else {
-      <div class="animate-fade-in">
-        <div class="row g-4 mb-4 stagger-2">
-          @for (stat of stats(); track stat.title) {
-            <div class="col-12 col-lg-4">
-              <article class="neo-widget-card stat-card p-4 h-100 d-flex align-items-center">
-                <div class="stat-icon-neo {{ stat.color }} me-4">
-                  <i class="bi {{ stat.icon }}"></i>
-                </div>
-
-                <div class="stat-info overflow-hidden">
-                  <p class="text-muted m-0 fw-bold text-uppercase tracking-wide text-truncate">
-                    {{ stat.title }}
-                  </p>
-                  <div class="d-flex align-items-baseline gap-2 mt-1">
-                    <h3 class="title-kpi-main text-dark m-0">{{ stat.value }}</h3>
-                  </div>
-                  <span class="small text-muted fw-semibold text-truncate d-block mt-1">{{
-                    stat.subtext
-                  }}</span>
-                </div>
-              </article>
-            </div>
+      <div class="dashboard-content d-flex flex-column gap-4 animate-fade-in">
+        <section class="summary-grid stagger-2">
+          @for (stat of summaryCards(); track stat.title) {
+            <article class="summary-card p-4 d-flex align-items-center gap-3">
+              <div class="stat-icon {{ stat.color }}">
+                <i class="bi {{ stat.icon }}"></i>
+              </div>
+              <div class="stat-copy overflow-hidden">
+                <span class="stat-label text-truncate d-block">{{ stat.title }}</span>
+                <strong class="stat-value text-dark">{{ stat.value }}</strong>
+                <small class="text-muted fw-semibold text-truncate d-block">{{ stat.subtext }}</small>
+              </div>
+            </article>
           }
-        </div>
+        </section>
 
-        <div class="row g-4 stagger-3 pb-4">
-          <div class="col-12 col-xl-8 d-flex flex-column">
-            <section class="neo-widget-content p-4 p-md-5 h-100 d-flex flex-column">
-              <div class="header-flex mb-4 pb-3 border-bottom-neo">
+        @if (isAdmin()) {
+          <section class="role-layout">
+            <article class="glass-panel p-4 p-lg-5">
+              <div class="section-head d-flex justify-content-between align-items-start gap-3 mb-4">
                 <div>
-                  <h5 class="fw-bold text-dark m-0 tracking-tight">Mis proximas reservas</h5>
-                  <span class="small text-muted">Agenda inmediata y seguimiento visible</span>
+                  <span class="section-kicker">Sistema</span>
+                  <h3 class="section-title text-dark mb-1">Solicitudes pendientes</h3>
+                  <p class="text-muted small m-0">Reserva y préstamo listos para decisión.</p>
                 </div>
-                <button class="btn-neo-text small fw-bold" routerLink="/dashboard/reservas">
+                <button class="btn-aero-soft" type="button" routerLink="/dashboard/reportes">
+                  <i class="bi bi-clipboard-data-fill me-2"></i>
+                  Reportes
+                </button>
+              </div>
+
+              <ng-container [ngTemplateOutlet]="approvalQueueTemplate"></ng-container>
+            </article>
+
+            <aside class="glass-panel admin-actions p-4">
+              <span class="section-kicker">Gestión</span>
+              <h3 class="section-title text-dark mb-3">Controles rápidos</h3>
+              <div class="d-flex flex-column gap-3">
+                <button class="action-button" type="button" routerLink="/dashboard/laboratorios/nuevo">
+                  <i class="bi bi-building-add"></i>
+                  Crear laboratorio
+                </button>
+                <button class="action-button" type="button" routerLink="/dashboard/equipos/nuevo">
+                  <i class="bi bi-plus-square"></i>
+                  Crear equipo
+                </button>
+                <button class="action-button" type="button" routerLink="/dashboard/reservas/nueva">
+                  <i class="bi bi-calendar-plus"></i>
+                  Reserva para usuario
+                </button>
+                <button class="action-button" type="button" routerLink="/dashboard/prestamos/nueva">
+                  <i class="bi bi-box-arrow-up-right"></i>
+                  Préstamo para usuario
+                </button>
+              </div>
+            </aside>
+          </section>
+        } @else if (isTechnician()) {
+          <section class="glass-panel p-4 p-lg-5 stagger-3">
+            <div class="section-head d-flex justify-content-between align-items-start gap-3 mb-4">
+              <div>
+                <span class="section-kicker">Cola operativa</span>
+                <h3 class="section-title text-dark mb-1">Pendientes por validar</h3>
+                <p class="text-muted small m-0">Sin accesos de creación de reservas o préstamos.</p>
+              </div>
+              <button class="btn-aero-soft" type="button" routerLink="/dashboard/reportes">
+                <i class="bi bi-inboxes-fill me-2"></i>
+                Bandeja
+              </button>
+            </div>
+
+            <ng-container [ngTemplateOutlet]="approvalQueueTemplate"></ng-container>
+          </section>
+        } @else {
+          <section class="role-layout">
+            <article class="glass-panel p-4 p-lg-5">
+              <div class="section-head d-flex justify-content-between align-items-start gap-3 mb-4">
+                <div>
+                  <span class="section-kicker">Agenda</span>
+                  <h3 class="section-title text-dark mb-1">Mis próximas reservas</h3>
+                  <p class="text-muted small m-0">Seguimiento de tu actividad inmediata.</p>
+                </div>
+                <button class="btn-aero-soft" type="button" routerLink="/dashboard/reservas">
                   Ver todas
                   <i class="bi bi-chevron-right ms-1"></i>
                 </button>
               </div>
 
-              <div class="reservations-list flex-grow-1">
-                @if (proximasReservas().length === 0) {
-                  <div
-                    class="empty-state d-flex flex-column align-items-center justify-content-center h-100 opacity-50 py-4"
-                  >
-                    <i class="bi bi-inbox fs-1 text-muted mb-3"></i>
-                    <p class="fw-medium m-0">No tienes reservas activas.</p>
-                  </div>
-                } @else {
-                  <div class="d-flex flex-column gap-3">
-                    @for (res of proximasReservas(); track res.lab + res.fecha) {
-                      <article
-                        class="neo-list-item d-flex flex-column flex-sm-row justify-content-between align-items-sm-center p-3 px-4"
-                        [class]="res.estado === 'Confirmada' ? 'status-green' : 'status-yellow'"
-                      >
-                        <div class="d-flex align-items-center gap-3 mb-3 mb-sm-0 overflow-hidden">
-                          <div class="item-icon text-primary">
-                            <i class="bi bi-journal-text"></i>
-                          </div>
-                          <div class="item-text overflow-hidden">
-                            <h6
-                              class="fw-bold text-dark m-0 tracking-tight text-truncate"
-                              title="{{ res.lab }}"
-                            >
-                              {{ res.lab }}
-                            </h6>
-                            <span class="small text-muted fw-medium text-truncate d-block">{{
-                              res.materia
-                            }}</span>
-                          </div>
-                        </div>
-
-                        <div class="reservation-meta d-flex align-items-center gap-3 ms-auto ms-sm-0 flex-shrink-0">
-                          <div class="reservation-time text-sm-end text-muted small fw-medium">
-                            <i class="bi bi-clock me-1 text-primary"></i>
-                            {{ res.fecha }}
-                          </div>
-                          <span class="neo-badge-status {{ res.badgeClass }}">{{ res.estado }}</span>
-                          <button
-                            class="btn-neo-mini text-muted hover-glow-primary"
-                            routerLink="/dashboard/reservas"
-                            title="Ir a reservas"
-                          >
-                            <i class="bi bi-arrow-up-right"></i>
-                          </button>
-                        </div>
-                      </article>
-                    }
-                  </div>
-                }
-              </div>
-            </section>
-          </div>
-
-          <div class="col-12 col-xl-4 d-flex flex-column gap-4">
-            <section class="neo-widget-card p-4">
-              <div class="header-flex mb-3">
-                <h6 class="fw-bold text-dark m-0 tracking-tight">Ocupacion global</h6>
-                <div class="live-indicator"><span class="pulse-dot"></span> Vivo</div>
-              </div>
-
-              <div class="d-flex align-items-end gap-2 mb-3">
-                <h2 class="occupancy-value fw-bold m-0 lh-1 text-dark">{{ ocupacionGlobal() }}%</h2>
-                <span class="text-muted small fw-medium mb-1">En uso</span>
-              </div>
-
-              <div class="neo-progress-track">
-                <div
-                  class="neo-progress-fill bg-primary-gradient progress-glow"
-                  [style.width.%]="ocupacionGlobal()"
-                ></div>
-              </div>
-            </section>
-
-            <section class="neo-widget-action p-4 p-xl-5 flex-grow-1 position-relative overflow-hidden">
-              <div class="vector-shape shape-1"></div>
-              <div class="vector-shape shape-2"></div>
-
-              <div class="content-z-index d-flex flex-column h-100">
-                <span class="action-kicker">Acciones sugeridas</span>
-                <h5 class="fw-bold mb-1 text-white tracking-tight">Acceso rapido</h5>
-                <p class="small text-white-50 mb-4">Que necesitas, {{ userName() }}?</p>
-
-                <div class="d-flex flex-column gap-3 mt-auto">
-                  <button
-                    class="btn-action-solid w-100 d-flex align-items-center"
-                    routerLink="/dashboard/reservas/nueva"
-                  >
-                    <div class="icon-box bg-primary-soft text-primary me-3">
-                      <i class="bi bi-plus-lg"></i>
-                    </div>
-                    Nueva reserva
-                  </button>
-
-                  <button
-                    class="btn-action-outline w-100 d-flex align-items-center"
-                    routerLink="/dashboard/prestamos/nueva"
-                  >
-                    <div class="icon-box bg-white-20 text-white me-3">
-                      <i class="bi bi-tools"></i>
-                    </div>
-                    Solicitar equipo
-                  </button>
+              @if (proximasReservas().length === 0) {
+                <div class="empty-state d-flex flex-column align-items-center justify-content-center text-center">
+                  <i class="bi bi-calendar2-x text-muted"></i>
+                  <strong class="text-dark">Sin reservas activas</strong>
+                  <span class="small text-muted">Puedes crear una nueva desde accesos rápidos.</span>
                 </div>
+              } @else {
+                <div class="reservation-stack d-flex flex-column gap-3">
+                  @for (res of proximasReservas(); track res.lab + res.fecha) {
+                    <article class="reservation-item p-3 d-flex flex-column flex-sm-row gap-3">
+                      <div class="item-icon text-primary">
+                        <i class="bi bi-journal-text"></i>
+                      </div>
+                      <div class="flex-grow-1 overflow-hidden">
+                        <h4 class="item-title text-dark mb-1 text-truncate">{{ res.lab }}</h4>
+                        <span class="small text-muted fw-semibold d-block text-truncate">
+                          {{ res.materia }}
+                        </span>
+                      </div>
+                      <div class="reservation-meta">
+                        <span class="small text-muted fw-semibold">{{ res.fecha }}</span>
+                        <span class="status-badge {{ res.badgeClass }}">{{ res.estado }}</span>
+                      </div>
+                    </article>
+                  }
+                </div>
+              }
+            </article>
+
+            <aside class="glass-panel quick-reserve p-4">
+              <span class="section-kicker">Acceso rápido</span>
+              <h3 class="section-title text-dark mb-3">Crear solicitud</h3>
+              <div class="d-flex flex-column gap-3">
+                <button class="action-button" type="button" routerLink="/dashboard/reservas/nueva">
+                  <i class="bi bi-calendar-plus"></i>
+                  Nueva reserva
+                </button>
+                <button class="action-button" type="button" routerLink="/dashboard/prestamos/nueva">
+                  <i class="bi bi-tools"></i>
+                  Solicitar equipo
+                </button>
               </div>
-            </section>
+            </aside>
+          </section>
+        }
+
+        <section class="occupancy-card glass-panel p-4 stagger-3">
+          <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+            <div>
+              <span class="section-kicker">Ocupación</span>
+              <h3 class="section-title text-dark mb-0">Laboratorios en uso</h3>
+            </div>
+            <strong class="occupancy-value">{{ ocupacionGlobal() }}%</strong>
           </div>
-        </div>
+          <div class="progress-track">
+            <div class="progress-fill" [style.width.%]="ocupacionGlobal()"></div>
+          </div>
+        </section>
       </div>
     }
   </div>
 </div>
+
+<ng-template #approvalQueueTemplate>
+  @if (approvalQueue().length === 0) {
+    <div class="empty-state d-flex flex-column align-items-center justify-content-center text-center">
+      <i class="bi bi-inbox text-muted"></i>
+      <strong class="text-dark">Sin pendientes</strong>
+      <span class="small text-muted">La cola de aprobación está despejada.</span>
+    </div>
+  } @else {
+    <div class="queue-stack d-flex flex-column gap-3">
+      @for (item of approvalQueue(); track item.kind + item.id) {
+        <article class="queue-item p-3">
+          <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
+            <div class="d-flex gap-3 overflow-hidden">
+              <div class="item-icon" [class.text-primary]="item.kind === 'reservation'" [class.text-warning]="item.kind === 'loan'">
+                @if (item.kind === 'reservation') {
+                  <i class="bi bi-calendar2-check-fill"></i>
+                } @else {
+                  <i class="bi bi-tools"></i>
+                }
+              </div>
+              <div class="overflow-hidden">
+                <span class="queue-kind">
+                  {{ item.kind === 'reservation' ? 'Reserva' : 'Préstamo' }}
+                </span>
+                <h4 class="item-title text-dark mb-1 text-truncate">{{ item.title }}</h4>
+                <span class="small text-muted fw-semibold d-block text-truncate">
+                  {{ item.subtitle }} · {{ item.requester }}
+                </span>
+                <span class="small text-muted d-block">{{ item.meta }}</span>
+              </div>
+            </div>
+
+            <div class="queue-actions d-flex gap-2">
+              <button class="btn-queue approve" type="button" (click)="approveQueueItem(item)">
+                <i class="bi bi-check2"></i>
+                Aprobar
+              </button>
+              <button class="btn-queue reject" type="button" (click)="rejectQueueItem(item)">
+                <i class="bi bi-x-lg"></i>
+                Rechazar
+              </button>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</ng-template>
