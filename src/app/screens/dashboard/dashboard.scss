@@ -204,6 +204,30 @@
   }
 }
 
+.hover-purple {
+  /* Usamos tu transición suave global */
+  transition: var(--transition-smooth);
+  
+  &:hover {
+    cursor: pointer;
+    background-color: #6f42c1 !important; /* Morado */
+    color: #ffffff !important;            /* Texto blanco */
+    box-shadow: 0 0.8rem 1.6rem color-mix(in srgb, #6f42c1 25%, transparent) !important;
+    
+    /* Cambiamos el color de todos los textos internos al hacer hover */
+    span, 
+    .small {
+      color: #ffffff !important;
+    }
+
+    /* Cambiamos el punto verde por uno blanco para que resalte en el fondo morado */
+    .role-dot {
+      background: #ffffff !important;
+      box-shadow: 0 0 0.7rem rgba(255, 255, 255, 0.4) !important;
+    }
+  }
+}
+
 .role-dot {
   width: 0.55rem;
   height: 0.55rem;

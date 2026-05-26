@@ -18,6 +18,7 @@ export class LabsListScreen implements OnInit {
   private labsService = inject(LabsService);
   private snackBar = inject(MatSnackBar);
 
+  public isStaff = signal(false);
   public isAdmin = signal(false);
   public searchTerm = signal('');
   public isLoading = signal(true);
@@ -42,6 +43,8 @@ export class LabsListScreen implements OnInit {
 
   ngOnInit(): void {
     this.authService.currentUser$.subscribe((user) => {
+      const isStaff = !!user && (user.rol === 'admin' || user.rol === 'tecnico');
+      this.isStaff.set(isStaff);
       this.isAdmin.set(user?.rol === 'admin');
     });
 
