@@ -61,6 +61,76 @@ export class LabsFormScreen implements OnInit {
     }
   }
 
+  // 1. NOMBRE y TIPO: Solo letras y máximo un espacio entre palabras
+  public soloLetras(event: KeyboardEvent, valorActual: string = ''): void {
+    if (event.key.length > 1) return; // Permite teclas como Backspace, Tab, flechas
+
+    // Bloquea espacio al inicio o dos espacios seguidos
+    if (event.key === ' ' && (valorActual.length === 0 || valorActual.endsWith(' '))) {
+      event.preventDefault();
+      return;
+    }
+
+    // Solo permite letras y espacios
+    const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]$/;
+    if (!regex.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  // 2. EDIFICIO: Alfanumérico y máximo un espacio entre palabras
+  public alfanumericoUnEspacio(event: KeyboardEvent, valorActual: string = ''): void {
+    if (event.key.length > 1) return;
+
+    if (event.key === ' ' && (valorActual.length === 0 || valorActual.endsWith(' '))) {
+      event.preventDefault();
+      return;
+    }
+
+    // Permite letras, números y espacios
+    const regex = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]$/;
+    if (!regex.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  // 3. CAPACIDAD: Solo números (bloquea el signo negativo y letras)
+  public soloNumeros(event: KeyboardEvent): void {
+    if (event.key.length > 1) return;
+
+    const regex = /^[0-9]$/;
+    if (!regex.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  // 4. EQUIPAMIENTO: Alfanumérico, máximo 2 espacios juntos, solo comas (no juntas)
+  public reglasEquipamiento(event: KeyboardEvent, valorActual: string = ''): void {
+    if (event.key.length > 1) return;
+
+    // Bloquea coma al inicio o dos comas seguidas
+    if (event.key === ',') {
+      if (valorActual.length === 0 || valorActual.endsWith(',')) {
+        event.preventDefault();
+        return;
+      }
+    }
+
+    // Permite 2 espacios, pero bloquea el 3er espacio consecutivo
+    if (event.key === ' ') {
+      if (valorActual.endsWith('  ')) { // Si ya hay dos espacios al final
+        event.preventDefault();
+        return;
+      }
+    }
+
+    // Permite letras, números, espacios y comas
+    const regex = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s,]$/;
+    if (!regex.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
   public validarFormulario(): boolean {
     this.errors = {};
     this.serverError.set(null);

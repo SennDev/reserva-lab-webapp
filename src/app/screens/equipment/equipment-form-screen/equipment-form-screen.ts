@@ -57,43 +57,82 @@ export class EquipmentFormScreen implements OnInit {
     }
   }
 
+  public soloLetras(event: KeyboardEvent, valorActual: string = ''): void {
+  if (event.key.length > 1) return; // Permite teclas como Backspace, Tab, flechas
+
+  if (event.key === ' ' && (valorActual.length === 0 || valorActual.endsWith(' '))) {
+    event.preventDefault();
+    return;
+  }
+
+  const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]$/;
+  if (!regex.test(event.key)) {
+    event.preventDefault();
+  }
+}
+
+public alfanumericoUnEspacio(event: KeyboardEvent, valorActual: string = ''): void {
+  if (event.key.length > 1) return;
+
+  if (event.key === ' ' && (valorActual.length === 0 || valorActual.endsWith(' '))) {
+    event.preventDefault();
+    return;
+  }
+
+  const regex = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]$/;
+  if (!regex.test(event.key)) {
+    event.preventDefault();
+  }
+}
+
+public soloNumeros(event: KeyboardEvent): void {
+  if (event.key.length > 1) return;
+
+  const regex = /^[0-9]$/;
+  if (!regex.test(event.key)) {
+    event.preventDefault();
+  }
+}
+
   public validarFormulario(): boolean {
     this.errors = {};
     this.serverError.set(null);
     let esValido = true;
 
-    if (!this.eqData.nombre || this.eqData.nombre.trim().length < 5) {
+    const data = this.eqData;
+
+    // 1. NOMBRE / DESCRIPCIÓN: Al menos 5 caracteres (se permiten letras y números para los modelos)
+    if (!data.nombre || data.nombre.trim().length < 5) {
       this.errors.nombre = 'El nombre del equipo debe tener al menos 5 caracteres.';
       esValido = false;
     }
 
-    if (!this.eqData.numero_serie || this.eqData.numero_serie.trim().length < 4) {
-      this.errors.numero_serie = 'Ingresa un numero de serie valido.';
+    // 2. NÚMERO DE SERIE: Al menos 4 caracteres
+    if (!data.numero_serie || data.numero_serie.trim().length < 4) {
+      this.errors.numero_serie = 'Ingresa un número de serie válido (mínimo 4 caracteres).';
       esValido = false;
     }
 
-    if (!this.eqData.laboratorioId && !this.eqData.ubicacion.trim()) {
-      this.errors.ubicacion = 'Debes asignar el equipo a un laboratorio o ubicacion.';
+    // 3. ASIGNACIÓN: Debe tener un laboratorio seleccionado O una ubicación manual
+    if (!data.laboratorioId && (!data.ubicacion || data.ubicacion.trim() === '')) {
+      this.errors.ubicacion = 'Debes asignar el equipo a un laboratorio o escribir una ubicación manual.';
       esValido = false;
     }
 
-    if (!this.eqData.cantidad_total || this.eqData.cantidad_total <= 0) {
+    // 4. CANTIDAD TOTAL: Mayor a 0
+    if (!data.cantidad_total || data.cantidad_total <= 0) {
       this.errors.cantidad_total = 'La cantidad total debe ser mayor a cero.';
       esValido = false;
     }
 
-    const cantidadDisponible =
-      this.eqData.cantidad_disponible ?? this.eqData.cantidad_total ?? 0;
+    // 5. CANTIDAD DISPONIBLE: No negativa y no mayor a la cantidad total
+    const cantidadDisponible = data.cantidad_disponible ?? data.cantidad_total ?? 0;
 
     if (cantidadDisponible < 0) {
       this.errors.cantidad_disponible = 'La cantidad disponible no puede ser negativa.';
       esValido = false;
-    } else if (
-      this.eqData.cantidad_total &&
-      cantidadDisponible > this.eqData.cantidad_total
-    ) {
-      this.errors.cantidad_disponible =
-        'La cantidad disponible no puede exceder la cantidad total.';
+    } else if (data.cantidad_total && cantidadDisponible > data.cantidad_total) {
+      this.errors.cantidad_disponible = 'La cantidad disponible no puede exceder la cantidad total.';
       esValido = false;
     }
 

@@ -47,6 +47,8 @@
                 [class.input-error]="errors.nombre"
                 name="nombre"
                 [(ngModel)]="eqData.nombre"
+                #inputNombre
+                (keypress)="soloLetras($event, inputNombre.value)"
                 placeholder="Ej. Osciloscopio Digital Rigol"
               />
               @if (errors.nombre) {
@@ -110,6 +112,8 @@
                   [class.input-error]="errors.ubicacion"
                   name="ubicacion"
                   [(ngModel)]="eqData.ubicacion"
+                  #inputEdificio
+                  (keypress)="alfanumericoUnEspacio($event, inputEdificio.value)"
                   placeholder="Ej. Almacen Central"
                 />
                 @if (errors.ubicacion) {
@@ -133,6 +137,7 @@
                   [(ngModel)]="eqData.cantidad_total"
                   (ngModelChange)="syncCantidadDisponible()"
                   min="1"
+                  (keypress)="soloNumeros($event)"
                 />
                 @if (errors.cantidad_total) {
                   <span class="text-danger small mt-2 d-block fw-medium"
@@ -151,6 +156,7 @@
                   name="cantidad_disponible"
                   [(ngModel)]="eqData.cantidad_disponible"
                   min="0"
+                  (keypress)="soloNumeros($event)"
                 />
                 @if (errors.cantidad_disponible) {
                   <span class="text-danger small mt-2 d-block fw-medium"

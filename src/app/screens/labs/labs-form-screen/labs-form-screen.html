@@ -46,7 +46,10 @@
                 class="neo-input w-100"
                 [class.input-error]="errors.nombre"
                 name="nombre"
+                #inputNombre
+                (keypress)="soloLetras($event, inputNombre.value)"
                 [(ngModel)]="labData.nombre"
+
                 placeholder="Ej. Lab de Realidad Virtual"
               />
               @if (errors.nombre) {
@@ -66,6 +69,8 @@
                   class="neo-input w-100"
                   [class.input-error]="errors.edificio"
                   name="edificio"
+                  #inputEdificio
+                  (keypress)="alfanumericoUnEspacio($event, inputEdificio.value)"
                   [(ngModel)]="labData.edificio"
                   placeholder="Ej. Edificio CCO1"
                 />
@@ -85,6 +90,8 @@
                   [class.input-error]="errors.tipo"
                   name="tipo"
                   [(ngModel)]="labData.tipo"
+                  #inputTipo
+                  (keypress)="soloLetras($event, inputTipo.value)"
                   placeholder="Ej. Computacion, Redes, Robotica"
                 />
                 @if (errors.tipo) {
@@ -107,6 +114,8 @@
                   name="capacidad"
                   [(ngModel)]="labData.capacidad"
                   placeholder="Ej. 25"
+                  min="1"
+                  (keypress)="soloNumeros($event)"
                 />
                 @if (errors.capacidad) {
                   <span class="text-danger small mt-2 d-block fw-medium"
@@ -135,6 +144,8 @@
                 [class.input-error]="errors.equipamiento"
                 rows="3"
                 name="equipamiento"
+                #inputEquipamiento
+                (keypress)="reglasEquipamiento($event, inputEquipamiento.value)"
                 [(ngModel)]="labData.equipamiento"
                 placeholder="Ej. 20 Workstations, Proyector 4K, Pizarron..."
               ></textarea>
