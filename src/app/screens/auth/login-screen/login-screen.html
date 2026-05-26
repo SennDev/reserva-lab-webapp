@@ -182,25 +182,28 @@
             </form>
 
             <footer class="text-center mt-5 pt-4 border-top-neo stagger-5">
-              <span class="text-muted small">No tienes cuenta? </span>
-              <a
-                routerLink="/auth/registro"
-                class="text-primary fw-bold text-decoration-none small transition-smooth hover-scale"
-              >
-                Registrate aqui
-              </a>
+                <div class="d-flex flex-column gap-4">
+                  
+                  <div class="mb-2"> <span class="text-muted small d-block mb-3">¿No tienes cuenta?</span>
+                    <a
+                      routerLink="/auth/registro"
+                      class="btn-neo-outline w-100 py-3 fw-bold transition-smooth d-block"
+                    >
+                      Regístrate aquí
+                    </a>
+                  </div>
 
-              <div class="mt-4">
-                <a
-                  routerLink="/"
-                  class="text-muted text-decoration-none small transition-smooth hover-scale"
-                >
-                  <i class="bi bi-arrow-left me-1"></i>
-                  Volver al inicio publico
-                </a>
-              </div>
-            </footer>
-          </div>
+                  <a
+                    routerLink="/"
+                    class="btn-neo-outline w-100 py-3 fw-bold transition-smooth d-block"
+                  >
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Volver al inicio público
+                  </a>
+                  
+                </div>
+              </footer>
+            </div>
         </div>
       </section>
     </div>
