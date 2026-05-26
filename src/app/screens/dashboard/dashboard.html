@@ -30,32 +30,33 @@
         </div>
       </a>
 
-      <a
-        routerLink="/dashboard/reservas"
-        class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth"
-        (click)="closeSidebar()"
-        routerLinkActive="active"
-      >
-        <div class="icon-wrapper me-3"><i class="bi bi-calendar2-check-fill"></i></div>
-        <div class="nav-item-copy">
-          <span class="fw-semibold">Mis reservas</span>
-          <small class="nav-item-subtitle">Solicitudes y agenda</small>
-        </div>
-      </a>
+      @if (user()?.rol !== 'admin' && user()?.rol !== 'tecnico') {
+        <a
+          routerLink="/dashboard/reservas"
+          class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth"
+          (click)="closeSidebar()"
+          routerLinkActive="active"
+        >
+          <div class="icon-wrapper me-3"><i class="bi bi-calendar2-check-fill"></i></div>
+          <div class="nav-item-copy">
+            <span class="fw-semibold">Mis reservas</span>
+            <small class="nav-item-subtitle">Solicitudes y agenda</small>
+          </div>
+        </a>
 
-      <a
-        routerLink="/dashboard/prestamos"
-        class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth"
-        (click)="closeSidebar()"
-        routerLinkActive="active"
-      >
-        <div class="icon-wrapper me-3"><i class="bi bi-box-seam-fill"></i></div>
-        <div class="nav-item-copy">
-          <span class="fw-semibold">Mis prestamos</span>
-          <small class="nav-item-subtitle">Herramientas y devoluciones</small>
-        </div>
-      </a>
-
+        <a
+          routerLink="/dashboard/prestamos"
+          class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth"
+          (click)="closeSidebar()"
+          routerLinkActive="active"
+        >
+          <div class="icon-wrapper me-3"><i class="bi bi-box-seam-fill"></i></div>
+          <div class="nav-item-copy">
+            <span class="fw-semibold">Mis prestamos</span>
+            <small class="nav-item-subtitle">Herramientas y devoluciones</small>
+          </div>
+        </a>
+      }
       <a
         routerLink="/dashboard/laboratorios"
         class="nav-item d-flex align-items-center px-3 py-3 mb-2 transition-smooth"
