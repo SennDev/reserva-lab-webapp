@@ -57,11 +57,16 @@ export class RegistroScreen {
   ];
 
   public soloLetras(event: KeyboardEvent, valorActual = ''): void {
-    if (event.key === ' ' && valorActual.trim().length === 0) {
-      event.preventDefault();
-      return;
+    // 1. Validaciones específicas para la tecla espacio
+    if (event.key === ' ') {
+      // Previene el espacio si es el primer carácter O si el último carácter ya es un espacio
+      if (valorActual.trim().length === 0 || valorActual.endsWith(' ')) {
+        event.preventDefault();
+        return;
+      }
     }
 
+    // 2. Validación general (solo letras y el espacio permitido)
     const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
 
     if (!regex.test(event.key)) {
@@ -69,10 +74,23 @@ export class RegistroScreen {
     }
   }
 
-  public soloAlfanumericoSinEspacios(event: KeyboardEvent): void {
-    const regex = /^[a-zA-Z0-9]*$/;
+  public soloNumeros(event: KeyboardEvent, valorActual: string = ''): void {
+    // 1. Permitir teclas de navegación y borrado (Backspace, flechas, Tab, etc.)
+    // Las teclas de control devuelven strings de más de 1 carácter (ej. 'Backspace')
+    if (event.key.length > 1) {
+      return;
+    }
 
+    // 2. Validar que la tecla presionada sea estrictamente un número
+    const regex = /^[0-9]$/;
+    
     if (!regex.test(event.key)) {
+      event.preventDefault();
+      return; // Detenemos la ejecución si no es un número
+    }
+
+    // 3. Validar la longitud máxima (9 valores)
+    if (valorActual.length >= 9) {
       event.preventDefault();
     }
   }

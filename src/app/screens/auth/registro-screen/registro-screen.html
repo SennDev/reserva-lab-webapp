@@ -210,10 +210,10 @@
                         placeholder="202301234"
                         name="matricula"
                         [(ngModel)]="user.matricula"
-                        (keypress)="soloAlfanumericoSinEspacios($event)"
+                        (keypress)="soloNumeros($event, user.matricula)"
                         [class.border-danger]="errors.matricula"
                         autocomplete="off"
-                        maxlength="20"
+                        maxlength="9"
                         required
                       />
                     </div>
