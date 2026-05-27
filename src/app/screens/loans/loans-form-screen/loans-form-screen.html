@@ -133,6 +133,7 @@
               [class.input-error]="errors.proyecto"
               name="proyecto"
               [(ngModel)]="prestamoData.proyecto"
+              (keypress)="prevenirEspacioInicial($event, prestamoData.proyecto)"
               placeholder="Ej. Proyecto Final de IoT"
             />
             @if (errors.proyecto) {
@@ -152,6 +153,7 @@
               rows="3"
               name="motivo"
               [(ngModel)]="prestamoData.motivo"
+              (keypress)="prevenirEspacioInicial($event, prestamoData.motivo)"
               placeholder="Describe que actividades se realizaran con el equipo solicitado..."
             ></textarea>
             @if (errors.motivo) {

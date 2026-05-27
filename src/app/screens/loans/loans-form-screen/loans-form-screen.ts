@@ -82,6 +82,12 @@ export class LoansFormScreen implements OnInit {
     }
   }
 
+  public prevenirEspacioInicial(event: KeyboardEvent, valorActual = ''): void {
+    if (event.key === ' ' && (!valorActual || valorActual.trim().length === 0)) {
+      event.preventDefault();
+    }
+  }
+
   public validarFormulario(): boolean {
     this.errors = {};
     this.serverError.set(null);
@@ -147,8 +153,9 @@ export class LoansFormScreen implements OnInit {
           ...this.errors,
           ...(extractFieldErrors(error) as LoanFormErrors)
         };
+        const horarioError = this.errors.horario;
         this.serverError.set(
-          extractErrorMessage(error, 'No se pudo enviar la solicitud de prestamo.')
+          horarioError || extractErrorMessage(error, 'No se pudo enviar la solicitud de prestamo.')
         );
       }
     });

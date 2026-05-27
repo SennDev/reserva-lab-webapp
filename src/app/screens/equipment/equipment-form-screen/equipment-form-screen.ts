@@ -57,10 +57,16 @@ export class EquipmentFormScreen implements OnInit {
     }
   }
 
+  public prevenirEspacioInicial(event: KeyboardEvent, valorActual = ''): void {
+    if (event.key === ' ' && (!valorActual || valorActual.trim().length === 0)) {
+      event.preventDefault();
+    }
+  }
+
   public soloLetras(event: KeyboardEvent, valorActual: string = ''): void {
   if (event.key.length > 1) return; // Permite teclas como Backspace, Tab, flechas
 
-  if (event.key === ' ' && (valorActual.length === 0 || valorActual.endsWith(' '))) {
+  if (event.key === ' ' && (!valorActual || valorActual.trim().length === 0 || valorActual.endsWith(' '))) {
     event.preventDefault();
     return;
   }
@@ -74,7 +80,7 @@ export class EquipmentFormScreen implements OnInit {
 public alfanumericoUnEspacio(event: KeyboardEvent, valorActual: string = ''): void {
   if (event.key.length > 1) return;
 
-  if (event.key === ' ' && (valorActual.length === 0 || valorActual.endsWith(' '))) {
+  if (event.key === ' ' && (!valorActual || valorActual.trim().length === 0 || valorActual.endsWith(' '))) {
     event.preventDefault();
     return;
   }

@@ -109,6 +109,7 @@
               [class.input-error]="errors.materia"
               name="materia"
               [(ngModel)]="reservaData.materia"
+              (keypress)="prevenirEspacioInicial($event, reservaData.materia)"
               placeholder="Ej. Robotica Industrial I"
             />
             @if (errors.materia) {
@@ -128,6 +129,7 @@
               rows="3"
               name="motivo"
               [(ngModel)]="reservaData.motivo"
+              (keypress)="prevenirEspacioInicial($event, reservaData.motivo)"
               placeholder="Describe que actividades se realizaran en el laboratorio..."
             ></textarea>
             @if (errors.motivo) {

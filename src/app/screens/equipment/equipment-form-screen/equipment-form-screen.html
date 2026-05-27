@@ -69,6 +69,7 @@
                   [class.input-error]="errors.numero_serie"
                   name="numero_serie"
                   [(ngModel)]="eqData.numero_serie"
+                  (keypress)="prevenirEspacioInicial($event, eqData.numero_serie)"
                   placeholder="Ej. SN-RIG-8472"
                 />
                 @if (errors.numero_serie) {
